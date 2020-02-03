@@ -7,7 +7,7 @@ Its not an acronym, or even a retronym, we just called it Tapirs because an easy
 Nothing met our needs, see the [background](background.md) page for discussion.
 
 # Can you add in my favourite software for me?
-No, sorry. We really hope however that choosing a workflow manager (Snakemake) means that this is much easier than for any other metabarcoding package. Look at the [extending Tapirs How-To guide](../How_To-Guide/extending.md).
+No, sorry. We really hope however that choosing a workflow manager (Snakemake) means that this is much easier than for any other metabarcoding package. Look at the [extending Tapirs How-To guide](../How-To-Guide/extending.md).
 
 # I've added some tools, do you want my changes?
 Yes please. Do this via a pull request on github.

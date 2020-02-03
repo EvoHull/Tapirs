@@ -2,7 +2,7 @@
 
 We set directory structure in the repository to standardise the workflow design.
 
-![Directory Structure](../../images/dir_structure.png)
+![Directory Structure](../images/dir_structure.png)
 
 *Above: the directory structure of a standard Tapirs workflow*
 ## snakefile
@@ -33,7 +33,7 @@ This directory usually has subdirectories named by the program (eg blast). It is
 ## docs
 Documentation for Tapirs
 
-# ANALYSIS 
+# ANALYSIS
 ## fastp
 fastp is used for 2 separate jobs:
 
