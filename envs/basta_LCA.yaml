@@ -1,0 +1,34 @@
+name: basta_LCA
+channels:
+  - bnoon
+  - timkahlke
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - basta=1.3=py27_1
+  - ca-certificates=2019.11.28=hecc5488_0
+  - certifi=2019.11.28=py27_0
+  - gettext=0.19.8.1=hc5be6a0_1002
+  - krona=2.7.1=pl526_1
+  - leveldb=1.15=1
+  - libffi=3.2.1=he1b5a44_1006
+  - libgcc-ng=9.2.0=hdf63c60_0
+  - libidn2=2.3.0=h516909a_0
+  - libstdcxx-ng=9.2.0=hdf63c60_0
+  - libunistring=0.9.10=h14c3975_0
+  - ncurses=6.1=hf484d3e_1002
+  - openssl=1.1.1d=h516909a_0
+  - perl=5.26.2=h516909a_1006
+  - pip=19.3.1=py27_0
+  - plyvel=0.8=py27_0
+  - python=2.7.15=h5a48372_1009
+  - readline=8.0=hf8c457e_0
+  - setuptools=42.0.2=py27_0
+  - snappy=1.1.1=0
+  - sqlite=3.30.1=hcee41ef_0
+  - tk=8.6.10=hed695b0_0
+  - wget=1.20.1=h22169c7_0
+  - wheel=0.33.6=py27_0
+  - zlib=1.2.11=h516909a_1006

@@ -1,0 +1,44 @@
+# --------------------------------------------------
+# WILDCARD VARIABLES
+# --------------------------------------------------
+# Set experiment-specific variables here. Specifically, wildcards for {library}, {sample}, and {experiment}.
+experiment: "my_experiment" # insert experiment name, no_spaces
+
+# -----------------------------------------------
+# LOCATION OF DATA FILES AND DATABASES
+# or do this on per-progrqam basis?
+# -----------------------------------------------
+data_dir: "<insert path>" # location of data directory on your file system
+            # this should contain 'raw' and 'demultiplex' directories
+blast_db: "db/blast/my_blast_db" # or set location of database
+kraken_db: "db/kraken/kraken_db" # or set location of database
+basta_tax_db: "<insert path>" # or install using "$ basta taxonomy" from within the basta_LCA conda_environment
+basta_map_db: "<insert path>" # or install using "$ basta download gb" from within the basta_LCA environment
+
+# -----------------------------------------------
+# FASTP TRIMMING AND MERGING VARIABLES
+# -----------------------------------------------
+FASTP_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+FASTP_max_trim2: "106"
+FASTP_trim_front1: "20"
+FASTP_trim_front2: "20"
+FASTP_len_required: "90" # reads shorter than this will be discarded
+FASTP_qual_phred: "30" # quality value that a base is qualified. 30 means phred quality >=Q30 is qualified
+FASTP_overlap_len: "90" # length of overlap required for MERGING
+
+# -----------------------------------------------
+# BLAST VARIABLES
+# -----------------------------------------------
+BLAST_db: "db/blast/my_blast_db"
+BLAST_Nhits: "50" # Number of descriptions
+
+# -----------------------------------------------
+# BASTA LAST COMMON ANCESTOR VARIABLES
+# -----------------------------------------------
+BASTA_nhits: "50", # -n max number of  hits to consider for classification (default=0=all)
+BASTA_minhits: "3", # -m must have at least 3 hits, else ignored (default=3)
+BASTA_evalue: "1e-20", # -e min e-value of hit (default=0.00001)
+BASTA_length: "90", # -l match must be at least 90bp (default=100)
+BASTA_minident: "95", # -i minimum identity of hit (default=80)
+BASTA_maj_percent: "90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
+BASTA_dir: "/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)

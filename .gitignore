@@ -1,0 +1,7 @@
+.snakemake
+.DS_Store
+*.gz
+.ipynb_checkpoints
+/data/databases/*
+/data/demultiplex/*
+/data/0_raw/*
