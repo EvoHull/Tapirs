@@ -9,15 +9,15 @@
 #configfile: "config.yaml"    # needs implementing and updating --Mike
 
 # Flag "$ snakemake" with "--report" to use
-report: "reports/metacles.rst"       #this is for generating a report of the workflow
+report: "reports/tapirs.rst"       #this is for generating a report of the workflow
 					#aswell as providing a report on the full workflow progress, individual output reports can be written to it by flagging the output with report()
 						#eg. report(<real_output>)
 						#Ive done this to rule fastp to demonstrate -- Mike
 
 
 
-library="N1"
-sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
+library="testlib"
+sample,= glob_wildcards("data/01_dmpxd/testlib/{sample}.R1.fastq.gz")
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
 ## check libraries and library are named OK throughout
@@ -209,22 +209,26 @@ rule blastn:
     conda:
         "envs/metacles.yaml"
     input:
-        db = "nt", #specify in environment.yaml
+        #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir="/media/mike/mieksdrive/NCBI_databases/nt", # database directory
+        #db_dir="/media/mike/mieksdrive/NCBI_databases/nt", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
+    threads:
+        10
     shell:
         "blastn \
-            -db {params.db_dir}/{input.db} \
-            -num_threads 3 \
+            -db nt \
+            -num_threads {threads} \
             -outfmt {params.outformat} \
             -max_target_seqs {params.descriptions} \
             -query {input.query} \
             -out {output}"
+
+# database is going to cause problems and needs a symbolic path in config
 
 #-----------------------------------------------------
 # LCA, Last Comomon Ancestor analysis of blast using BASTA
