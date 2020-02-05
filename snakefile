@@ -22,7 +22,7 @@ R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
 ## check libraries and library are named OK throughout
 
-conda_envs=["metacles.yaml", "basta_LCA.yaml"]
+conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
 #sample,= glob_wildcards("data/01_dmpxd/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
@@ -77,7 +77,7 @@ rule all:
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         read1 = "data/01_dmpxd/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_dmpxd/{library}/{sample}.R2.fastq.gz"
@@ -119,7 +119,7 @@ rule fastp_trim_and_merge:
 #-----------------------------------------------------
 rule fastq_to_fasta:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -134,7 +134,7 @@ rule fastq_to_fasta:
 #-----------------------------------------------------
 rule vsearch_reporting:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -149,7 +149,7 @@ rule vsearch_reporting:
 #-----------------------------------------------------
 rule vsearch_dereplication:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fasta"
     output:
@@ -162,7 +162,7 @@ rule vsearch_dereplication:
 #-----------------------------------------------------
 rule vsearch_denoising:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
@@ -178,7 +178,7 @@ rule vsearch_denoising:
 #-----------------------------------------------------
 rule vsearch_dechimerisation: # output needs fixing
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/03_denoised/{library}/{sample}.fasta"
     output: # fix
@@ -207,7 +207,7 @@ rule vsearch_rereplication:
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
@@ -264,7 +264,7 @@ rule basta_LCA:
 #-----------------------------------------------------
 rule basta_BIOM:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "results/LCA/{library}/{sample}.basta_LCA.out"
     params:
@@ -280,7 +280,7 @@ rule basta_BIOM:
 #-----------------------------------------------------
 # rule BIOM_tsv:
 #     conda:
-#         "envs/metacles.yaml"
+#         "envs/tapirs.yaml"
 #     input:
 #         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
 #     output:
@@ -301,7 +301,7 @@ rule basta_BIOM:
 
 rule krona_LCA_plot:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "results/LCA/{library}/{sample}.basta_LCA.out"
     output:
@@ -310,7 +310,7 @@ rule krona_LCA_plot:
         "python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py {input} {output}"
 
         ## DO NOT LOSE THIS COMMAND!!!!
-        ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py Desktop/metacles/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
+        ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
 
 #-----------------------------------------------------
