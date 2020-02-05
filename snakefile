@@ -22,6 +22,7 @@ R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
 ## check libraries and library are named OK throughout
 
+conda_envs=["metacles.yaml", "basta_LCA.yaml"]
 #sample,= glob_wildcards("data/01_dmpxd/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
