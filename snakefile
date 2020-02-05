@@ -20,7 +20,7 @@ library="N1"
 sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
-## check libraries and LIBS are named OK throughout
+## check libraries and library are named OK throughout
 
 #sample,= glob_wildcards("data/01_dmpxd/{library}/{sample}.R1.fastq")
 
@@ -29,21 +29,21 @@ R=["R1", "R2"]
 #-----------------------------------------------------
 rule all:
     input:
-        #expand("data/00_raw/{library}.{R}.fastq.gz", library=LIBS, R=R),
-        #directory(expand("data/01_dmpxd/{library}/", library=LIBS, R=R)),
-        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=LIBS, sample=SAMPLES, R=R),
-        expand("data/03_denoised/{library}/{sample}.fasta", library=LIBS, sample=SAMPLES, R=R),
-        expand("results/blast/{library}/{sample}_blast.out", library=LIBS, sample=SAMPLES),
-        expand("results/LCA/{library}/{sample}.basta_LCA.out", library=LIBS, sample=SAMPLES),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=LIBS, sample=SAMPLES),
-		#expand("results/basta/{sample}.basta_LCA.out", library=LIBS, sample=SAMPLES),
+        #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
+        #directory(expand("data/01_dmpxd/{library}/", library=library, R=R)),
+        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=SAMPLES, R=R),
+        expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=SAMPLES, R=R),
+        expand("results/blast/{library}/{sample}_blast.out", library=library, sample=SAMPLES),
+        expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=SAMPLES),
+        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=SAMPLES),
+		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=SAMPLES),
         # reports ----------------------------------------------
-        expand("reports/fastp/{library}/{sample}.json", library=LIBS, sample=SAMPLES),
-        expand("reports/fastp/{library}/{sample}.html", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}.denoise.biom", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}_fq_eestats", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}_fq_readstats", library=LIBS, sample=SAMPLES),
-        expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=LIBS, sample=SAMPLES),
+        expand("reports/fastp/{library}/{sample}.json", library=library, sample=SAMPLES),
+        expand("reports/fastp/{library}/{sample}.html", library=library, sample=SAMPLES),
+        expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=SAMPLES),
+        expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=SAMPLES),
+        expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=SAMPLES),
+        expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=SAMPLES),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
         #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
