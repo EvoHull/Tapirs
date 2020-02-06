@@ -14,10 +14,10 @@ report: "reports/tapirs.rst"       #this is for generating a report of the workf
 						#eg. report(<real_output>)
 						#Ive done this to rule fastp to demonstrate -- Mike
 
+## Need to implement something to allow intake of both fastq and fastq.gz -Mike
 
-
-library="testlib"
-sample,= glob_wildcards("data/01_dmpxd/testlib/{sample}.R1.fastq.gz")
+library="N1"
+sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq.gz")
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
 ## check libraries and library are named OK throughout
@@ -126,8 +126,8 @@ rule fastq_to_fasta:
         "data/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
         "vsearch \
-            --fastq_filter {input} \
-            --fastaout {output}"
+        --fastq_filter {input} \
+        --fastaout {output}"
 
 #-----------------------------------------------------
 # vsearch fastq fqreport
@@ -214,7 +214,9 @@ rule blastn:
     params:
         db_dir="/media/mike/mikesdrive/NCBI_databases/blastdb_nt", # database directory
         descriptions="50", # return maximum of 50 hits
-        outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+        outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
+        min_perc_ident="100",             # thsi needs to be 100%
+        min_evalue="1e-20"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
     threads:
@@ -224,6 +226,8 @@ rule blastn:
             -db nt \
             -num_threads {threads} \
             -outfmt {params.outformat} \
+            -perc_identity {params.min_perc_ident} \
+            -evalue {params.min_evalue} \
             -max_target_seqs {params.descriptions} \
             -query {input.query} \
             -out {output}"
