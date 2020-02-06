@@ -1,4 +1,4 @@
-name: metacles
+name: tapirs
 channels:
   - rmg
   - conda-forge
