@@ -212,7 +212,7 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        #db_dir="/media/mike/mieksdrive/NCBI_databases/nt", # database directory
+        db_dir="/media/mike/mikesdrive/NCBI_databases/blastdb_nt", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     output: # need to fix this by adding library name
@@ -297,7 +297,8 @@ rule basta_BIOM:
 # Krona
 #-----------------------------------------------------
 # basta2krona.py
-# This creates a krona plot (html file) that can be opened in your browser from a basta annotation output file(s). Multiple files can be given separated by comma.
+# This creates a krona plot (html file) for each sample that can be opened in a browser from a basta annotation output file(s).
+# Multiple files can be given separated by comma.
 
 rule krona_LCA_plot:
     conda:
