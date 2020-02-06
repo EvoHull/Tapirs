@@ -36,6 +36,8 @@ rule all:
         expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
+        expand("results/blast{library}/{sample}_blast.taxed.out", library=library, sample=sample),
+        expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
         # reports ----------------------------------------------
@@ -212,7 +214,7 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir="/media/mike/mikesdrive/NCBI_databases/blastdb_nt", # database directory
+        db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
         min_perc_ident="100",             # thsi needs to be 100%
@@ -262,10 +264,35 @@ rule basta_LCA:
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
 
+
+
+#-----------------------------------------------------
+# simple LCA
+#-----------------------------------------------------
+rule simpleLCA_adding_taxid:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        "results/blast/{library}/{sample}_blast.out"
+    output:
+        "results/blast{library}/{sample}_blast.taxed.out"
+    threads:
+        28
+    shell:
+        "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
+
+rule simpleLCA:
+    input:
+        "results/blast/{library}/{sample}_blast.taxed.out"
+    output:
+        "results/simpleLCA/{library}/{sample}.lca"
+    shell:
+        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
 #-----------------------------------------------------
 # BASTA to BIOM,
-# BASTA output tsv converted to BIOM, uses BIOM-convert
 #-----------------------------------------------------
+# BASTA output tsv converted to BIOM, uses BIOM-convert
+
 rule basta_BIOM:
     conda:
         "envs/tapirs.yaml"
