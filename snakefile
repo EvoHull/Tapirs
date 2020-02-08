@@ -280,13 +280,13 @@ rule simpleLCA:
         "results/blast/{library}/{sample}_blast.taxed.out"
     params:
         bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
-        id = "80" # -id identity threshold, required
-        coverage = "80" # -cov coverage threshold', required=True
-        tophit = "yes" # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
-        tid = "99" # 'identity treshold for the tophit', required=False, default='100'
-        tcov = "100" # query coverage threshold for the tophit', required=False,  default='100'
-        fh = "environmental" # filter out hits that contain unwanted taxonomy'
-        flh = "unknown" # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
+        id = "80", # -id identity threshold, required
+        coverage = "80", # -cov coverage threshold', required=True
+        tophit = "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
+        tid = "99", # 'identity treshold for the tophit', required=False, default='100'
+        tcov = "100", # query coverage threshold for the tophit', required=False,  default='100'
+        fh = "environmental", # filter out hits that contain unwanted taxonomy'
+        flh = "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
     output:
         "results/simpleLCA/{library}/{sample}.lca"
     shell:
@@ -393,6 +393,21 @@ rule conda_env:
 #-----------------------------------------------------
 # vegan
 #-----------------------------------------------------
+
+#-----------------------------------------------------
+# multiQC, create a single report from QC outputs
+#-----------------------------------------------------
+
+# rule multiqc:
+#     input:
+#         "./reports/"
+    params:
+        name = "my_expt_name",
+
+    # output:
+    #     ""reports/multiqc"
+#     shell:
+#         "multiqc {input} -o {output} --force"
 
 #-----------------------------------------------------
 # seqkit, write simple report on fasta files
