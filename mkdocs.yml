@@ -1,0 +1,21 @@
+site_name: Tapirs
+
+nav:
+  - Home: 'index.md'
+  - How-To-Guide:
+    - 'Installation': 'How-To-Guide/installation.md'
+    - 'Setup Tapirs': 'How-To-Guide/setup.md'
+    - 'Extending the Workflow': 'How-To-Guide/extending.md'
+    - 'Reproducibiility': 'How-To-Guide/reproducibility.md'
+  - Tutorials:
+    - 'Basic blast': 'Tutorials/blast_tutorial.md'
+    - 'Kraken2': 'Tutorials/kraken_tutorial.md'
+  - About:
+    - 'FAQs': 'About/faqs.md'
+    - 'Design': 'About/design.md'
+    - 'Background': 'About/background.md'
+    
+theme: readthedocs
+
+markdown_extensions:
+  - admonition # this adds info box functionality

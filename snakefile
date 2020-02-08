@@ -215,7 +215,7 @@ rule blastn:
         db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
-        min_perc_ident="100",             # thsi needs to be 100%
+        min_perc_ident="100",             # this needs to be 100%
         min_evalue="1e-20"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
@@ -262,10 +262,8 @@ rule basta_LCA:
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
 
-
-
 #-----------------------------------------------------
-# simple LCA
+# Simple-LCA
 #-----------------------------------------------------
 rule simpleLCA_adding_taxid:
     conda:
@@ -282,10 +280,18 @@ rule simpleLCA_adding_taxid:
 rule simpleLCA:
     input:
         "results/blast/{library}/{sample}_blast.taxed.out"
+    params:
+        bitscore = "8", #'-b', '--bitscore', 'bitscore top percentage threshold',
+        id = "80" #identity threshold, required
+        coverage = "80" # coverage threshold', required=True
+        tophit = "yes" # Check the best hit first, if it is above the gives treshold the tophit will become the output', required=False, choices=['no', 'yes'], nargs='?', default='no')
+        tid = "99" # 'identity treshold for the tophit', required=False, default='100'
+        tcov = "100" # query coverage threshold for the tophit', required=False,  default='100'
     output:
         "results/simpleLCA/{library}/{sample}.lca"
     shell:
-        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b {params.bitscore} -id {params.id} -cov {params.coverage} -t {params.tophit} -tid {params.tid} -tcov {params.tcov} -fh 'environmental' -flh 'unknown'"
+        # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
 #-----------------------------------------------------
 # BASTA to BIOM,
 #-----------------------------------------------------
