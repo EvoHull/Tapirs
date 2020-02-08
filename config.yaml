@@ -1,6 +1,6 @@
 #####   TAPIRS: CONFIGFILE   #####
 
-## You must customise the next rtwo sections to identify your data (wildcard variables) and database locations.
+## You must customise the next two sections to identify your data (wildcard variables) and database locations.
 
 # --------------------------------------------------
 # WILDCARD VARIABLES
@@ -32,8 +32,10 @@ kraken_db: "<path to kraken db>" # or set location of database
 basta_tax_db: "<insert path>" # or install using "$ basta taxonomy" from within the basta_LCA conda_environment
 basta_map_db: "<insert path>" # or install using "$ basta download gb" from within the basta_LCA environment
 
+# *******************************************************
 # config parameters below here are optional,
 # ie if you don't change then default values will be used
+# *******************************************************
 
 # -----------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES

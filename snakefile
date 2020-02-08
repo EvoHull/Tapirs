@@ -363,7 +363,6 @@ rule krona_LCA_plot:
 # Archive conda environment
 #-----------------------------------------------------
 
-
 rule conda_env:
     conda:
         "envs/{conda_envs}"
@@ -398,16 +397,15 @@ rule conda_env:
 # multiQC, create a single report from QC outputs
 #-----------------------------------------------------
 
-# rule multiqc:
-#     input:
-#         "./reports/"
+rule multiqc:
+    input:
+        "./reports/"
     params:
-        name = "my_expt_name",
-
-    # output:
-    #     ""reports/multiqc"
-#     shell:
-#         "multiqc {input} -o {output} --force"
+        name = config["experiment"]
+    output:
+        "reports/multiqc"
+    shell:
+        "multiqc {input} -o {output} -i {params.name} --force"
 
 #-----------------------------------------------------
 # seqkit, write simple report on fasta files
