@@ -1,4 +1,4 @@
-name: metacles
+name: tapirs
 channels:
   - bioconda
   - conda-forge
@@ -6,10 +6,9 @@ dependencies:
   - snakemake-minimal =5.2.4
   - python
   - jinja2 =2.10
-  # - networkx =2.1
   - matplotlib =2.2.3
   - graphviz =2.38.0
-  - git
+  # - git
 
   # processing sequence reads
   - fastp # sequence trimming and processing
@@ -22,5 +21,8 @@ dependencies:
   - blast # sequence search
   - kraken2 # kmer search
   - kraken-biom # creates BIOM from kraken output
+
+  # reports and outputs
   - biom-format # converts tsv to BIOM1 or BIOM2
+  - multiqc # creates a report of qc reports
   - krona # html visualisation of taxonomy

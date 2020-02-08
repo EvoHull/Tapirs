@@ -72,7 +72,7 @@ rule all:
 #         "gzip {input} > {output}"
 
 #-----------------------------------------------------
-# fastp, control for sequence quality
+# fastp, control for sequence quality and pair reads
 #-----------------------------------------------------
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
@@ -125,9 +125,7 @@ rule fastq_to_fasta:
     output:
         "results/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
-        "vsearch \
-        --fastq_filter {input} \
-        --fastaout {output}"
+        "vsearch --fastq_filter {input} --fastaout {output}"
 
 #-----------------------------------------------------
 # vsearch fastq report
@@ -281,16 +279,28 @@ rule simpleLCA:
     input:
         "results/blast/{library}/{sample}_blast.taxed.out"
     params:
-        bitscore = "8", #'-b', '--bitscore', 'bitscore top percentage threshold',
-        id = "80" #identity threshold, required
-        coverage = "80" # coverage threshold', required=True
-        tophit = "yes" # Check the best hit first, if it is above the gives treshold the tophit will become the output', required=False, choices=['no', 'yes'], nargs='?', default='no')
+        bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
+        id = "80" # -id identity threshold, required
+        coverage = "80" # -cov coverage threshold', required=True
+        tophit = "yes" # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
         tid = "99" # 'identity treshold for the tophit', required=False, default='100'
         tcov = "100" # query coverage threshold for the tophit', required=False,  default='100'
+        fh = "environmental" # filter out hits that contain unwanted taxonomy'
+        flh = "unknown" # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
     output:
         "results/simpleLCA/{library}/{sample}.lca"
     shell:
-        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b {params.bitscore} -id {params.id} -cov {params.coverage} -t {params.tophit} -tid {params.tid} -tcov {params.tcov} -fh 'environmental' -flh 'unknown'"
+        "scripts/Simple-LCA-master/lca.py \
+        -i {input} \
+        -o {output} \
+        -b {params.bitscore} \
+        -id {params.id} \
+        -cov {params.coverage} \
+        -t {params.tophit} \
+        -tid {params.tid} \
+        -tcov {params.tcov} \
+        -fh {params.fh} \
+        -flh {params.flh}"
         # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
 #-----------------------------------------------------
 # BASTA to BIOM,
