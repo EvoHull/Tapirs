@@ -1,24 +1,46 @@
+#####   TAPIRS: CONFIGFILE   #####
+
+## Please customise this file according to your available hardware, database locations, module parameters, and much more!
+
+
 # --------------------------------------------------
 # WILDCARD VARIABLES
 # --------------------------------------------------
 # Set experiment-specific variables here. Specifically, wildcards for {library}, {sample}, and {experiment}.
 experiment: "my_experiment" # insert experiment name, no_spaces
 
+## Comment from Mike: Struggling to get iteration to work ovr two
+#  wildcards - ie, library and sample - currently specifying library
+#  manually and globbing sample names from within it
+# should work like this below vvv
+# library,: glob_wildcards("data/01_dmpxd/{library}")
+library: "<library name>" or "[<list of libraries>]" # depending on how we iterate
+# but for now, manually
+
+# this below should work fine though may need altering once library iteration is implemented
+sample,: glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
+
+# this is for wildcarding forward and reverse
+R: ['R1', 'R2']
+
 # -----------------------------------------------
 # LOCATION OF DATA FILES AND DATABASES
-# or do this on per-progrqam basis?
 # -----------------------------------------------
 data_dir: "<insert path>" # location of data directory on your file system
             # this should contain 'raw' and 'demultiplex' directories
-blast_db: "db/blast/my_blast_db" # or set location of database
-kraken_db: "db/kraken/kraken_db" # or set location of database
+            ## Comment from Mike: i know a lot of people do this but i think it complicates things needlessly.
+            # i think using a standardised "data/" directory with 01_dmpxd etc inside it makes things more straightforward
+            # then just tell users to either drop their files in there, or have them set path to their raw data, but still maintain the
+            # rest of the outputs of the workflow in the "data/" directory
+blast_db: "<path to blast_nt_db>" # or set location of database
+kraken_db: "<path to kraken db>" # or set location of database
 basta_tax_db: "<insert path>" # or install using "$ basta taxonomy" from within the basta_LCA conda_environment
 basta_map_db: "<insert path>" # or install using "$ basta download gb" from within the basta_LCA environment
 
 # -----------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES
 # -----------------------------------------------
-FASTP_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+FASTP_max_trim1: "106"
 FASTP_max_trim2: "106"
 FASTP_trim_front1: "20"
 FASTP_trim_front2: "20"
@@ -29,7 +51,13 @@ FASTP_overlap_len: "90" # length of overlap required for MERGING
 # -----------------------------------------------
 # BLAST VARIABLES
 # -----------------------------------------------
-BLAST_db: "db/blast/my_blast_db"
+max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+max_trim2: "106"
+overlap_len: "<interger>" # length of overlap required for MERGING
+
+
+
+
 BLAST_Nhits: "50" # Number of descriptions
 
 # -----------------------------------------------

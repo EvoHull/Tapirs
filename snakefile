@@ -1,66 +1,59 @@
 #-----------------------------------------------------
-# metaclese
+# Tapirs
 # ---------
 # A metabarcoding workflow using snakemake
 # this file runs other snakemake worksflows in the rules
 # directory
 #-----------------------------------------------------
 
-import os
-
-
-config: "config.yaml"    #this is for when we have one --Mike
+#configfile: "config.yaml"    # needs implementing and updating --Mike
 
 # Flag "$ snakemake" with "--report" to use
-report: "reports/metacles.rst"       #this is for generating a report of the workflow
+report: "reports/tapirs.rst"       #this is for generating a report of the workflow
 					#aswell as providing a report on the full workflow progress, individual output reports can be written to it by flagging the output with report()
 						#eg. report(<real_output>)
 						#Ive done this to rule fastp to demonstrate -- Mike
 
 
-# get the sequence files into a list. CHECK is this a library not sample?
-LIBS,=glob_wildcards("data/00_raw/{library}.R1.fastq.gz")
-#LIBS=["BLEL01","testlib"]
-## check libraries and LIBS are named OK throughout
 
-SAMPLES="BLEL01"
-#SAMPLES, = glob_wildcards("data/01_dmpxd/testlib/{sample}.R1.fastq.gz")
+library="testlib"
+sample,= glob_wildcards("data/01_dmpxd/testlib/{sample}.R1.fastq.gz")
+R=["R1", "R2"]
+#, = glob_wildcards("data/01_dmpxd/{library}/")
+## check libraries and library are named OK throughout
 
-## COMMENT [Marco]:
-## libs is the name of the libraries and it can be taken from the fastq.gz
-## files in 00_raw folder. Sample names though might need to be specified
-## in a separate file (??) or after demultiplex (??)
-
-R=['R1', 'R2']
-conda_envs=["metacles.yaml", "basta_LCA.yaml"]
+conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
+#sample,= glob_wildcards("data/01_dmpxd/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
 # target rule, specify outputs
 #-----------------------------------------------------
 rule all:
     input:
-        #expand("data/00_raw/{library}.{R}.fastq.gz", library=LIBS, R=R),
-        #directory(expand("data/01_dmpxd/{library}/", library=LIBS, R=R)),
-        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=LIBS, sample=SAMPLES, R=R),
-        expand("data/03_denoised/{library}/{sample}.fasta", library=LIBS, sample=SAMPLES, R=R),
-        expand("results/blast/{library}/{sample}_blast.out", library=LIBS, sample=SAMPLES),
-        expand("results/LCA/{library}/{sample}.basta_LCA.out", library=LIBS, sample=SAMPLES),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=LIBS, sample=SAMPLES),
-		#expand("results/basta/{sample}.basta_LCA.out", library=LIBS, sample=SAMPLES),
+        #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
+        #directory(expand("data/01_dmpxd/{library}/", library=library, R=R)),
+        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
+        expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
+        expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
+        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
+		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
         # reports ----------------------------------------------
-        expand("reports/fastp/{library}/{sample}.json", library=LIBS, sample=SAMPLES),
-        expand("reports/fastp/{library}/{sample}.html", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}.denoise.biom", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}_fq_eestats", library=LIBS, sample=SAMPLES),
-        expand("reports/vsearch/{library}/{sample}_fq_readstats", library=LIBS, sample=SAMPLES),
-        expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=LIBS, sample=SAMPLES),
-        expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs)
+        expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
+        expand("reports/fastp/{library}/{sample}.html", library=library, sample=sample),
+        expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
+        expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
+        expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
+        expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
+        expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
+        expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
+        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
 
 #-----------------------------------------------------
 # include rule files
 #-----------------------------------------------------
 
-# include: os.path.join("rules/qc.smk"),
+
 # include: "rules/reports.smk",
 # #include: "rules/kraken.smk",
 # include: "rules/blast.smk",
@@ -84,7 +77,7 @@ rule all:
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         read1 = "data/01_dmpxd/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_dmpxd/{library}/{sample}.R2.fastq.gz"
@@ -126,7 +119,7 @@ rule fastp_trim_and_merge:
 #-----------------------------------------------------
 rule fastq_to_fasta:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -141,7 +134,7 @@ rule fastq_to_fasta:
 #-----------------------------------------------------
 rule vsearch_reporting:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -156,7 +149,7 @@ rule vsearch_reporting:
 #-----------------------------------------------------
 rule vsearch_dereplication:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.fasta"
     output:
@@ -169,7 +162,7 @@ rule vsearch_dereplication:
 #-----------------------------------------------------
 rule vsearch_denoising:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
@@ -185,7 +178,7 @@ rule vsearch_denoising:
 #-----------------------------------------------------
 rule vsearch_dechimerisation: # output needs fixing
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "data/03_denoised/{library}/{sample}.fasta"
     output: # fix
@@ -194,30 +187,48 @@ rule vsearch_dechimerisation: # output needs fixing
     shell:
         "vsearch --uchime3_denovo {input} --uchimeout {output.text} --nonchimeras {output.fasta}"
 
+#------------------------------------------------------
+# re-replication
+#-------------------------------------------------------
+rule vsearch_rereplication:
+    input:
+        "data/03_denoised/{library}/{sample}.fasta"
+    output:
+        "data/rereplicated/{library}/{sample}.fasta"
+    threads:
+        12
+    shell:
+        "vsearch --rereplicate {input} --output {output}"
+
+
 #-----------------------------------------------------
 # blastn, sequence similarity search
 #-----------------------------------------------------
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
-        db = "nt", #specify in environment.yaml
+        #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir="~/Desktop/Marco/BLAST_DB/nt-Dec18", # database directory
+        db_dir="/media/mike/mikesdrive/NCBI_databases/blastdb_nt", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
+    threads:
+        10
     shell:
         "blastn \
-            -db {params.db_dir}/{input.db} \
-            -num_threads 3 \
+            -db nt \
+            -num_threads {threads} \
             -outfmt {params.outformat} \
             -max_target_seqs {params.descriptions} \
             -query {input.query} \
             -out {output}"
+
+# database is going to cause problems and needs a symbolic path in config
 
 #-----------------------------------------------------
 # LCA, Last Comomon Ancestor analysis of blast using BASTA
@@ -251,29 +262,32 @@ rule basta_LCA:
 # BASTA to BIOM,
 # BASTA output tsv converted to BIOM, uses BIOM-convert
 #-----------------------------------------------------
-# rule basta_BIOM:
-#     conda:
-#         "envs/metacles.yaml"
-#     input:
-#         "results/LCA/{library}/{sample}.basta_LCA.out"
-#     params:
-#         json="json",
-#         hdf5="hdf5"
-#     output:
-#         "results/LCA/{library}.basta_LCA.out.biom"
-#     shell:
-#         "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.hdf5}"
+rule basta_BIOM:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        "results/LCA/{library}/{sample}.basta_LCA.out"
+    params:
+        json="json",
+        hdf5="hdf5"
+    output:
+        "results/LCA/{library}/{sample}.basta_LCA.out.biom"
+    shell:
+        "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.hdf5}"
 
 #-----------------------------------------------------
 # BIOM to tsv GRAHAM TO CHECK
 #-----------------------------------------------------
 # rule BIOM_tsv:
+#     conda:
+#         "envs/tapirs.yaml"
 #     input:
-#         "results/LCA/{sample}.basta_LCA.out.biom"
+#         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
 #     output:
-#         "results/LCA/{sample}.basta_LCA.out.tsv"
+#         "results/LCA/{library}/{sample}.basta_LCA.out.tsv"
 #     shell:
 #         "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.hdf5}"
+
 
 # biom convert -i table.txt -o table.from_txt_json.biom --table-type="OTU table" --to-json
 # biom convert -i table.txt -o table.from_txt_hdf5.biom --table-type="OTU table" --to-hdf5
@@ -283,11 +297,12 @@ rule basta_LCA:
 # Krona
 #-----------------------------------------------------
 # basta2krona.py
-# This creates a krona plot (html file) that can be opened in your browser from a basta annotation output file(s). Multiple files can be given separated by comma.
+# This creates a krona plot (html file) for each sample that can be opened in a browser from a basta annotation output file(s).
+# Multiple files can be given separated by comma.
 
 rule krona_LCA_plot:
     conda:
-        "envs/metacles.yaml"
+        "envs/tapirs.yaml"
     input:
         "results/LCA/{library}/{sample}.basta_LCA.out"
     output:
@@ -296,7 +311,7 @@ rule krona_LCA_plot:
         "python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py {input} {output}"
 
         ## DO NOT LOSE THIS COMMAND!!!!
-        ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py Desktop/metacles/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
+        ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
 
 #-----------------------------------------------------
