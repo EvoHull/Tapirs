@@ -14,10 +14,10 @@ report: "reports/tapirs.rst"       #this is for generating a report of the workf
 						#eg. report(<real_output>)
 						#Ive done this to rule fastp to demonstrate -- Mike
 
+## Need to implement something to allow intake of both fastq and fastq.gz -Mike
 
-
-library="testlib"
-sample,= glob_wildcards("data/01_dmpxd/testlib/{sample}.R1.fastq.gz")
+library="N1"
+sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq.gz")
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_dmpxd/{library}/")
 ## check libraries and library are named OK throughout
@@ -36,6 +36,8 @@ rule all:
         expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
+        expand("results/blast{library}/{sample}_blast.taxed.out", library=library, sample=sample),
+        expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
         # reports ----------------------------------------------
@@ -126,8 +128,8 @@ rule fastq_to_fasta:
         "data/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
         "vsearch \
-            --fastq_filter {input} \
-            --fastaout {output}"
+        --fastq_filter {input} \
+        --fastaout {output}"
 
 #-----------------------------------------------------
 # vsearch fastq fqreport
@@ -212,9 +214,11 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "data/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir="/media/mike/mikesdrive/NCBI_databases/blastdb_nt", # database directory
+        db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
-        outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'"
+        outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
+        min_perc_ident="100",             # thsi needs to be 100%
+        min_evalue="1e-20"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
     threads:
@@ -224,6 +228,8 @@ rule blastn:
             -db nt \
             -num_threads {threads} \
             -outfmt {params.outformat} \
+            -perc_identity {params.min_perc_ident} \
+            -evalue {params.min_evalue} \
             -max_target_seqs {params.descriptions} \
             -query {input.query} \
             -out {output}"
@@ -258,10 +264,35 @@ rule basta_LCA:
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
 
+
+
+#-----------------------------------------------------
+# simple LCA
+#-----------------------------------------------------
+rule simpleLCA_adding_taxid:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        "results/blast/{library}/{sample}_blast.out"
+    output:
+        "results/blast{library}/{sample}_blast.taxed.out"
+    threads:
+        28
+    shell:
+        "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
+
+rule simpleLCA:
+    input:
+        "results/blast/{library}/{sample}_blast.taxed.out"
+    output:
+        "results/simpleLCA/{library}/{sample}.lca"
+    shell:
+        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
 #-----------------------------------------------------
 # BASTA to BIOM,
-# BASTA output tsv converted to BIOM, uses BIOM-convert
 #-----------------------------------------------------
+# BASTA output tsv converted to BIOM, uses BIOM-convert
+
 rule basta_BIOM:
     conda:
         "envs/tapirs.yaml"
