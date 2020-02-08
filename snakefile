@@ -32,8 +32,8 @@ rule all:
     input:
         #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
         #directory(expand("data/01_dmpxd/{library}/", library=library, R=R)),
-        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
-        expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
+        expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         expand("results/blast{library}/{sample}_blast.taxed.out", library=library, sample=sample),
@@ -54,8 +54,6 @@ rule all:
 #-----------------------------------------------------
 # include rule files
 #-----------------------------------------------------
-
-
 # include: "rules/reports.smk",
 # #include: "rules/kraken.smk",
 # include: "rules/blast.smk",
@@ -84,12 +82,12 @@ rule fastp_trim_and_merge:
         read1 = "data/01_dmpxd/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_dmpxd/{library}/{sample}.R2.fastq.gz"
     output:
-        out1 = "data/02_trimmed/{library}/{sample}.R1.fastq.gz",
-        out2 = "data/02_trimmed/{library}/{sample}.R2.fastq.gz",
-        out_unpaired1 = "data/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
-        out_unpaired2 = "data/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
-        out_failed = "data/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged="data/02_trimmed/{library}/{sample}.merged.fastq.gz",
+        out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
+        out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
+        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
+        out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
+        merged="results/02_trimmed/{library}/{sample}.merged.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -123,22 +121,22 @@ rule fastq_to_fasta:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
-        "data/02_trimmed/{library}/{sample}.merged.fasta",
+        "results/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
         "vsearch \
         --fastq_filter {input} \
         --fastaout {output}"
 
 #-----------------------------------------------------
-# vsearch fastq fqreport
+# vsearch fastq report
 #-----------------------------------------------------
 rule vsearch_reporting:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -153,9 +151,9 @@ rule vsearch_dereplication:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.fasta"
     output:
-        "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     shell:
         "vsearch --derep_fulllength {input} --sizeout --output {output}"
 
@@ -166,9 +164,9 @@ rule vsearch_denoising:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
-        fasta="data/03_denoised/{library}/{sample}.fasta",
+        fasta="results/03_denoised/{library}/{sample}.fasta",
         biom="reports/vsearch/{library}/{sample}.denoise.biom"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
@@ -182,10 +180,10 @@ rule vsearch_dechimerisation: # output needs fixing
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}.fasta"
     output: # fix
-        text = "data/03_denoised/{library}/{sample}_chimera.txt",
-        fasta = "data/03_denoised/{library}/nc_{sample}.fasta"
+        text = "results/03_denoised/{library}/{sample}_chimera.txt",
+        fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
     shell:
         "vsearch --uchime3_denovo {input} --uchimeout {output.text} --nonchimeras {output.fasta}"
 
@@ -194,9 +192,9 @@ rule vsearch_dechimerisation: # output needs fixing
 #-------------------------------------------------------
 rule vsearch_rereplication:
     input:
-        "data/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}.fasta"
     output:
-        "data/rereplicated/{library}/{sample}.fasta"
+        "results/rereplicated/{library}/{sample}.fasta"
     threads:
         12
     shell:
@@ -212,7 +210,7 @@ rule blastn:
         "envs/tapirs.yaml"
     input:
         #db = "nt", #specify in environment.yaml
-        query = "data/03_denoised/{library}/nc_{sample}.fasta"
+        query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
         db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
