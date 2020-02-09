@@ -1,24 +1,21 @@
+![tapirs_logo](./images/tapirs_seq.png)
+
 # Overview of Tapirs
 
-Tapirs is a snakemake workflow system to process metabarcode DNA sequences and assign taxonomy.
+Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to process metabarcode DNA sequences and assign taxonomy.
 
-![tapirs_logo](./images/ACGT_tapirs.png)
-
-The Tapirs workflow takes a directory of demultiplexed fastq.gz sequences and applies quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy. It will next assign a taxonomic identity to each sequence by a variety of methods. Since we use a workflow manager (snakemake) methods can easily be added to this list without affecting the rest of the workflow. Out of the box it can use:
+The Tapirs workflow takes a directory of demultiplexed fastq.gz sequences and applies quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy. It will next assign a taxonomic identity to each sequence by a variety of methods. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow. Out of the box it can use:
 
 - blast with Last Common Ancestor analysis of results
-- kraken2
+- Kraken2 kmer analysis
 
 The workflow will write reports of its analyses and actions, and output to standard format BIOM and tsv files.
-
-!!! note
-    The assumption is that you are working on a POSIX system, not MS Windows.
 
 # Quickstart
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
-    - `git clone url`
+    - `git clone https://github.com/davelunt/Tapirs`
 3. create and activate a conda environment from the Tapirs `environment.yaml` file
     - `conda env create --file environment.yaml`
 4. edit the `config.yaml` to identify the location of demultiplexed data and databases
@@ -35,9 +32,10 @@ The software is released as CC0, public domain, you may do as you wish.
 
 Please cite the software like this:
 ```
-Tapirs: extensible reproducible workflows for metabarcoding
-Authors
-doi: 1234567
+Title:  Tapirs: extensible reproducible workflows for metabarcoding
+Authors:
+doi:    1234567
+URL:    https://github.com/davelunt/Tapirs
 ```
 
-Please also cite the software generating the analysis, for example Kraken2 (Wood et al).
+Please also cite the software generating the analysis, an appropriate way to do this would be: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], and Krona [4]."

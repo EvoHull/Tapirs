@@ -14,7 +14,7 @@ When an experiment is finished you should have an 'exit strategy' checklist to m
 
 # Software list and versions
 
-The full list of software, their dependencies and version numbers will be written to envs/ at the end of the run. This .yaml file can be used to reproduce the experimental conditions.
+The full list of software, their dependencies and version numbers called `environment.yaml` is written to envs/ directory at the end of the run. This file can be used to reproduce the experimental software conditions.
 
 
 Snakemake can be asked to archive it all.

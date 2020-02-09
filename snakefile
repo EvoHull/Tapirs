@@ -1,12 +1,12 @@
 #-----------------------------------------------------
 # Tapirs
 # ---------
-# A metabarcoding workflow using snakemake
-# this file runs other snakemake worksflows in the rules
+# A reproducible metabarcoding workflow using snakemake
+# This file runs other snakemake worksflows in the rules
 # directory
 #-----------------------------------------------------
 
-#configfile: "config.yaml"    # needs implementing and updating --Mike
+#configfile: "config.yaml"
 
 # Flag "$ snakemake" with "--report" to use
 report: "reports/tapirs.rst"       #this is for generating a report of the workflow
@@ -276,6 +276,8 @@ rule simpleLCA_adding_taxid:
         "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
 
 rule simpleLCA:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/blast/{library}/{sample}_blast.taxed.out"
     params:
@@ -302,6 +304,7 @@ rule simpleLCA:
         -fh {params.fh} \
         -flh {params.flh}"
         # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+
 #-----------------------------------------------------
 # BASTA to BIOM,
 #-----------------------------------------------------
@@ -371,8 +374,6 @@ rule conda_env:
     shell:
         "conda env export --file {output}"
 
-
-
 # rule kraken2:
 #     input:
 #         query= "data/kraken/query/R2.fasta",
@@ -397,15 +398,15 @@ rule conda_env:
 # multiQC, create a single report from QC outputs
 #-----------------------------------------------------
 
-rule multiqc:
-    input:
-        "./reports/"
-    params:
-        name = config["experiment"]
-    output:
-        "reports/multiqc"
-    shell:
-        "multiqc {input} -o {output} -i {params.name} --force"
+# rule multiqc:
+#     input:
+#         "./reports/"
+#     params:
+#         expt_name = config["experiment"]
+#     output:
+#         "reports/multiqc"
+#     shell:
+#         "multiqc {input} -o {output} -i {params.expt_name} --force"
 
 #-----------------------------------------------------
 # seqkit, write simple report on fasta files
