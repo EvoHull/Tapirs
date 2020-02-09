@@ -8,7 +8,6 @@ dependencies:
   - jinja2 =2.10
   - matplotlib =2.2.3
   - graphviz =2.38.0
-  # - git
 
   # processing sequence reads
   - fastp # sequence trimming and processing
