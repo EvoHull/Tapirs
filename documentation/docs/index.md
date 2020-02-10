@@ -2,14 +2,13 @@
 
 # Overview of Tapirs
 
-Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to process metabarcode DNA sequences and assign taxonomy.
+Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to reproducibly process metabarcode DNA sequences and assign taxonomy.
 
-The Tapirs workflow takes a directory of demultiplexed fastq.gz sequences and applies quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy. It will next assign a taxonomic identity to each sequence by a variety of methods. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow. Out of the box it can use:
+The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences. There are three key sections to its workflow:
 
-- blast with Last Common Ancestor analysis of results
-- Kraken2 kmer analysis
-
-The workflow will write reports of its analyses and actions, and output to standard format BIOM and tsv files.
+1. **Qualtiy Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
+2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, and Karken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
+3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package is used to calculate diversity statistics and plots.
 
 # Quickstart
 
