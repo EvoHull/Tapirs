@@ -16,7 +16,10 @@ When an experiment is finished you should have an 'exit strategy' checklist to m
 
 The full list of software, their dependencies and version numbers called `environment.yaml` is written to envs/ directory at the end of the run. This file can be used to reproduce the experimental software conditions.
 
-
-Snakemake can be asked to archive it all.
+# Archiving
+Snakemake can be asked to [make an archive](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#sustainable-and-reproducible-archiving) of code, cofig, and input file:
+```
+snakemake --archive my-workflow.tar.gz
+```
 
 Transparent workflow
