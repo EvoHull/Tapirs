@@ -23,7 +23,7 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 
 See the [installation](How-To-Guide/installation.md) and [setup](How-To-Guide/setup.md) pages for more detailed help
 
-# License and citation
+# Licence and citation
 
 Project led by [Dave Lunt](https://davelunt.net), Mike Winter, Graham Sellers, Marco Benucci, and the EvoHull group at the University of Hull, UK.
 
@@ -37,4 +37,4 @@ doi:    1234567
 URL:    https://github.com/davelunt/Tapirs
 ```
 
-Please also cite the software generating the analysis, an appropriate way to do this would be: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], and Krona [4]."
+**Please also cite the software generating the analyses.** An appropriate way to do this would be: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using vsearch [2], blast [3], Kraken2 [4], and Krona [5]."
