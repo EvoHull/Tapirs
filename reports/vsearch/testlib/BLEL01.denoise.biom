@@ -4,7 +4,7 @@
 	"format_url": "http://biom-format.org/documentation/format_versions/biom-1.0.html",
 	"type": "OTU table",
 	"generated_by": "vsearch 2.14.1",
-	"date": "2019-12-18T11:53:06",
+	"date": "2020-02-05T21:33:04",
 	"matrix_type": "sparse",
 	"matrix_element_type": "int",
 	"shape": [47,1],

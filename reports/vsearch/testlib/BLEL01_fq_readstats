@@ -1,6 +1,6 @@
-vsearch v2.14.1_linux_x86_64, 5.8GB RAM, 4 cores
+vsearch v2.14.1_linux_x86_64, 47.1GB RAM, 16 cores
 vsearch --fastq_stats data/02_trimmed/testlib/BLEL01.merged.fastq.gz --log reports/vsearch/testlib/BLEL01_fq_readstats
-Started  Tue Dec 17 17:05:38 2019
+Started  Wed Feb  5 21:32:58 2020
 
 Read length distribution
       L           N      Pct   AccPct
@@ -387,6 +387,6 @@ Truncate at first Q
      103.2  Avg length
      12.8M  Bases
 
-Finished Tue Dec 17 17:05:39 2019
+Finished Wed Feb  5 21:32:59 2020
 Elapsed time 00:01
 Max memory 4.4MB
