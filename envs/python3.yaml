@@ -1,6 +1,0 @@
-name: python3
-channels:
-  - conda-forge
-  - bioconda
-  - defaults
-prefix: /home/mike/anaconda3/envs/python3
