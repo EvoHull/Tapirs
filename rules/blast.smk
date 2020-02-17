@@ -1,5 +1,5 @@
 #-----------------------------------------------------
-# metaclese-blast
+# Tapirs-blast
 # ---------
 # A metabarcoding workflow to make taxon assignments
 # using blast

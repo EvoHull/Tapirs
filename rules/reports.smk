@@ -1,11 +1,11 @@
 #-----------------------------------------------------
-# metaclese-report
-# ---------
+# Tapirs-report
+# -------------
 # A metabarcoding workflow to report on QC and
 # taxonomic assignment
 #-----------------------------------------------------
 
-report: "../reports/metacles.rst"
+report: "../reports/tapirs.rst"
 
 # get the sequence files into a list
 SAMPLES, = glob_wildcards("{sample}.R[1,2].fastq.gz")
@@ -56,6 +56,15 @@ rule basta_to_krona:
         "reports/krona/basta_to_krona.html"
     shell:
         "./scripts/basta2krona {input} {output}"
+
+#-----------------------------------------------------
+# Snakemake report
+#-----------------------------------------------------
+rule snakemake_report:
+    output:
+        "reports/snakemake_report.html"
+    shell:
+        "snakemake --report {output}"
 
 #-----------------------------------------------------
 # Archive conda environment

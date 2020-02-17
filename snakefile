@@ -1,12 +1,12 @@
 #-----------------------------------------------------
 # Tapirs
 # ---------
-# A metabarcoding workflow using snakemake
-# this file runs other snakemake worksflows in the rules
+# A reproducible metabarcoding workflow using snakemake
+# This file runs other snakemake worksflows in the rules
 # directory
 #-----------------------------------------------------
 
-#configfile: "config.yaml"    # needs implementing and updating --Mike
+#configfile: "config.yaml"
 
 # Flag "$ snakemake" with "--report" to use
 report: "reports/tapirs.rst"       #this is for generating a report of the workflow
@@ -32,8 +32,8 @@ rule all:
     input:
         #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
         #directory(expand("data/01_dmpxd/{library}/", library=library, R=R)),
-        expand("data/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
-        expand("data/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
+        expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         expand("results/blast{library}/{sample}_blast.taxed.out", library=library, sample=sample),
@@ -54,8 +54,6 @@ rule all:
 #-----------------------------------------------------
 # include rule files
 #-----------------------------------------------------
-
-
 # include: "rules/reports.smk",
 # #include: "rules/kraken.smk",
 # include: "rules/blast.smk",
@@ -74,7 +72,7 @@ rule all:
 #         "gzip {input} > {output}"
 
 #-----------------------------------------------------
-# fastp, control for sequence quality
+# fastp, control for sequence quality and pair reads
 #-----------------------------------------------------
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
@@ -84,12 +82,12 @@ rule fastp_trim_and_merge:
         read1 = "data/01_dmpxd/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_dmpxd/{library}/{sample}.R2.fastq.gz"
     output:
-        out1 = "data/02_trimmed/{library}/{sample}.R1.fastq.gz",
-        out2 = "data/02_trimmed/{library}/{sample}.R2.fastq.gz",
-        out_unpaired1 = "data/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
-        out_unpaired2 = "data/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
-        out_failed = "data/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged="data/02_trimmed/{library}/{sample}.merged.fastq.gz",
+        out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
+        out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
+        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
+        out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
+        merged="results/02_trimmed/{library}/{sample}.merged.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -123,22 +121,20 @@ rule fastq_to_fasta:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
-        "data/02_trimmed/{library}/{sample}.merged.fasta",
+        "results/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
-        "vsearch \
-        --fastq_filter {input} \
-        --fastaout {output}"
+        "vsearch --fastq_filter {input} --fastaout {output}"
 
 #-----------------------------------------------------
-# vsearch fastq fqreport
+# vsearch fastq report
 #-----------------------------------------------------
 rule vsearch_reporting:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -153,9 +149,9 @@ rule vsearch_dereplication:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.fasta"
     output:
-        "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     shell:
         "vsearch --derep_fulllength {input} --sizeout --output {output}"
 
@@ -166,9 +162,9 @@ rule vsearch_denoising:
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
-        fasta="data/03_denoised/{library}/{sample}.fasta",
+        fasta="results/03_denoised/{library}/{sample}.fasta",
         biom="reports/vsearch/{library}/{sample}.denoise.biom"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
@@ -182,10 +178,10 @@ rule vsearch_dechimerisation: # output needs fixing
     conda:
         "envs/tapirs.yaml"
     input:
-        "data/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}.fasta"
     output: # fix
-        text = "data/03_denoised/{library}/{sample}_chimera.txt",
-        fasta = "data/03_denoised/{library}/nc_{sample}.fasta"
+        text = "results/03_denoised/{library}/{sample}_chimera.txt",
+        fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
     shell:
         "vsearch --uchime3_denovo {input} --uchimeout {output.text} --nonchimeras {output.fasta}"
 
@@ -194,9 +190,9 @@ rule vsearch_dechimerisation: # output needs fixing
 #-------------------------------------------------------
 rule vsearch_rereplication:
     input:
-        "data/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}.fasta"
     output:
-        "data/rereplicated/{library}/{sample}.fasta"
+        "results/rereplicated/{library}/{sample}.fasta"
     threads:
         12
     shell:
@@ -212,12 +208,12 @@ rule blastn:
         "envs/tapirs.yaml"
     input:
         #db = "nt", #specify in environment.yaml
-        query = "data/03_denoised/{library}/nc_{sample}.fasta"
+        query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
         db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
-        min_perc_ident="100",             # thsi needs to be 100%
+        min_perc_ident="100",             # this needs to be 100%
         min_evalue="1e-20"
     output: # need to fix this by adding library name
         "results/blast/{library}/{sample}_blast.out"
@@ -264,10 +260,8 @@ rule basta_LCA:
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
 
-
-
 #-----------------------------------------------------
-# simple LCA
+# Simple-LCA
 #-----------------------------------------------------
 rule simpleLCA_adding_taxid:
     conda:
@@ -282,12 +276,35 @@ rule simpleLCA_adding_taxid:
         "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
 
 rule simpleLCA:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/blast/{library}/{sample}_blast.taxed.out"
+    params:
+        bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
+        id = "80", # -id identity threshold, required
+        coverage = "80", # -cov coverage threshold', required=True
+        tophit = "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
+        tid = "99", # 'identity treshold for the tophit', required=False, default='100'
+        tcov = "100", # query coverage threshold for the tophit', required=False,  default='100'
+        fh = "environmental", # filter out hits that contain unwanted taxonomy'
+        flh = "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
     output:
         "results/simpleLCA/{library}/{sample}.lca"
     shell:
-        "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+        "scripts/Simple-LCA-master/lca.py \
+        -i {input} \
+        -o {output} \
+        -b {params.bitscore} \
+        -id {params.id} \
+        -cov {params.coverage} \
+        -t {params.tophit} \
+        -tid {params.tid} \
+        -tcov {params.tcov} \
+        -fh {params.fh} \
+        -flh {params.flh}"
+        # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+
 #-----------------------------------------------------
 # BASTA to BIOM,
 #-----------------------------------------------------
@@ -349,7 +366,6 @@ rule krona_LCA_plot:
 # Archive conda environment
 #-----------------------------------------------------
 
-
 rule conda_env:
     conda:
         "envs/{conda_envs}"
@@ -357,8 +373,6 @@ rule conda_env:
         "reports/archived_envs/{conda_envs}"
     shell:
         "conda env export --file {output}"
-
-
 
 # rule kraken2:
 #     input:
@@ -379,6 +393,20 @@ rule conda_env:
 #-----------------------------------------------------
 # vegan
 #-----------------------------------------------------
+
+#-----------------------------------------------------
+# multiQC, create a single report from QC outputs
+#-----------------------------------------------------
+
+# rule multiqc:
+#     input:
+#         "./reports/"
+#     params:
+#         expt_name = config["experiment"]
+#     output:
+#         "reports/multiqc"
+#     shell:
+#         "multiqc {input} -o {output} -i {params.expt_name} --force"
 
 #-----------------------------------------------------
 # seqkit, write simple report on fasta files

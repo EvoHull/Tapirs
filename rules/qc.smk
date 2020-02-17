@@ -1,5 +1,5 @@
 #-----------------------------------------------------
-# metaclese-qc
+# Tapirs-qc
 # ---------
 # A metabarcoding workflow for quality control
 # before taxonomic assignment
@@ -85,24 +85,24 @@ rule seqkit:
         shell:
             "seqkit fq2fa {input} -o {output}"
 
-#-----------------------------------------------------
-# seqkit to write simple report on fasta files
-#-----------------------------------------------------
-rule seqkitstats:
-        input:
-            "results/seqkit/{sample}.fasta.gz"
-        output:
-            "reports/{sample}.seqkit_fastastats.md"
-        shell:
-            "seqkit stats {input} | csvtk csv2md -t -o {output}"
-
-#-----------------------------------------------------
-# tidy fastp report
-#-----------------------------------------------------
-rule fastp_report_mover: # moving reports from fastp
-    input:
-        "fastp.*" # check this syntax
-    output:
-        directory("reports/")
-    shell:
-        "mv {input} {output}"
+# #-----------------------------------------------------
+# # seqkit to write simple report on fasta files
+# #-----------------------------------------------------
+# rule seqkitstats:
+#         input:
+#             "results/seqkit/{sample}.fasta.gz"
+#         output:
+#             "reports/{sample}.seqkit_fastastats.md"
+#         shell:
+#             "seqkit stats {input} | csvtk csv2md -t -o {output}"
+#
+# #-----------------------------------------------------
+# # tidy fastp report
+# #-----------------------------------------------------
+# rule fastp_report_mover: # moving reports from fastp
+#     input:
+#         "fastp.*" # check this syntax
+#     output:
+#         directory("reports/")
+#     shell:
+#         "mv {input} {output}"
