@@ -16,19 +16,6 @@ rule all_qc:
         expand("reports/{sample}.seqkit_fastastats.md", sample=SAMPLES)
 
 #-----------------------------------------------------
-# demultiplex to gather data correctly
-# this is a placeholder, needs fixing
-#-----------------------------------------------------
-rule demultiplex:
-    input:
-        raw_data="data/raw/{sample}.R[1,2].fastq.gz", # fix to take libraries
-        dir_tsv="data/demultiplex/" #fix to take tsv files
-    output:
-        directory("results/demultiplex/")
-    script:
-        "scripts/demultiplex.py" # this script needs to be snakemakified
-
-#-----------------------------------------------------
 # fastp- this replaces trimmomatic etc
 #-----------------------------------------------------
 rule fastp:
@@ -47,7 +34,7 @@ rule fastp:
 #-----------------------------------------------------
 rule denoise:
     input:
-        "data/Lib1-Oct-SH1a.R1.fastq.gz"
+        "data/{sample}.fastq.gz"
     output:
         "denoised-sequences"
     shell:
