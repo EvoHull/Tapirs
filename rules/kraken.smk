@@ -1,5 +1,5 @@
 #-----------------------------------------------------
-# metaclese-kraken2
+# Tapirs-kraken2
 # ---------
 # A metabarcoding workflow to assign taxonomy using Kraken2
 #-----------------------------------------------------
