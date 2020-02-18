@@ -11,8 +11,15 @@ min_version("5.1.2")
 configfile: "config.yaml"
 validate(config, schema="schemas/config.schema.yaml")
 
-samples = pd.read_table(config["samples"]).set_index("sample", drop=False)
-validate(samples, schema="schemas/samples.schema.yaml")
+# we need a libraries.tsv and units.tsv files at the top level
+# config.yaml then just lists them ie
+units: units.tsv
+libraries: libraries.tsv
+
+# Note 'samples' changed to 'libraries'
+
+libraries = pd.read_table(config["libraries"]).set_index("sample", drop=False)
+validate(libraries, schema="schemas/libraries.schema.yaml")
 
 units = pd.read_table(config["units"], dtype=str).set_index(["sample", "unit"], drop=False)
 units.index = units.index.set_levels([i.astype(str) for i in units.index.levels])  # enforce str in index
@@ -28,33 +35,7 @@ rule all:
                contrast=config["diffexp"]["contrasts"]),
         "results/pca.svg",
         "qc/multiqc_report.html"
-##### setup singularity #####
-# this container defines the underlying OS for each job when using the workflow
-# with --use-conda --use-singularity
-singularity: "docker://continuumio/miniconda3"
-
 
 ##### setup report #####
 
 report: "report/workflow.rst"
-
-
-##### load rules #####
-
-include: "rules/common.smk"
-include: "rules/trim.smk"
-include: "rules/align.smk"
-include: "rules/diffexp.smk"
-include: "rules/qc.smk"
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
