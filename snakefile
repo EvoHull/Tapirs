@@ -326,6 +326,8 @@ rule mlca:
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 rule kraken2:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
@@ -353,6 +355,8 @@ rule kraken2:
 # Kraken output to BIOM format
 #-----------------------------------------------------
 rule kraken_to_biom:
+    conda:
+        "envs/tapirs.yaml"
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
