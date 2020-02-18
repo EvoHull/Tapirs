@@ -262,36 +262,34 @@ rule blastn:
         -query {input.query} \
         -out {output}"
 
-# database is going to cause problems and needs a symbolic path in config
-
 #-----------------------------------------------------
 # LCA, Last Comomon Ancestor analysis of blast using BASTA
 #-----------------------------------------------------
-rule basta_LCA:
-    conda:
-        "envs/basta_LCA.yaml"
-    input:
-        "results/blast/{library}/{sample}_blast.out" #fix this
-        # file of blast tabular -outfmt 6 from above
-    params:
-        nhits="50", # -n max number of  hits to consider for classification (default=0=all)
-        minhits="3", # -m must have at least 3 hits, else ignored (default=3)
-        evalue="1e-20", # -e min e-value of hit (default=0.00001)
-        length="90", # -l match must be at least 90bp (default=100)
-        minident="95", # -i minimum identity of hit (default=80)
-        maj_percent="90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
-        dir="/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
-    output: # check library/sample syntax
-        "results/LCA/{library}/{sample}.basta_LCA.out"
-    shell:
-        "basta sequence {input} {output} gb \
-        -p {params.maj_percent} \
-        -m {params.minhits} \
-        -l {params.length} \
-        -i {params.minident} \
-        -n {params.nhits}"
-#        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
-
+# rule basta_LCA:
+#     conda:
+#         "envs/basta_LCA.yaml"
+#     input:
+#         "results/blast/{library}/{sample}_blast.out" #fix this
+#         # file of blast tabular -outfmt 6 from above
+#     params:
+#         nhits="50", # -n max number of  hits to consider for classification (default=0=all)
+#         minhits="3", # -m must have at least 3 hits, else ignored (default=3)
+#         evalue="1e-20", # -e min e-value of hit (default=0.00001)
+#         length="90", # -l match must be at least 90bp (default=100)
+#         minident="95", # -i minimum identity of hit (default=80)
+#         maj_percent="90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
+#         dir="/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
+#     output: # check library/sample syntax
+#         "results/LCA/{library}/{sample}.basta_LCA.out"
+#     shell:
+#         "basta sequence {input} {output} gb \
+#         -p {params.maj_percent} \
+#         -m {params.minhits} \
+#         -l {params.length} \
+#         -i {params.minident} \
+#         -n {params.nhits}"
+# #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
+#
 #-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
@@ -330,11 +328,6 @@ rule mlca:
         -cov {params.coverage} \
         -m {params.majority} \
         -hits {params.hits}"
-
-# usage:
-# python tax_to_blast.py -i blast_out/BLE04_blast.tsv -o blast_out/BLE04_tax.tsv -lin new_taxdump/rankedlineage.dmp
-#       tax_to_blast.py adds taxonomy in a column to blast output
-#       rankedlineage.dmp is genbank taxonomy
 
 #-----------------------------------------------------
 # Simple-LCA
@@ -423,10 +416,8 @@ rule mlca:
 # OUTPUT: workflow should export data for downstream analysis. This is BIOM format written by metaBEAT, and also csv I guess.
 
 #-----------------------------------------------------
-# Krona
+# Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-# basta2krona.py
-# This creates a krona plot (html file) for each sample that can be opened in a browser from a basta annotation output file(s).
 # Multiple files can be given separated by comma.
 
 rule krona_LCA_plot:
