@@ -1,5 +1,6 @@
 #####   TAPIRS: CONFIGFILE   #####
 
+## Tapirs is highly configurable. Configuration is done before a run from within this file.
 ## You must customise the next two sections to identify your data (wildcard variables) and database locations.
 
 # --------------------------------------------------
@@ -8,26 +9,26 @@
 # Set experiment-specific variables here. Specifically, wildcards for {library}, {sample}, and {experiment}.
 experiment: "my_experiment" # insert experiment name, no_spaces
 
-## Comment from Mike: Struggling to get iteration to work ovr two
-#  wildcards - ie, library and sample - currently specifying library
-#  manually and globbing sample names from within it
-# should work like this below vvv
-# library,: glob_wildcards("data/01_dmpxd/{library}")
-library: "<library name>" or "[<list of libraries>]" # depending on how we iterate
+## Need to implement library iteration
+library: "N1" # "<library name>" or "[<list of libraries>]" # depending on how we iterate
 # but for now, manually
 
-# this below should work fine though may need altering once library iteration is implemented
+# this will need altering once library iteration is implemented
 sample,: glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
 
-# this is for wildcarding forward and reverse
+# this is for wildcarding forward and reverse reads
 R: ['R1', 'R2']
 
 # -----------------------------------------------
 # LOCATION OF DATA FILES AND DATABASES
 # -----------------------------------------------
 data_dir: "./data" # <insert path> location of data directory on your file system
-            # default is /data - this should contain 'demultiplexed' directory
+            # default is data/ - this should contain 'demultiplexed' directory
 blast_db: "<path to blast_nt_db>" # or set location of database
+
+
+# The following lines can potentially be removed depending on the implementation fo kraken and basta
+# If we do not use kraken or basta in the final pipeline, remove them from this configfile
 kraken_db: "<path to kraken db>" # or set location of database
 basta_tax_db: "<insert path>" # or install using "$ basta taxonomy" from within the basta_LCA conda_environment
 basta_map_db: "<insert path>" # or install using "$ basta download gb" from within the basta_LCA environment

@@ -9,9 +9,7 @@
 data/01_dmpxd/*
 data/01_demultiplexed/*
 /documentation/site/*
-12S_full/
 .git
 data/*
 reports/*
 results/*
-.gitignore

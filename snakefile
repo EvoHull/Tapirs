@@ -7,9 +7,13 @@
 configfile: "config.yaml"
 
 # Flag "$ snakemake" with "--report" to use
-report: "reports/tapirs.rst"
+report: "reports/tapirs.rst"   ### Check to make sure this works and that the output is something sensible - Mike
 
 ## Need to implement something to allow intake of both fastq and fastq.gz -Mike
+## This count be a rule wherein if the input is eg. .gz, it unzips,
+## whereas if not it automatically continues to the next rule that takes unzipped - mike
+
+
 
 library="N1"
 sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq.gz")
@@ -353,8 +357,9 @@ rule krona_LCA_plot:
     shell:
         "python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py {input} {output}"
 
-        ## DO NOT LOSE THIS COMMAND!!!!
-        ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
+## DO NOT LOSE THIS COMMAND!!!!
+## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
+# Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
 
 #-----------------------------------------------------
@@ -369,26 +374,6 @@ rule conda_env:
     shell:
         "conda env export --file {output}"
 
-# rule kraken2:
-#     input:
-#         query= "data/kraken/query/R2.fasta",
-#         database= directory("data/kraken/db/NCBI_nt")
-#     output:
-#         "results/kraken/R2out.txt"
-# 	# params:		## It isnt liking the use of params here for some reason. not sure why
-# 	# 	database= directory("data/kraken/db/NCBI_nt")
-#     shell:
-#       "kraken2 --db {input.database} {input.query} --use-names --report {output}"
-#
-#-----------------------------------------------------
-# krona
-#-----------------------------------------------------
-# now in the conda environment
-# need to run .pl and .sh scripts to install taxonomy databases
-#-----------------------------------------------------
-# vegan
-#-----------------------------------------------------
-
 #-----------------------------------------------------
 # multiQC, create a single report from QC outputs
 #-----------------------------------------------------
@@ -402,16 +387,3 @@ rule conda_env:
 #         "reports/multiqc"
 #     shell:
 #         "multiqc {input} -o {output} -i {params.expt_name} --force"
-
-#-----------------------------------------------------
-# seqkit, write simple report on fasta files
-#-----------------------------------------------------
-#rule seqkitstats:
-#        input:
-#            "data/05_seqkit/{library}/{sample}/extendedFrags.fas"
-#        output:
-#            "reports/seqkit/{library}/{sample}.seqkit_fastastats.md"
-#            #"reports/seqkit/seqkit_fastastats.md"
-#        shell:
-#            "seqkit stats {input} | csvtk csv2md -t -o {output}"
-#
