@@ -33,18 +33,19 @@ rule all:
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
-        expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
+        #expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
         ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
-# reports ----------------------------------------------
+        expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
+        # reports ----------------------------------------------
         expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
         expand("reports/fastp/{library}/{sample}.html", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
-        expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
+        #expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
     #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
         #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
@@ -164,6 +165,7 @@ rule vsearch_dereplication:
         "vsearch \
         --derep_fulllength {input} \
         --sizeout \
+        --minuniquesize 3 \
         --output {output} \
         "
 
@@ -185,6 +187,8 @@ rule vsearch_denoising:
         --cluster_unoise {input} \
         --centroids {output.fasta} \
         --biomout {output.biom} \
+        --minsize 3 \
+        --unoise_alpha 0.5 \
         "
         #" --notrunclabels
         # --log {params.log} \
@@ -203,7 +207,10 @@ rule vsearch_dechimerisation: # output needs fixing
         fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
     shell:
         "vsearch \
-        --uchime3_denovo {input} \
+        --uchime_ref {input} \
+        --db data/databases/12S_full/12s_full.fasta \
+        --mindiffs 1 \
+        --mindiv 0.8 \
         --uchimeout {output.text} \
         --nonchimeras {output.fasta} \
         "
@@ -237,7 +244,7 @@ rule blastn:
     params:
         db_dir=directory("data/databases/12S_full/12s_full"), # database directory
         descriptions="50", # return maximum of 50 hits
-        outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
+        outformat="'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
         min_perc_ident="100", # this needs to be 100%
         min_evalue="1e-20"
     output:
@@ -284,6 +291,50 @@ rule basta_LCA:
         -i {params.minident} \
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
+
+#-----------------------------------------------------
+# tax_to_blast, adds taxonomy in a column to blast output
+#-----------------------------------------------------
+rule tax_to_blast:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        blast_out="results/blast/{library}/{sample}_blast.out",
+        ranked_lineage="data/databases/new_taxdump/rankedlineage.dmp"
+    output:
+        blast_taxonomy="results/blast/{library}/{sample}_tax.tsv"
+    shell:
+        "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
+
+#-----------------------------------------------------
+# MLCA, majority lowest common ancestor
+#-----------------------------------------------------
+rule mlca:
+    input:
+        "results/blast/{library}/{sample}_tax.tsv"
+    output:
+        "results/mlca/{library}/{sample}_lca.tsv"
+    params:
+        bitscore = "10", # -b blast hit bitscore upper threshold
+        identity = "100", # -id percent identity
+        coverage = "60", # -cov percentage coverage
+        majority = "100", # -m majority percent, 100 is all hits share taxonomy
+        hits = "1" # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
+    shell:
+        "python \
+        scripts/mlca.py \
+        -i {input} \
+        -o {output} \
+        -b {params.bitscore} \
+        -id {params.identity} \
+        -cov {params.coverage} \
+        -m {params.majority} \
+        -hits {params.hits}"
+
+# usage:
+# python tax_to_blast.py -i blast_out/BLE04_blast.tsv -o blast_out/BLE04_tax.tsv -lin new_taxdump/rankedlineage.dmp
+#       tax_to_blast.py adds taxonomy in a column to blast output
+#       rankedlineage.dmp is genbank taxonomy
 
 #-----------------------------------------------------
 # Simple-LCA
