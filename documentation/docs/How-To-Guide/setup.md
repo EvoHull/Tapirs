@@ -3,15 +3,17 @@
     These instructions are to set up Tapirs after [installation](installation.md) has been carried out.
 
 # CONFIG FILES
-The `config.yaml` file contains settings for the workflow's operation. Most of them have reasonable default values, but some (like specifying the location of your data) require your input. Open `config.yaml` in a text editor.
+The `config.yaml` file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in `config.yaml` have reasonable default values, but some may require your input. Open `config.yaml` in a text editor.
 
 1. set a name for your experiment (default=expt_name)
 2. set the directory containing your **demultiplexed** fastq.gz data (default=data/demultiplexed)
-3. set the location of your databases (ignore if not using the program)
-    - blast database
-    - Kraken2 database
+3. check the location of your databases is correct and amend if they are elsewhere. Defaults are:
+    - `data/databases/blast`
+    - `data/databases/kraken`
+    - `data/databases/taxonomy`
 4. set fastp parameters for quality control and read merging
 5. set blast parameters
+6. set MLCA parameters
 
 # DATA
 
