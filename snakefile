@@ -16,8 +16,8 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 library="testlib"
-#sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
-sample="BLEL01" #this is temporary while we sort the output of demultiplexing to be zipped
+sample,= glob_wildcards("data/01_demultiplexed/testlib/{sample}.R1.fastq.gz")
+#sample="BLEL01" #this is temporary while we sort the output of demultiplexing to be zipped
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
@@ -35,7 +35,7 @@ rule all:
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
-        #expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
+        ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
 # reports ----------------------------------------------
