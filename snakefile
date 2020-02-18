@@ -15,8 +15,9 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 
-library="N1"
-sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
+library=["EA01"]
+sample,= glob_wildcards("data/01_demultiplexed/EA01/{sample}.R1.fastq.gz")
+#sample="BLEL01" #this is temporary while we sort the output of demultiplexing to be zipped
 R=["R1", "R2"]
 #, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
@@ -29,17 +30,15 @@ conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
 #-----------------------------------------------------
 rule all:
     input:
-        #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
-        #directory(expand("data/01_demultiplexed/{library}/", library=library, R=R)),
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
-        expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
-        expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
+        #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
+        ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
-        # reports ----------------------------------------------
+# reports ----------------------------------------------
         expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
         expand("reports/fastp/{library}/{sample}.html", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
@@ -54,9 +53,10 @@ rule all:
 # include rule files
 #-----------------------------------------------------
 # include: "rules/reports.smk",
-# #include: "rules/kraken.smk",
+# include: "rules/kraken.smk",
 # include: "rules/blast.smk",
 # include: "rules/qc.smk"
+
 
 # #-----------------------------------------------------
 # # gzip demultiplexed files, seqkit
@@ -69,6 +69,7 @@ rule all:
 #         "data/1_demultiplexed/{library}/{sample}.{R}.fastq.gz"
 #     shell:
 #         "gzip {input} > {output}"
+
 
 #-----------------------------------------------------
 # fastp, control for sequence quality and pair reads
@@ -124,7 +125,10 @@ rule fastq_to_fasta:
     output:
         "results/02_trimmed/{library}/{sample}.merged.fasta",
     shell:
-        "vsearch --fastq_filter {input} --fastaout {output}"
+        "vsearch \
+        --fastq_filter {input} \
+        --fastaout {output} \
+        "
 
 #-----------------------------------------------------
 # vsearch fastq report
@@ -138,8 +142,13 @@ rule vsearch_fastq_report:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
     shell:
-        "vsearch --fastq_eestats {input} --output {output.fqreport} ; \
-        vsearch --fastq_stats {input} --log {output.fqreadstats}"
+        "vsearch \
+        --fastq_eestats {input} \
+        --output {output.fqreport} ; \
+        vsearch \
+        --fastq_stats {input} \
+        --log {output.fqreadstats} \
+        "
 
 #-----------------------------------------------------
 # dereplication
@@ -152,7 +161,11 @@ rule vsearch_dereplication:
     output:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     shell:
-        "vsearch --derep_fulllength {input} --sizeout --output {output}"
+        "vsearch \
+        --derep_fulllength {input} \
+        --sizeout \
+        --output {output} \
+        "
 
 #-----------------------------------------------------
 # denoise, remove sequence errors
@@ -168,7 +181,14 @@ rule vsearch_denoising:
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
-        "vsearch --cluster_unoise {input} --centroids {output.fasta} --biomout {output.biom}"#" --notrunclabels" # --log {params.log}"
+        "vsearch \
+        --cluster_unoise {input} \
+        --centroids {output.fasta} \
+        --biomout {output.biom} \
+        "
+        #" --notrunclabels
+        # --log {params.log} \
+
 
 #-----------------------------------------------------
 # chimera removal, vsearch
@@ -182,7 +202,11 @@ rule vsearch_dechimerisation: # output needs fixing
         text = "results/03_denoised/{library}/{sample}_chimera.txt",
         fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
     shell:
-        "vsearch --uchime3_denovo {input} --uchimeout {output.text} --nonchimeras {output.fasta}"
+        "vsearch \
+        --uchime3_denovo {input} \
+        --uchimeout {output.text} \
+        --nonchimeras {output.fasta} \
+        "
 
 #------------------------------------------------------
 # re-replication
@@ -195,7 +219,10 @@ rule vsearch_rereplication:
     threads:
         12
     shell:
-        "vsearch --rereplicate {input} --output {output}"
+        "vsearch \
+        --rereplicate {input} \
+        --output {output} \
+        "
 
 
 #-----------------------------------------------------
@@ -220,14 +247,14 @@ rule blastn:
         10
     shell:
         "blastn \
-            -db {params.db_dir} \
-            -num_threads {threads} \
-            -outfmt {params.outformat} \
-            -perc_identity {params.min_perc_ident} \
-            -evalue {params.min_evalue} \
-            -max_target_seqs {params.descriptions} \
-            -query {input.query} \
-            -out {output}"
+        -db {params.db_dir} \
+        -num_threads {threads} \
+        -outfmt {params.outformat} \
+        -perc_identity {params.min_perc_ident} \
+        -evalue {params.min_evalue} \
+        -max_target_seqs {params.descriptions} \
+        -query {input.query} \
+        -out {output}"
 
 # database is going to cause problems and needs a symbolic path in config
 
@@ -262,47 +289,47 @@ rule basta_LCA:
 #-----------------------------------------------------
 # Simple-LCA
 #-----------------------------------------------------
-rule simpleLCA_adding_taxid:
-    conda:
-        "envs/tapirs.yaml"
-    input:
-        "results/blast/{library}/{sample}_blast.out"
-    output:
-        "results/blast/{library}/{sample}_blast.taxed.out"
-    threads:
-        28
-    shell:
-        "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
-
-rule simpleLCA:
-    conda:
-        "envs/tapirs.yaml"
-    input:
-        "results/blast/{library}/{sample}_blast.taxed.out"
-    params:
-        bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
-        id = "80", # -id identity threshold, required
-        coverage = "80", # -cov coverage threshold', required=True
-        tophit = "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
-        tid = "99", # 'identity treshold for the tophit', required=False, default='100'
-        tcov = "100", # query coverage threshold for the tophit', required=False,  default='100'
-        fh = "environmental", # filter out hits that contain unwanted taxonomy'
-        flh = "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
-    output:
-        "results/simpleLCA/{library}/{sample}.lca"
-    shell:
-        "scripts/Simple-LCA-master/lca.py \
-        -i {input} \
-        -o {output} \
-        -b {params.bitscore} \
-        -id {params.id} \
-        -cov {params.coverage} \
-        -t {params.tophit} \
-        -tid {params.tid} \
-        -tcov {params.tcov} \
-        -fh {params.fh} \
-        -flh {params.flh}"
-        # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+# rule simpleLCA_adding_taxid:
+#     conda:
+#         "envs/tapirs.yaml"
+#     input:
+#         "results/blast/{library}/{sample}_blast.out"
+#     output:
+#         "results/blast/{library}/{sample}_blast.taxed.out"
+#     threads:
+#         28
+#     shell:
+#         "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
+#
+# rule simpleLCA:
+#     conda:
+#         "envs/tapirs.yaml"
+#     input:
+#         "results/blast/{library}/{sample}_blast.taxed.out"
+#     params:
+#         bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
+#         id = "80", # -id identity threshold, required
+#         coverage = "80", # -cov coverage threshold', required=True
+#         tophit = "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
+#         tid = "99", # 'identity treshold for the tophit', required=False, default='100'
+#         tcov = "100", # query coverage threshold for the tophit', required=False,  default='100'
+#         fh = "environmental", # filter out hits that contain unwanted taxonomy'
+#         flh = "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
+#     output:
+#         "results/simpleLCA/{library}/{sample}.lca"
+#     shell:
+#         "scripts/Simple-LCA-master/lca.py \
+#         -i {input} \
+#         -o {output} \
+#         -b {params.bitscore} \
+#         -id {params.id} \
+#         -cov {params.coverage} \
+#         -t {params.tophit} \
+#         -tid {params.tid} \
+#         -tcov {params.tcov} \
+#         -fh {params.fh} \
+#         -flh {params.flh}"
+#         # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
 
 #-----------------------------------------------------
 # BASTA to BIOM,
@@ -320,7 +347,12 @@ rule basta_BIOM:
     output:
         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
     shell:
-        "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.hdf5}"
+        "biom convert \
+        -i {input} \
+        -o {output} \
+        --table-type='OTU table' \
+        --to-{params.hdf5} \
+        "
 
 #-----------------------------------------------------
 # BIOM to tsv GRAHAM TO CHECK
@@ -355,7 +387,10 @@ rule krona_LCA_plot:
     output:
         "reports/krona/{library}/{sample}.basta_to_krona.html"
     shell:
-        "python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py {input} {output}"
+        "python \
+        /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py \
+        {input} \
+        {output}"
 
 ## DO NOT LOSE THIS COMMAND!!!!
 ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
@@ -373,17 +408,3 @@ rule conda_env:
         "reports/archived_envs/{conda_envs}"
     shell:
         "conda env export --file {output}"
-
-#-----------------------------------------------------
-# multiQC, create a single report from QC outputs
-#-----------------------------------------------------
-
-# rule multiqc:
-#     input:
-#         "./reports/"
-#     params:
-#         expt_name = config["experiment"]
-#     output:
-#         "reports/multiqc"
-#     shell:
-#         "multiqc {input} -o {output} -i {params.expt_name} --force"
