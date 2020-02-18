@@ -217,7 +217,7 @@ rule vsearch_rereplication:
     output:
         "results/rereplicated/{library}/{sample}.fasta"
     threads:
-        12
+        6
     shell:
         "vsearch \
         --rereplicate {input} \
@@ -244,7 +244,7 @@ rule blastn:
     output:
         "results/blast/{library}/{sample}_blast.out"
     threads:
-        10
+        6
     shell:
         "blastn \
         -db {params.db_dir} \
