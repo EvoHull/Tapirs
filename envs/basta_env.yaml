@@ -1,8 +1,0 @@
-name: basta_LCA
-channels:
-  - bioconda
-  - conda-forge
-  - bnoon # for BASTA
-  - timkahlke # for BASTA
-dependencies:
-  - basta  # carries out LCA, needs python 2.7
