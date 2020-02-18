@@ -382,7 +382,7 @@ rule kraken2:
     kraken_outputs = directory("/results/kraken/outputs/{sample}.tsv"),
     kraken_reports = directory("results/kraken/report/{sample}.txt")
 params:
-    threads="6"
+    threads="6",
     confidence="0.0"
   shell:
     "kraken2 --db fish_db {input.seqs} \
