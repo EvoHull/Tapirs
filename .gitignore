@@ -8,3 +8,4 @@ data/01_demultiplexed/*
 data/*
 reports/*
 results/*
+.Rhistory
