@@ -212,6 +212,8 @@ rule vsearch_dechimerisation: # output needs fixing
 # re-replication
 #-------------------------------------------------------
 rule vsearch_rereplication:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta" # check
     output:
@@ -362,7 +364,7 @@ rule kraken_to_biom:
     params:
         input="results/kraken/reports"
     shell:
-        "kraken-biom {params.input} -max F -o {output}"
+        "kraken-biom {params.input} --max F -o {output}"
 
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
