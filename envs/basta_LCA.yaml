@@ -1,9 +1,9 @@
 name: basta_LCA
 channels:
+  - bioconda
+  - conda-forge
   - bnoon
   - timkahlke
-  - conda-forge
-  - bioconda
   - defaults
 dependencies:
   - _libgcc_mutex=0.1=main
