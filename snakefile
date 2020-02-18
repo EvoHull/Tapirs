@@ -441,6 +441,14 @@ rule krona_LCA_plot:
 ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
 # Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
+#-----------------------------------------------------
+# Snakemake report
+#-----------------------------------------------------
+rule snakemake_report:
+    output:
+        "reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
+    shell:
+        "snakemake --report {output}"
 
 #-----------------------------------------------------
 # Archive conda environment
