@@ -3,7 +3,10 @@
 .ipynb_checkpoints
 data/01_demultiplexed/E*
 data/01_demultiplexed/N*
+data/0_raw/*
+data/*
 /documentation/site/*
+data/databases/*
 .git
 reports/*
 results/*
