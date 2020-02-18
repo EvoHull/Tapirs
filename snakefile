@@ -39,15 +39,13 @@ rule all:
         ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
-<<<<<<< HEAD
-        expand("results/kraken/outputs/{sample}.tsv", sample=sample),
-        expand("results/kraken/reports/{sample}.txt", sample=sample),
+        expand("results/kraken/outputs/{library}.{sample}.tsv", sample=sample, library=library),
+        expand("results/kraken/reports/{library}.{sample}.txt", sample=sample, library=library),
         expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment),
 # reports ----------------------------------------------
-=======
+
         expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
         # reports ----------------------------------------------
->>>>>>> 140709f95b7e2ec7797a97dd73c272eeae723c88
         expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
         expand("reports/fastp/{library}/{sample}.html", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
@@ -328,12 +326,11 @@ rule mlca:
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 rule kraken2:
-<<<<<<< HEAD
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
-        kraken_outputs="results/kraken/outputs/{sample}.tsv",   #this is broken. its flagged as directory but aiming at a file
-        kraken_reports="results/kraken/reports/{sample}.txt"     #same here - Mike
+        kraken_outputs="results/kraken/outputs/{library}.{sample}.tsv",   #this is broken. its flagged as directory but aiming at a file
+        kraken_reports="results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
     threads:
         6
     params:
@@ -348,25 +345,7 @@ rule kraken2:
         --confidence {params.confidence} \
         --output {output.kraken_outputs} \
         --report {output.kraken_reports}"
-=======
-  input:
-    seqs = "results/rereplicated/{library}/{sample}.fasta",
-    kraken_db = directory("data/databases/kraken/kraken2_db")
-  output:
-    kraken_outputs = "/results/kraken/outputs/{sample}.tsv",
-    kraken_reports = "results/kraken/report/{sample}.txt"
-params:
-    threads="6",
-    confidence="0.0"
-  shell:
-    "kraken2 --db fish_db {input.seqs} \
-    --use-names \
-    --memory-mapping \
-    --threads {params.threads} \
-    --confidence {params.confidence} \
-    --output {output.kraken_outputs} \
-    --report {output.kraken_reports} "
->>>>>>> 140709f95b7e2ec7797a97dd73c272eeae723c88
+
 # could use --report-zero-counts if against small database
     # will add this t the config file - Mike
 
@@ -374,12 +353,12 @@ params:
 # Kraken output to BIOM format
 #-----------------------------------------------------
 rule kraken_to_biom:
-    input:
-        directory("results/kraken/reports")
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
+    params:
+        input="results/kraken/reports"
     shell:
-        "kraken-biom {input} -max F -o {output}"
+        "kraken-biom {params.input} -max F -o {output}"
 
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
@@ -388,11 +367,11 @@ rule kraken_to_biom:
 
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     input:
-        kraken_output = "/results/kraken/outputs/{sample}.tsv"
+        kraken_report = "results/kraken/report/{sample}.txt"
     output:
         "reports/krona/kraken/{sample}.html",
     script:
-        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_output} -o {output}"
+        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_report} -o {output}"
 
 rule mlca_to_krona:
     input:
@@ -411,7 +390,7 @@ rule mlca_to_krona:
 #-----------------------------------------------------
 rule snakemake_report:
     output:
-        "reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
+        "reports/{my_experiment}_smk-report.html"
     shell:
         "snakemake --report {output}"
 
