@@ -15,7 +15,6 @@ rule all_reports:
     input:
         expand("data/{sample}.R[1,2].fastq.gz", sample=SAMPLES)
 
-
 #-----------------------------------------------------
 # seqkit to write simple report on fasta files
 #-----------------------------------------------------
@@ -44,25 +43,62 @@ rule fastpreport_mover: # moving reports from fastp
 
 
 #-----------------------------------------------------
-# Krona
+# Generate files suitable for Krona reports
+#       only one of these rules is required perhaps?
 #-----------------------------------------------------
-# basta2krona.py
-# This creates a krona plot (html file) that can be opened in your browser from a basta annotation output file(s). Multiple files can be given separated by comma.
+rule biom_to_krona_tsv:
+# convert BIOM output of LCA analysis to krona
+# https://github.com/GenomicaMicrob/OTUsamples2krona
+    input:
+        biom = "{sample}_otu_table.biom"
+    output:
+        tmp_table = temp("results/blast/{sample}_otu_table.tsv"),
+        otu_final = "results/blast/{sample}_otu.tsv"
+    shell:
+        "biom convert -i {input.biom} -o {output.tmp_table} --to-tsv --header-key taxonomy;\
+        cut -f1 --complement {output.tmp_table} > {output.otu_final}" # fixes formatting
 
+rule lca_to_krona: # pseudocode
+    input:
+        "results/blast/lca/{sample}.tsv"
+    output:
+        "results/blast/lca/{sample}_krona.tsv"
+    scriot:
+        "scripts/lca_to_krona.py"
+
+#-----------------------------------------------------
+# Generate Krona html files
+#-----------------------------------------------------
 rule basta_to_krona:
+# basta2krona.py work from a basta annotation output file(s)
+# Multiple files can be given separated by comma.
     input:
         "results/basta/basta_LCA.out"
     output:
-        "reports/krona/basta_to_krona.html"
+        "reports/krona/basta/{sample}.html"
+    script:
+        "scripts/basta2krona.py {input} {output}"
+
+rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+    input:
+    output:
+        "reports/krona/kraken/{sample}.html"
+    script:
+        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 YourKrakenOutputFile -o YourKronaReportFile"
+
+rule blastlca_to_krona:
+    input:
+        "results/blast/{sample}_otu.tsv" # or lca tsv
+    output:
+        "reports/krona/blast/{sample}.html"
     shell:
-        "./scripts/basta2krona {input} {output}"
 
 #-----------------------------------------------------
 # Snakemake report
 #-----------------------------------------------------
 rule snakemake_report:
     output:
-        "reports/snakemake_report.html"
+        "reports/(config["my_experiment"])_smk-report.html"
     shell:
         "snakemake --report {output}"
 

@@ -1,18 +1,13 @@
-#-----------------------------------------------------
+#------------------------------------------------------
 # Tapirs
 # ---------
 # A reproducible metabarcoding workflow using snakemake
-# This file runs other snakemake worksflows in the rules
-# directory
-#-----------------------------------------------------
+#------------------------------------------------------
 
-#configfile: "config.yaml"
+configfile: "config.yaml"
 
 # Flag "$ snakemake" with "--report" to use
-report: "reports/tapirs.rst"       #this is for generating a report of the workflow
-					#aswell as providing a report on the full workflow progress, individual output reports can be written to it by flagging the output with report()
-						#eg. report(<real_output>)
-						#Ive done this to rule fastp to demonstrate -- Mike
+report: "reports/tapirs.rst"
 
 ## Need to implement something to allow intake of both fastq and fastq.gz -Mike
 
@@ -130,7 +125,7 @@ rule fastq_to_fasta:
 #-----------------------------------------------------
 # vsearch fastq report
 #-----------------------------------------------------
-rule vsearch_reporting:
+rule vsearch_fastq_report:
     conda:
         "envs/tapirs.yaml"
     input:
@@ -190,7 +185,7 @@ rule vsearch_dechimerisation: # output needs fixing
 #-------------------------------------------------------
 rule vsearch_rereplication:
     input:
-        "results/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}.fasta" # check
     output:
         "results/rereplicated/{library}/{sample}.fasta"
     threads:
@@ -213,9 +208,9 @@ rule blastn:
         db_dir="data/databases/12_S", # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
-        min_perc_ident="100",             # this needs to be 100%
+        min_perc_ident="100", # this needs to be 100%
         min_evalue="1e-20"
-    output: # need to fix this by adding library name
+    output:
         "results/blast/{library}/{sample}_blast.out"
     threads:
         10
