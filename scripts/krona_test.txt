@@ -1,0 +1,14 @@
+4	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+3	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+3	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+1212	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+4	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius
+13	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+6	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+2	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+11	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	unidentified	unidentified
+21	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius
+11	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+5	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius
+8	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus
+17	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Phoxinus	Phoxinus_phoxinus
