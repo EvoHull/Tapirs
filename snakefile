@@ -46,7 +46,7 @@ rule all:
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
         expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
-        expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
+    #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
         #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
 
 #-----------------------------------------------------
@@ -336,23 +336,23 @@ rule basta_LCA:
 #-----------------------------------------------------
 # BASTA output tsv converted to BIOM, uses BIOM-convert
 
-rule basta_BIOM:
-    conda:
-        "envs/tapirs.yaml"
-    input:
-        "results/LCA/{library}/{sample}.basta_LCA.out"
-    params:
-        json="json",
-        hdf5="hdf5"
-    output:
-        "results/LCA/{library}/{sample}.basta_LCA.out.biom"
-    shell:
-        "biom convert \
-        -i {input} \
-        -o {output} \
-        --table-type='OTU table' \
-        --to-{params.hdf5} \
-        "
+# rule basta_BIOM:
+#     conda:
+#         "envs/tapirs.yaml"
+#     input:
+#         "results/LCA/{library}/{sample}.basta_LCA.out"
+#     params:
+#         json="json",
+#         hdf5="hdf5"
+#     output:
+#         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
+#     shell:
+#         "biom convert \
+#         -i {input} \
+#         -o {output} \
+#         --table-type='OTU table' \
+#         --to-{params.hdf5} \
+#         "
 
 #-----------------------------------------------------
 # BIOM to tsv GRAHAM TO CHECK
