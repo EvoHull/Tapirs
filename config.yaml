@@ -1,5 +1,4 @@
 #####   TAPIRS: CONFIGFILE   #####
-
 ## Tapirs is highly configurable. Configuration is done before a run from within this file.
 ## You must customise the next two sections to identify your data (wildcard variables) and database locations.
 
@@ -14,7 +13,7 @@ library: "N1" # "<library name>" or "[<list of libraries>]" # depending on how w
 # but for now, manually
 
 # this will need altering once library iteration is implemented
-sample,: glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
+#sample,: glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
 
 # this is for wildcarding forward and reverse reads
 R: ['R1', 'R2']
@@ -73,7 +72,7 @@ BASTA_dir: "/media/mike/mikesdrive/" # -d directory of database files (default: 
 # SIMPLE-LCA VARIABLES
 # -----------------------------------------------
 SLCA_bitscore: "8", # '-b', '--bitscore', 'bitscore top percentage threshold'
-SLCA_id: "80," # -id identity threshold, required
+SLCA_id: "80", # -id identity threshold, required
 SLCA_coverage: "80", # -cov coverage threshold', required=True
 SLCA_tophit: "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
 SLCA_tid: "99", # -tid 'identity treshold for the tophit', required=False, default='100'
