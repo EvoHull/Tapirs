@@ -2,6 +2,11 @@ import argparse
 import pandas as pd
 import numpy as np
 
+# usage:
+# python tax_to_blast.py -i blast_out/BLE04_blast.tsv -o blast_out/BLE04_tax.tsv -lin new_taxdump/rankedlineage.dmp
+#       tax_to_blast.py adds taxonomy in a column to blast output
+#       rankedlineage.dmp is genbank taxonomy
+
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('-i', '--infile', metavar='blast output', dest='infile', type=str,
             help='input data in blast format', default='', required=True)
