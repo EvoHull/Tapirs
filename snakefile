@@ -310,7 +310,7 @@ rule mlca:
         identity = "100", # -id percent identity
         coverage = "60", # -cov percentage coverage
         majority = "100", # -m majority percent, 100 is all hits share taxonomy
-        hits = "1" # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
+        hits = "1" # -hits minimum number of hits, default = 2, 1 isn't true LCA just takes top hit
     shell:
         "python \
         scripts/mlca.py \
