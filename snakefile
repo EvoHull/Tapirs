@@ -372,6 +372,40 @@ rule basta_LCA:
 # OUTPUT: workflow should export data for downstream analysis. This is BIOM format written by metaBEAT, and also csv I guess.
 
 #-----------------------------------------------------
+# Kraken
+#-----------------------------------------------------
+rule kraken2:
+  input: #
+    seqs = "results/rereplicated/{library}/{sample}.fasta",
+    kraken_db = directory("data/databases/kraken/kraken2_db")
+  output:
+    kraken_outputs = directory("/results/kraken/outputs/{sample}.tsv"),
+    kraken_reports = directory("results/kraken/report/{sample}.txt")
+params:
+    threads="6"
+    confidence="0.0"
+  shell:
+    "kraken2 --db fish_db {input.seqs} \
+    --use-names \
+    --memory-mapping \
+    --threads {params.threads} \
+    --confidence {params.confidence} \
+    --output {output.kraken_outputs} \
+    --report {output.kraken_reports} "
+# could use --report-zero-counts if against small database
+
+#-----------------------------------------------------
+# Kraken output to BIOM format
+#-----------------------------------------------------
+rule kraken_to_biom:
+    input:
+        directory("results/kraken/report/")
+    output:
+        "results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]
+    shell:
+        "kraken-biom {input} -max F -o {output}"
+
+#-----------------------------------------------------
 # Krona
 #-----------------------------------------------------
 # basta2krona.py
