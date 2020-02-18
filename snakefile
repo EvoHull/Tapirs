@@ -406,11 +406,15 @@ rule krona_LCA_plot:
         "results/LCA/{library}/{sample}.basta_LCA.out"
     output:
         "reports/krona/{library}/{sample}.basta_to_krona.html"
+    params:
+        path="/home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin" # this is going to need sorting out in the config file
     shell:
         "python \
-        /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py \
+        {params.path}/basta2krona.py \
         {input} \
         {output}"
+
+
 
 ## DO NOT LOSE THIS COMMAND!!!!
 ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
