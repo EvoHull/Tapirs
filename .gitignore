@@ -1,12 +1,11 @@
 .snakemake
 .DS_Store
-*.gz
 .ipynb_checkpoints
 data/01_demultiplexed/E*
 data/01_demultiplexed/N*
 /documentation/site/*
 .git
-data/*
+data/databases
 reports/*
 results/*
 .Rhistory
