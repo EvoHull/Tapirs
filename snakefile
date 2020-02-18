@@ -47,6 +47,7 @@ rule all:
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
         #expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
+        #"reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
     #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
         #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
 
@@ -57,20 +58,6 @@ rule all:
 # include: "rules/kraken.smk",
 # include: "rules/blast.smk",
 # include: "rules/qc.smk"
-
-
-# #-----------------------------------------------------
-# # gzip demultiplexed files, seqkit
-# # should modify demultiplex.py to do this
-# #-----------------------------------------------------
-# rule gzip:
-#     input:
-#         "data/01_demultiplexed/{library}/{sample}.{R}.fastq"
-#     output:
-#         "data/1_demultiplexed/{library}/{sample}.{R}.fastq.gz"
-#     shell:
-#         "gzip {input} > {output}"
-
 
 #-----------------------------------------------------
 # fastp, control for sequence quality and pair reads
