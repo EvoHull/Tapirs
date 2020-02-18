@@ -224,7 +224,6 @@ rule vsearch_rereplication:
         --output {output} \
         "
 
-
 #-----------------------------------------------------
 # blastn, sequence similarity search
 #-----------------------------------------------------
@@ -285,26 +284,6 @@ rule basta_LCA:
         -i {params.minident} \
         -n {params.nhits}"
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
-
-#-----------------------------------------------------
-# Kraken
-#-----------------------------------------------------
-rule kraken2:
-  input: #
-    seqs = "results/rereplicated/{library}/{sample}.fasta",
-    kraken_db = directory("data/databases/kraken/Kraken2_db")
-  output:
-    kraken_outputs = directory("/results/kraken/{library}/{sample}.tsv"),
-    kraken_reports = directory("reports/kraken/{library}/{sample}.tsv")
-  shell:
-    "kraken2 --db fish_db {input.seqs} \
-    --use-names \
-    --memory-mapping \
-    --threads 6 \
-    --report-zero-counts \
-    --confidence 0.0 \
-    --output {output.kraken_outputs} \
-    --report {output.kraken_reports} "
 
 #-----------------------------------------------------
 # Simple-LCA
