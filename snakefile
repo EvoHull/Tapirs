@@ -4,7 +4,7 @@
 # A reproducible metabarcoding workflow using snakemake
 #------------------------------------------------------
 
-configfile: "config.yaml"
+#configfile: "config.yaml"
 
 # Flag "$ snakemake" with "--report" to use
 report: "reports/tapirs.rst"   ### Check to make sure this works and that the output is something sensible - Mike
@@ -35,7 +35,7 @@ rule all:
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
-        expand("results/blast{library}/{sample}_blast.taxed.out", library=library, sample=sample),
+        expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
         expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
         #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
 		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
@@ -209,7 +209,7 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir="data/databases/12_S", # database directory
+        db_dir=directory("data/databases/12S_full/12s_full"), # database directory
         descriptions="50", # return maximum of 50 hits
         outformat="'6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore'",
         min_perc_ident="100", # this needs to be 100%
@@ -220,7 +220,7 @@ rule blastn:
         10
     shell:
         "blastn \
-            -db nt \
+            -db {params.db_dir} \
             -num_threads {threads} \
             -outfmt {params.outformat} \
             -perc_identity {params.min_perc_ident} \
@@ -268,7 +268,7 @@ rule simpleLCA_adding_taxid:
     input:
         "results/blast/{library}/{sample}_blast.out"
     output:
-        "results/blast{library}/{sample}_blast.taxed.out"
+        "results/blast/{library}/{sample}_blast.taxed.out"
     threads:
         28
     shell:
