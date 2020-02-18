@@ -11,7 +11,7 @@ dependencies:
 
   # processing sequence reads
   - fastp # sequence trimming and processing
-  - flash # paired end merging
+  # - flash # paired end merging
   - vsearch # dereplication clustering etc
 
   # taxonomic ID

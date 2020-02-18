@@ -5,7 +5,9 @@
 /data/databases/*
 /data/demultiplex/*
 /data/0_raw/*
+/data/00_raw/*
 data/01_dmpxd/*
+data/01_demultiplexed/*
 /documentation/site/*
 .git
 data/*

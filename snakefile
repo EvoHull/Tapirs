@@ -16,13 +16,13 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 library="N1"
-sample,= glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq.gz")
+sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
 R=["R1", "R2"]
-#, = glob_wildcards("data/01_dmpxd/{library}/")
+#, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
 
 conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
-#sample,= glob_wildcards("data/01_dmpxd/{library}/{sample}.R1.fastq")
+#sample,= glob_wildcards("data/01_demultiplexed/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
 # target rule, specify outputs
@@ -30,7 +30,7 @@ conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
 rule all:
     input:
         #expand("data/00_raw/{library}.{R}.fastq.gz", library=library, R=R),
-        #directory(expand("data/01_dmpxd/{library}/", library=library, R=R)),
+        #directory(expand("data/01_demultiplexed/{library}/", library=library, R=R)),
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
@@ -64,9 +64,9 @@ rule all:
 # #-----------------------------------------------------
 # rule gzip:
 #     input:
-#         "data/01_dmpxd/{library}/{sample}.{R}.fastq"
+#         "data/01_demultiplexed/{library}/{sample}.{R}.fastq"
 #     output:
-#         "data/1_dmpxd/{library}/{sample}.{R}.fastq.gz"
+#         "data/1_demultiplexed/{library}/{sample}.{R}.fastq.gz"
 #     shell:
 #         "gzip {input} > {output}"
 
@@ -78,8 +78,8 @@ rule fastp_trim_and_merge:
     conda:
         "envs/tapirs.yaml"
     input:
-        read1 = "data/01_dmpxd/{library}/{sample}.R1.fastq.gz",
-        read2 = "data/01_dmpxd/{library}/{sample}.R2.fastq.gz"
+        read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
+        read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
     output:
         out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
         out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
