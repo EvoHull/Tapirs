@@ -304,7 +304,7 @@ rule mlca:
         identity = "100", # -id percent identity
         coverage = "60", # -cov percentage coverage
         majority = "100", # -m majority percent, 100 is all hits share taxonomy
-        hits = "1" # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
+        hits = "1" # -hits minimum number of hits, default = 2, 1 isn't true LCA just takes top hit
     shell:
         "python \
         scripts/mlca.py \
@@ -357,11 +357,11 @@ rule kraken_to_biom:
 
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     input:
-        kraken_output = "/results/kraken/outputs/{sample}.tsv"
+        kraken_report = "results/kraken/report/{sample}.txt"
     output:
         "reports/krona/kraken/{sample}.html",
     script:
-        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_output} -o {output}"
+        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_report} -o {output}"
 
 rule mlca_to_krona:
     input:
