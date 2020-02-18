@@ -286,6 +286,47 @@ rule basta_LCA:
 #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
 
 #-----------------------------------------------------
+# tax_to_blast, adds taxonomy in a column to blast output
+#-----------------------------------------------------
+rule tax_to_blast:
+    input:
+        blast_out = "blast/{library}/{sample}_blast.tsv"
+        ranked_lineage = "data/database/new_taxdump/rankedlineage.dmp"
+    output:
+        blast_taxonomy = "blast/{library}/{sample}_tax.tsv"
+    script:
+        "scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
+
+#-----------------------------------------------------
+# MLCA, majority lowest common ancestor
+#-----------------------------------------------------
+rule:
+    input:
+        "blast/{library}/{sample}_tax.tsv"
+    output:
+        "results/mlca/{library}/{sample}_lca.tsv"
+    params:
+        bitscore = "10", # -b blast hit bitscore upper threshold
+        identity = "100", # -id percent identity
+        coverage = "60", # -cov percentage coverage
+        majority = "100", # -m majority percent, 100 is all hits share taxonomy
+        hits = "1" # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
+    script:
+        "scripts/mlca.py \
+        -i {input} \
+        -o {output} \
+        -b {params.bitscore} \
+        -id {params.identity} \
+        -cov {params.coverage} \
+        -m {params.majority} \
+        -hits {params.hits}"
+
+# usage:
+# python tax_to_blast.py -i blast_out/BLE04_blast.tsv -o blast_out/BLE04_tax.tsv -lin new_taxdump/rankedlineage.dmp
+#       tax_to_blast.py adds taxonomy in a column to blast output
+#       rankedlineage.dmp is genbank taxonomy
+
+#-----------------------------------------------------
 # Simple-LCA
 #-----------------------------------------------------
 # rule simpleLCA_adding_taxid:
