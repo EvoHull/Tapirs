@@ -29,7 +29,7 @@ rule seqkit_stats:
 #-----------------------------------------------------
 # tidy fastp report
 #-----------------------------------------------------
-rule fastpreport_mover: # moving reports from fastp
+rule fastp_report_mover: # moving reports from fastp
     input:
         "fastp.*" # check this syntax
     output:
@@ -50,10 +50,10 @@ rule biom_to_krona_tsv:
 # convert BIOM output of LCA analysis to krona
 # https://github.com/GenomicaMicrob/OTUsamples2krona
     input:
-        biom = "{sample}_otu_table.biom"
+        biom = "results/blast/{sample}.biom"
     output:
         tmp_table = temp("results/blast/{sample}_otu_table.tsv"),
-        otu_final = "results/blast/{sample}_otu.tsv"
+        otu_final = "results/blast/{sample}_otu_krona.tsv"
     shell:
         "biom convert -i {input.biom} -o {output.tmp_table} --to-tsv --header-key taxonomy;\
         cut -f1 --complement {output.tmp_table} > {output.otu_final}" # fixes formatting
@@ -63,8 +63,8 @@ rule lca_to_krona: # pseudocode
         "results/blast/lca/{sample}.tsv"
     output:
         "results/blast/lca/{sample}_krona.tsv"
-    scriot:
-        "scripts/lca_to_krona.py"
+    script:
+        "scripts/lca_to_krona.py" # not done yet
 
 #-----------------------------------------------------
 # Generate Krona html files
