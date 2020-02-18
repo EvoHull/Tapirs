@@ -7,9 +7,7 @@
 /data/0_raw/*
 data/01_dmpxd/*
 /documentation/site/*
-12S_full/
 .git
 data/*
 reports/*
 results/*
-.gitignore
