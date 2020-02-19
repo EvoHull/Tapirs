@@ -342,7 +342,7 @@ rule kraken2:
         kraken_db=directory("data/databases/kraken/kraken2_db") # This is specified but not called in the shell command - Mike
     shell:
         "kraken2 \
-        --db fish_db {input} \
+        --db data/databases/kraken2_db/ {input} \
         --use-names \
         --memory-mapping \
         --threads {threads} \
@@ -362,7 +362,7 @@ rule kraken_to_biom:
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
-        input="results/kraken/reports"
+        input="results/kraken/reports/"
     shell:
         "kraken-biom {params.input} --max F -o {output}"
 
