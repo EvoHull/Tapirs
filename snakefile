@@ -15,15 +15,15 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 
-library="N1"
+library = "N1"
 
 sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
 
 R=["R1", "R2"]
 
-my_experiment="testing_tapirs"
+my_experiment = "testing_tapirs"
 
-conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
+conda_envs = ["tapirs.yaml", "basta_LCA.yaml"]
 
 #-------------------------------------------------------------------------------
 # Target rules
@@ -162,8 +162,8 @@ rule vsearch_denoising:
     input:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
-        fasta="results/03_denoised/{library}/{sample}.fasta",
-        biom="reports/vsearch/{library}/{sample}.denoise.biom"
+        fasta = "results/03_denoised/{library}/{sample}.fasta",
+        biom = "reports/vsearch/{library}/{sample}.denoise.biom"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
@@ -227,11 +227,11 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir=directory("data/databases/12S_full/12s_full"), # database directory
-        descriptions="50", # return maximum of 50 hits
-        outformat="'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
-        min_perc_ident="100", # this needs to be 100%
-        min_evalue="1e-20"
+        db_dir = directory("data/databases/12S_full/12s_full"), # database directory
+        descriptions = "50", # return maximum of 50 hits
+        outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
+        min_perc_ident = "100", # this needs to be 100%
+        min_evalue = "1e-20"
     output:
         "results/blast/{library}/{sample}_blast.out"
     threads:
@@ -255,10 +255,10 @@ rule tax_to_blast:
     conda:
         "envs/tapirs.yaml"
     input:
-        blast_out="results/blast/{library}/{sample}_blast.out",
-        ranked_lineage="data/databases/new_taxdump/rankedlineage.dmp"
+        blast_out = "results/blast/{library}/{sample}_blast.out",
+        ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
-        blast_taxonomy="results/blast/{library}/{sample}_tax.tsv"
+        blast_taxonomy = "results/blast/{library}/{sample}_tax.tsv"
     shell:
         "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
 
@@ -297,13 +297,13 @@ rule kraken2:
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
-        kraken_outputs="results/kraken/outputs/{library}/{sample}.tsv",
-        kraken_reports="results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
+        kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
+        kraken_reports = "results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
     threads:
         6
     params:
-        confidence="0.0",
-        kraken_db=directory("data/databases/kraken/kraken2_db") # This is specified but not called in the shell command - Mike
+        confidence = "0.0",
+        kraken_db = directory("data/databases/kraken/kraken2_db") # This is specified but not called in the shell command - Mike
     shell:
         "kraken2 \
         --db data/databases/kraken2_db/ {input} \
@@ -327,7 +327,7 @@ rule kraken_to_biom:
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
-        input=expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample)
+        input = expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample)
     shell:
         "kraken-biom \
         {params.input} \
@@ -355,12 +355,12 @@ rule biom_convert:
 #---------------------------------------------------
 rule sintax:
     input:
-        database="data/databases/sintax/12s.fas",
-        query="results/rereplicated/{library}/{sample}.fasta"
+        database = "data/databases/sintax/12s.fas",
+        query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
-        cutoff="0.8"
+        cutoff = "0.8"
     shell:
         "vsearch -sintax \
         {input.query} \
