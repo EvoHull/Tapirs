@@ -182,7 +182,6 @@ rule vsearch_denoising:
         #" --notrunclabels
         # --log {params.log} \
 
-
 #-----------------------------------------------------
 # chimera removal, vsearch
 #-----------------------------------------------------
@@ -251,7 +250,8 @@ rule blastn:
         -evalue {params.min_evalue} \
         -max_target_seqs {params.descriptions} \
         -query {input.query} \
-        -out {output}"
+        -out {output}
+        "
 
 #-----------------------------------------------------
 # LCA, Last Comomon Ancestor analysis of blast using BASTA
@@ -321,31 +321,6 @@ rule mlca:
         -hits {params.hits}"
 
 #-----------------------------------------------------
-# MLCA, majority lowest common ancestor
-#-----------------------------------------------------
-rule mlca:
-    input:
-        "results/blast/{library}/{sample}_tax.tsv"
-    output:
-        "results/mlca/{library}/{sample}_lca.tsv"
-    params:
-        bitscore = "10", # -b blast hit bitscore upper threshold
-        identity = "100", # -id percent identity
-        coverage = "60", # -cov percentage coverage
-        majority = "100", # -m majority percent, 100 is all hits share taxonomy
-        hits = "1" # -hits minimum number of hits, default = 2, 1 isn't true LCA just takes top hit
-    shell:
-        "python \
-        scripts/mlca.py \
-        -i {input} \
-        -o {output} \
-        -b {params.bitscore} \
-        -id {params.identity} \
-        -cov {params.coverage} \
-        -m {params.majority} \
-        -hits {params.hits}"
-
-#-----------------------------------------------------
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 rule kraken2:
@@ -391,7 +366,7 @@ rule kraken_to_biom:
         -o {output}" \
 
 #---------------------------------------------------
-# Biom convert
+# Biom convert, BIOM to tsv
 #---------------------------------------------------
 rule biom_convert:
     conda:
@@ -416,9 +391,8 @@ rule biom_convert:
 #         "results/kraken/{my_experiment}.trans.tsv"
 #     run:
 #         "
-
-
 ## DO NOT USE THIS COMMAND!!!! - GS
+
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
