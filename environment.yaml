@@ -2,8 +2,8 @@ name: tapirs
 channels:
   - bioconda
   - conda-forge
-  - rmg
-  - defaults
+  # - rmg
+  # - defaults
 dependencies:
   - snakemake-minimal =5.2.4
   - python
