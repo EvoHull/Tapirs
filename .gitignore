@@ -3,8 +3,8 @@
 .ipynb_checkpoints
 data/01_demultiplexed/E*
 data/01_demultiplexed/N*
-/documentation/site/*
-.git
+data/databases/new_taxdump
+.git/
 reports/*
 results/*
 .Rhistory

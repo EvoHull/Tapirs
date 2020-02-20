@@ -19,6 +19,7 @@ library="N1"
 sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
 #sample="BLEL01" #this is temporary while we sort the output of demultiplexing to be zipped
 R=["R1", "R2"]
+my_experiment="testing_tapirs"
 #, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
 
@@ -49,7 +50,8 @@ rule all:
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         #"reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
     #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
+        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample),
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
 
 #-----------------------------------------------------
 # include rule files
@@ -206,6 +208,8 @@ rule vsearch_dechimerisation: # output needs fixing
 # re-replication
 #-------------------------------------------------------
 rule vsearch_rereplication:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta" # check
     output:
@@ -317,110 +321,124 @@ rule mlca:
         -hits {params.hits}"
 
 #-----------------------------------------------------
-# Simple-LCA
+# MLCA, majority lowest common ancestor
 #-----------------------------------------------------
-# rule simpleLCA_adding_taxid:
-#     conda:
-#         "envs/tapirs.yaml"
-#     input:
-#         "results/blast/{library}/{sample}_blast.out"
-#     output:
-#         "results/blast/{library}/{sample}_blast.taxed.out"
-#     threads:
-#         28
-#     shell:
-#         "scripts/Simple-LCA-master/add_taxonomy.py -i {input} -t rankedlineage.dmp -m merged.dmp -o {output}"
-#
-# rule simpleLCA:
-#     conda:
-#         "envs/tapirs.yaml"
-#     input:
-#         "results/blast/{library}/{sample}_blast.taxed.out"
-#     params:
-#         bitscore = "8", # '-b', '--bitscore', 'bitscore top percentage threshold',
-#         id = "80", # -id identity threshold, required
-#         coverage = "80", # -cov coverage threshold', required=True
-#         tophit = "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
-#         tid = "99", # 'identity treshold for the tophit', required=False, default='100'
-#         tcov = "100", # query coverage threshold for the tophit', required=False,  default='100'
-#         fh = "environmental", # filter out hits that contain unwanted taxonomy'
-#         flh = "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
-#     output:
-#         "results/simpleLCA/{library}/{sample}.lca"
-#     shell:
-#         "scripts/Simple-LCA-master/lca.py \
-#         -i {input} \
-#         -o {output} \
-#         -b {params.bitscore} \
-#         -id {params.id} \
-#         -cov {params.coverage} \
-#         -t {params.tophit} \
-#         -tid {params.tid} \
-#         -tcov {params.tcov} \
-#         -fh {params.fh} \
-#         -flh {params.flh}"
-#         # "scripts/Simple-LCA-master/lca.py -i {input} -o {output} -b 8 -id 80 -cov 80 -t yes -tid 99 -tcov 100 -fh 'environmental' -flh 'unknown'"
+rule mlca:
+    input:
+        "results/blast/{library}/{sample}_tax.tsv"
+    output:
+        "results/mlca/{library}/{sample}_lca.tsv"
+    params:
+        bitscore = "10", # -b blast hit bitscore upper threshold
+        identity = "100", # -id percent identity
+        coverage = "60", # -cov percentage coverage
+        majority = "100", # -m majority percent, 100 is all hits share taxonomy
+        hits = "1" # -hits minimum number of hits, default = 2, 1 isn't true LCA just takes top hit
+    shell:
+        "python \
+        scripts/mlca.py \
+        -i {input} \
+        -o {output} \
+        -b {params.bitscore} \
+        -id {params.identity} \
+        -cov {params.coverage} \
+        -m {params.majority} \
+        -hits {params.hits}"
 
 #-----------------------------------------------------
-# BASTA to BIOM,
+# Kraken, kmer based taxonomic id
 #-----------------------------------------------------
-# BASTA output tsv converted to BIOM, uses BIOM-convert
+rule kraken2:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        "results/rereplicated/{library}/{sample}.fasta"
+    output:
+        kraken_outputs="results/kraken/outputs/{library}.{sample}.tsv",   #this is broken. its flagged as directory but aiming at a file
+        kraken_reports="results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
+    threads:
+        6
+    params:
+        confidence="0.0",
+        kraken_db=directory("data/databases/kraken/kraken2_db") # This is specified but not called in the shell command - Mike
+    shell:
+        "kraken2 \
+        --db data/databases/kraken2_db/ {input} \
+        --use-names \
+        --memory-mapping \
+        --threads {threads} \
+        --confidence {params.confidence} \
+        --output {output.kraken_outputs} \
+        --report {output.kraken_reports}"
 
-# rule basta_BIOM:
-#     conda:
-#         "envs/tapirs.yaml"
+# could use --report-zero-counts if against small database
+    # will add this t the config file - Mike
+
+#-----------------------------------------------------
+# Kraken output to BIOM format
+#-----------------------------------------------------
+rule kraken_to_biom:
+    conda:
+        "envs/tapirs.yaml"
+    output:
+        "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
+    params:
+        input=expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample),
+    shell:
+        "kraken-biom \
+        {params.input} \
+        --max F \
+        -o {output}" \
+
+#---------------------------------------------------
+# Biom convert
+#---------------------------------------------------
+rule biom_convert:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment)
+    output:
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment)
+    threads:
+        6
+    shell:
+        "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
+
+#-------------------------------------------------
+# biom txonomy transformation
+#-------------------------------------------------
+
+# rule transform_biomtsv:
 #     input:
-#         "results/LCA/{library}/{sample}.basta_LCA.out"
-#     params:
-#         json="json",
-#         hdf5="hdf5"
+#         "results/kraken/{my_experiment}.tsv"
 #     output:
-#         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
-#     shell:
-#         "biom convert \
-#         -i {input} \
-#         -o {output} \
-#         --table-type='OTU table' \
-#         --to-{params.hdf5} \
+#         "results/kraken/{my_experiment}.trans.tsv"
+#     run:
 #         "
 
-#-----------------------------------------------------
-# BIOM to tsv GRAHAM TO CHECK
-#-----------------------------------------------------
-# rule BIOM_tsv:
-#     conda:
-#         "envs/tapirs.yaml"
-#     input:
-#         "results/LCA/{library}/{sample}.basta_LCA.out.biom"
-#     output:
-#         "results/LCA/{library}/{sample}.basta_LCA.out.tsv"
-#     shell:
-#         "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.hdf5}"
 
-
-# biom convert -i table.txt -o table.from_txt_json.biom --table-type="OTU table" --to-json
-# biom convert -i table.txt -o table.from_txt_hdf5.biom --table-type="OTU table" --to-hdf5
-# OUTPUT: workflow should export data for downstream analysis. This is BIOM format written by metaBEAT, and also csv I guess.
-
+## DO NOT USE THIS COMMAND!!!! - GS
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 # Multiple files can be given separated by comma.
 
-rule krona_LCA_plot:
-    conda:
-        "envs/tapirs.yaml"
+rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     input:
-        "results/LCA/{library}/{sample}.basta_LCA.out"
+        kraken_report = "results/kraken/reports/{sample}.txt"
     output:
-        "reports/krona/{library}/{sample}.basta_to_krona.html"
-    params:
-        path="/home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin" # this is going to need sorting out in the config file
-    shell:
-        "python \
-        {params.path}/basta2krona.py \
-        {input} \
-        {output}"
+        "reports/krona/kraken/{sample}.html",
+    script:
+        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_report} -o {output}"
+
+rule mlca_to_krona:
+    input:
+        "results/mlca/{library}/{sample}_lca.tsv"
+    output:
+        "reports/krona/krona_mlca.html"
+    script: # check grammar
+        "scripts/krona/ImportText.pl {input} -o {output}"
 
 
 
