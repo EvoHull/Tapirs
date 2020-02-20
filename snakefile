@@ -346,6 +346,24 @@ rule biom_convert:
     shell:
         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
 
+#---------------------------------------------------
+# sintax, kmer similarity taxonomic ID
+#---------------------------------------------------
+rule sintax:
+  input:
+      database="data/databases/sintax/12s.fas"
+      query="results/rereplicated/{library}/{sample}.fasta"
+  output:
+    "results/sintax/{library}/{sample}_reads.sintax"
+  params:
+    cutoff="0.8"
+  shell:
+    "vsearch -sintax \
+    {input.query} \
+    -db {input.database} \
+    -tabbedout {output} \
+    -strand both \
+    -sintax_cutoff {params.cutoff}"
 
 #-------------------------------------------------
 # biom txonomy transformation
@@ -364,8 +382,6 @@ rule biom_convert:
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 # Multiple files can be given separated by comma.
-
-
 
 # requires running : $ ktUpdateTaxonomy
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
@@ -388,7 +404,21 @@ rule mlca_to_krona:
     shell:
         "ktImportText {input} -o {output}"
 
+rule sintax_to_kronatext: # this is the format for imporing with kronatext
+    input:
+        "results/sintax/{library}/{sample}_reads.sintax"
+    output:
+        "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
+    shell:
+        "awk '{print $4}' {input} | sort | uniq -c >> {output}"
 
+rule sintax-text_to_krona: #imporing with kronatext
+    input:
+        "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
+    output:
+        "reports/krona/{library}/{sample}.sintax.html"
+    shell:
+        "ktImportText {input} -o {output}"
 
 ## DO NOT LOSE THIS COMMAND!!!!
 ## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
