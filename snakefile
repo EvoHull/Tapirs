@@ -15,8 +15,8 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 
-library="testlib"
-sample,= glob_wildcards("data/01_demultiplexed/testlib/{sample}.R1.fastq.gz")
+library="N1"
+sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
 #sample="BLEL01" #this is temporary while we sort the output of demultiplexing to be zipped
 R=["R1", "R2"]
 my_experiment="testing_tapirs"
@@ -55,7 +55,8 @@ rule all:
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         #"reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
     #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample)
+        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample),
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
 
 #-----------------------------------------------------
 # include rule files
@@ -362,10 +363,42 @@ rule kraken_to_biom:
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
-        input="results/kraken/reports/"
+        input=expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample),
     shell:
-        "kraken-biom {params.input} --max F -o {output}"
+        "kraken-biom \
+        {params.input} \
+        --max F \
+        -o {output}" \
 
+#---------------------------------------------------
+# Biom convert
+#---------------------------------------------------
+rule biom_convert:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment)
+    output:
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment)
+    threads:
+        6
+    shell:
+        "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
+
+#-------------------------------------------------
+# biom txonomy transformation
+#-------------------------------------------------
+
+# rule transform_biomtsv:
+#     input:
+#         "results/kraken/{my_experiment}.tsv"
+#     output:
+#         "results/kraken/{my_experiment}.trans.tsv"
+#     run:
+#         "
+
+
+## DO NOT USE THIS COMMAND!!!! - GS
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
@@ -373,7 +406,7 @@ rule kraken_to_biom:
 
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     input:
-        kraken_report = "results/kraken/report/{sample}.txt"
+        kraken_report = "results/kraken/reports/{sample}.txt"
     output:
         "reports/krona/kraken/{sample}.html",
     script:
