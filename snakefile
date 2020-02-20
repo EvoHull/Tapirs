@@ -47,7 +47,7 @@ rule all:
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
         expand("reports/krona/kraken/{library}/{sample}.html", library=library, sample=sample),
-        expand("reports/krona/{library}/{sample}.mlca.html", library=library, sample=sample)
+        expand("reports/krona/mlca/{library}/{sample}.html", library=library, sample=sample)
 
 #-----------------------------------------------------
 # Rule files
@@ -299,8 +299,8 @@ rule kraken2:
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
-        kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
-        kraken_reports = "results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
+        kraken_outputs = "results/kraken/outputs/{library}.{sample}.tsv",
+        kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
     threads:
         6
     params:
@@ -394,11 +394,11 @@ rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "envs/tapirs.yaml"
     input:
-        "results/kraken/outputs/{library}/{sample}.tsv"
+        "results/kraken/reports/{library}/{sample}.txt"
     output:
         "reports/krona/kraken/{library}/{sample}.html"
     shell:
-        "ktImportTaxonomy -q 2 -t 3 {input} -o {output}"
+        "ktImportTaxonomy -m 3 -t 5 {input} -o {output}"
 
 rule mlca_to_krona:
     conda:
@@ -406,9 +406,12 @@ rule mlca_to_krona:
     input:
         "results/mlca/{library}/{sample}_lca.tsv"
     output:
-        "reports/krona/{library}/{sample}.mlca.html"
+        "reports/krona/mlca/{library}/{sample}.html"
     shell:
-        "ktImportText {input} -o {output}"
+        "ktImportText -m 2 -t 3 {input} -o {output}"
+
+##this above needs the first column cutting down to just read count - Mike
+
 
 #-----------------------------------------------------
 # convert to tsv format for importing with kronatext
