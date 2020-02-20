@@ -23,7 +23,6 @@ my_experiment="testing_tapirs"
 #, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
 
-conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
 #sample,= glob_wildcards("data/01_demultiplexed/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
@@ -34,11 +33,8 @@ rule all:
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
         ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
         expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
         # reports ----------------------------------------------
         expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
@@ -46,11 +42,8 @@ rule all:
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
-        #expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         #"reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
-    #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
 
 #-----------------------------------------------------
@@ -66,8 +59,6 @@ rule all:
 #-----------------------------------------------------
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
-    conda:
-        "envs/tapirs.yaml"
     input:
         read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
@@ -108,8 +99,6 @@ rule fastp_trim_and_merge:
 # vsearch, convert files from fastq to fasta
 #-----------------------------------------------------
 rule fastq_to_fasta:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -124,8 +113,6 @@ rule fastq_to_fasta:
 # vsearch fastq report
 #-----------------------------------------------------
 rule vsearch_fastq_report:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -144,8 +131,6 @@ rule vsearch_fastq_report:
 # dereplication
 #-----------------------------------------------------
 rule vsearch_dereplication:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fasta"
     output:
@@ -162,8 +147,6 @@ rule vsearch_dereplication:
 # denoise, remove sequence errors
 #-----------------------------------------------------
 rule vsearch_denoising:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
@@ -186,8 +169,6 @@ rule vsearch_denoising:
 # chimera removal, vsearch
 #-----------------------------------------------------
 rule vsearch_dechimerisation: # output needs fixing
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta"
     output: # fix
@@ -207,8 +188,6 @@ rule vsearch_dechimerisation: # output needs fixing
 # re-replication
 #-------------------------------------------------------
 rule vsearch_rereplication:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta" # check
     output:
@@ -226,8 +205,6 @@ rule vsearch_rereplication:
 #-----------------------------------------------------
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
-    conda:
-        "envs/tapirs.yaml"
     input:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
@@ -254,39 +231,9 @@ rule blastn:
         "
 
 #-----------------------------------------------------
-# LCA, Last Comomon Ancestor analysis of blast using BASTA
-#-----------------------------------------------------
-# rule basta_LCA:
-#     conda:
-#         "envs/basta_LCA.yaml"
-#     input:
-#         "results/blast/{library}/{sample}_blast.out" #fix this
-#         # file of blast tabular -outfmt 6 from above
-#     params:
-#         nhits="50", # -n max number of  hits to consider for classification (default=0=all)
-#         minhits="3", # -m must have at least 3 hits, else ignored (default=3)
-#         evalue="1e-20", # -e min e-value of hit (default=0.00001)
-#         length="90", # -l match must be at least 90bp (default=100)
-#         minident="95", # -i minimum identity of hit (default=80)
-#         maj_percent="90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
-#         dir="/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
-#     output: # check library/sample syntax
-#         "results/LCA/{library}/{sample}.basta_LCA.out"
-#     shell:
-#         "basta sequence {input} {output} gb \
-#         -p {params.maj_percent} \
-#         -m {params.minhits} \
-#         -l {params.length} \
-#         -i {params.minident} \
-#         -n {params.nhits}"
-# #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
-#
-#-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
 rule tax_to_blast:
-    conda:
-        "envs/tapirs.yaml"
     input:
         blast_out="results/blast/{library}/{sample}_blast.out",
         ranked_lineage="data/databases/new_taxdump/rankedlineage.dmp"
@@ -324,8 +271,6 @@ rule mlca:
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 rule kraken2:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
@@ -353,8 +298,6 @@ rule kraken2:
 # Kraken output to BIOM format
 #-----------------------------------------------------
 rule kraken_to_biom:
-    conda:
-        "envs/tapirs.yaml"
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
@@ -369,8 +312,6 @@ rule kraken_to_biom:
 # Biom convert, BIOM to tsv
 #---------------------------------------------------
 rule biom_convert:
-    conda:
-        "envs/tapirs.yaml"
     input:
         expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment)
     output:
@@ -413,12 +354,6 @@ rule mlca_to_krona:
         "reports/krona/krona_mlca.html"
     script: # check grammar
         "ktImportText {input} -o {output}"
-
-
-
-## DO NOT LOSE THIS COMMAND!!!!
-## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
-# Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
 #-----------------------------------------------------
 # Snakemake report
