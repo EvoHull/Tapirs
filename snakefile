@@ -389,7 +389,8 @@ rule sintax:
 #-----------------------------------------------------
 # Multiple files can be given separated by comma.
 
-# requires running : $ ktUpdateTaxonomy
+
+#this requires installation of the krona tax database from the synology
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "envs/tapirs.yaml"
@@ -398,7 +399,7 @@ rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     output:
         "reports/krona/kraken/{library}/{sample}.html"
     shell:
-        "ktImportTaxonomy -m 3 -t 5 {input} -o {output}"
+        "ktImportTaxonomy -tax data/databases/krona/ -m 3 -t 5 {input} -o {output}"
 
 rule mlca_to_krona:
     conda:

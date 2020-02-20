@@ -9,4 +9,4 @@ reports/*
 results/*
 .Rhistory
 data/databases/new*
-data/databases/*
+data/databases/krona
