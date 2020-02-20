@@ -32,6 +32,8 @@ rule all:
     input:
 # results ----------------------------------------------------------------------
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("results/02_trimmed/{library}/{sample}.unpaired.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("results/02_trimmed/{library}/{sample}.merged.fastq.gz", library=library, sample=sample),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
@@ -64,8 +66,8 @@ rule fastp_trim_and_merge:
     conda:
         "envs/tapirs.yaml"
     input:
-        read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
-        read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
+        read1 = "./data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
+        read2 = "./data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
     output:
         out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
         out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
@@ -81,13 +83,13 @@ rule fastp_trim_and_merge:
         -I {input.read2} \
         -o {output.out1} \
         -O {output.out2} \
+        --unpaired1 {output.out_unpaired1} \
+        --unpaired2 {output.out_unpaired2} \
+        --failed_out {output.out_failed} \
         -j {output.json} \
         -h {output.html} \
         --qualified_quality_phred 30 \
         --length_required 90 \
-        --unpaired1 {output.out_unpaired1} \
-        --unpaired2 {output.out_unpaired2} \
-        --failed_out {output.out_failed} \
         --cut_tail \
         --trim_front1 20 \
         --trim_front2 20 \
