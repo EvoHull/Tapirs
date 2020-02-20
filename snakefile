@@ -66,8 +66,8 @@ rule fastp_trim_and_merge:
     conda:
         "envs/tapirs.yaml"
     input:
-        read1 = "./data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
-        read2 = "./data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
+        read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
+        read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
     output:
         out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
         out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
