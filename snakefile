@@ -99,7 +99,7 @@ rule fastp_trim_and_merge:
         "
 
 #-----------------------------------------------------
-# vsearch, convert files from fastq to fasta
+# convert files from fastq to fasta
 #-----------------------------------------------------
 rule fastq_to_fasta:
     conda:
@@ -135,7 +135,7 @@ rule vsearch_fastq_report:
         "
 
 #-----------------------------------------------------
-# vsearch, dereplication
+# dereplication
 #-----------------------------------------------------
 rule vsearch_dereplication:
     conda:
@@ -153,7 +153,7 @@ rule vsearch_dereplication:
         "
 
 #-----------------------------------------------------
-# vsearch, denoise
+# denoise
 #-----------------------------------------------------
 rule vsearch_denoising:
     conda:
@@ -177,7 +177,7 @@ rule vsearch_denoising:
         # --log {params.log} \
 
 #-----------------------------------------------------
-# chimera removal, vsearch
+# chimera removal
 #-----------------------------------------------------
 rule vsearch_dechimerisation: # output needs fixing
     conda:
@@ -350,23 +350,23 @@ rule biom_convert:
 # sintax, kmer similarity taxonomic ID
 #---------------------------------------------------
 rule sintax:
-  input:
-      database="data/databases/sintax/12s.fas"
-      query="results/rereplicated/{library}/{sample}.fasta"
-  output:
-    "results/sintax/{library}/{sample}_reads.sintax"
-  params:
-    cutoff="0.8"
-  shell:
-    "vsearch -sintax \
-    {input.query} \
-    -db {input.database} \
-    -tabbedout {output} \
-    -strand both \
-    -sintax_cutoff {params.cutoff}"
+    input:
+        database="data/databases/sintax/12s.fas"
+        query="results/rereplicated/{library}/{sample}.fasta"
+    output:
+        "results/sintax/{library}/{sample}_reads.sintax"
+    params:
+        cutoff="0.8"
+    shell:
+        "vsearch -sintax \
+        {input.query} \
+        -db {input.database} \
+        -tabbedout {output} \
+        -strand both \
+        -sintax_cutoff {params.cutoff}"
 
 #-------------------------------------------------
-# biom txonomy transformation
+# biom taxonomy transformation
 #-------------------------------------------------
 
 # rule transform_biomtsv:
@@ -376,7 +376,6 @@ rule sintax:
 #         "results/kraken/{my_experiment}.trans.tsv"
 #     run:
 #         "
-
 
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
@@ -404,7 +403,7 @@ rule mlca_to_krona:
     shell:
         "ktImportText {input} -o {output}"
 
-rule sintax_to_kronatext: # this is the format for imporing with kronatext
+rule sintax_to_kronatext: # converts to format for importing with kronatext
     input:
         "results/sintax/{library}/{sample}_reads.sintax"
     output:
@@ -412,7 +411,7 @@ rule sintax_to_kronatext: # this is the format for imporing with kronatext
     shell:
         "awk '{print $4}' {input} | sort | uniq -c >> {output}"
 
-rule sintax-text_to_krona: #imporing with kronatext
+rule sintaxtext_to_krona: # importing with kronatext to krona
     input:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
     output:
