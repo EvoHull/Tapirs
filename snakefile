@@ -44,6 +44,8 @@ rule all:
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
+        expand("reports/krona/kraken/{library}/{sample}.html", library=library, sample=sample),
+        expand("reports/krona/{library}/{sample}.mlca.html", library=library, sample=sample)
 
 #-----------------------------------------------------
 # Rule files
@@ -242,8 +244,7 @@ rule blastn:
         -evalue {params.min_evalue} \
         -max_target_seqs {params.descriptions} \
         -query {input.query} \
-        -out {output}
-        "
+        -out {output}"
 
 
 #-----------------------------------------------------
@@ -294,7 +295,7 @@ rule kraken2:
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
-        kraken_outputs="results/kraken/outputs/{library}.{sample}.tsv",   #this is broken. its flagged as directory but aiming at a file
+        kraken_outputs="results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports="results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
     threads:
         6
@@ -364,20 +365,27 @@ rule biom_convert:
 #-----------------------------------------------------
 # Multiple files can be given separated by comma.
 
+
+
+# requires running : $ ktUpdateTaxonomy
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+    conda:
+        "envs/tapirs.yaml"
     input:
-        kraken_report = "results/kraken/reports/{sample}.txt"
+        "results/kraken/reports/{library}.{sample}.txt"
     output:
-        "reports/krona/kraken/{sample}.html",
-    script:
-        "scripts/krona/ImportTaxonomy.pl -q 2 -t 3 {input.kraken_report} -o {output}"
+        "reports/krona/kraken/{library}/{sample}.html"
+    shell:
+        "ktImportText -q 2 -t 3 {input} -o {output}"
 
 rule mlca_to_krona:
+    conda:
+        "envs/tapirs.yaml"
     input:
         "results/mlca/{library}/{sample}_lca.tsv"
     output:
-        "reports/krona/krona_mlca.html"
-    script: # check grammar
+        "reports/krona/{library}/{sample}.mlca.html"
+    shell:
         "ktImportText {input} -o {output}"
 
 
@@ -391,7 +399,7 @@ rule mlca_to_krona:
 #-----------------------------------------------------
 rule snakemake_report:
     output:
-        "reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
+        expand("reports/{my_experiment}_smk-report.html", my_experiment=my_experiment)
     shell:
         "snakemake --report {output}"
 

@@ -28,7 +28,7 @@ dependencies:
   - jpeg=9c=h14c3975_1001
   - kraken2=2.0.8_beta=pl526h6bb024c_0
   - krona
-  - krona-biom
+  - kraken-biom
   - libblas=3.8.0=14_openblas
   - libcblas=3.8.0=14_openblas
   - libffi=3.2.1=he1b5a44_1006
