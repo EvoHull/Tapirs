@@ -33,11 +33,8 @@ rule all:
         expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
         expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
         ##expand("results/simpleLCA/{library}/{sample}.lca", library=library, sample=sample),
-        #expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-		#expand("results/basta/{sample}.basta_LCA.out", library=library, sample=sample),
         expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
         # reports ----------------------------------------------
         expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
@@ -45,11 +42,8 @@ rule all:
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
-        #expand("reports/krona/{library}/{sample}.basta_to_krona.html", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
         #"reports/{my_experiment}_smk-report.html", my_experiment = (config["my_experiment"])
-    #    expand("results/LCA/{library}/{sample}.basta_LCA.out.biom", library=library, sample=sample),
-        #    expand("results/LCA/{library}/{sample}.basta_LCA.out.tsv", library=library, sample=sample),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
 
 #-----------------------------------------------------
@@ -253,34 +247,6 @@ rule blastn:
         "
 
 #-----------------------------------------------------
-# LCA, Last Comomon Ancestor analysis of blast using BASTA
-#-----------------------------------------------------
-# rule basta_LCA:
-#     conda:
-#         "envs/basta_LCA.yaml"
-#     input:
-#         "results/blast/{library}/{sample}_blast.out" #fix this
-#         # file of blast tabular -outfmt 6 from above
-#     params:
-#         nhits="50", # -n max number of  hits to consider for classification (default=0=all)
-#         minhits="3", # -m must have at least 3 hits, else ignored (default=3)
-#         evalue="1e-20", # -e min e-value of hit (default=0.00001)
-#         length="90", # -l match must be at least 90bp (default=100)
-#         minident="95", # -i minimum identity of hit (default=80)
-#         maj_percent="90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
-#         dir="/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
-#     output: # check library/sample syntax
-#         "results/LCA/{library}/{sample}.basta_LCA.out"
-#     shell:
-#         "basta sequence {input} {output} gb \
-#         -p {params.maj_percent} \
-#         -m {params.minhits} \
-#         -l {params.length} \
-#         -i {params.minident} \
-#         -n {params.nhits}"
-# #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
-#
-#-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
 rule tax_to_blast:
@@ -412,12 +378,6 @@ rule mlca_to_krona:
         "reports/krona/krona_mlca.html"
     script: # check grammar
         "scripts/krona/ImportText.pl {input} -o {output}"
-
-
-
-## DO NOT LOSE THIS COMMAND!!!!
-## python /home/mike/anaconda3/pkgs/basta-1.3-py27_1/bin/basta2krona.py
-# Desktop/tapirs/results/LCA/testlib/BLEL01.basta_LCA.out Desktop/kronatest.html
 
 #-----------------------------------------------------
 # Snakemake report
