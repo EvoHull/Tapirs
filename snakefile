@@ -412,7 +412,7 @@ rule mlca_to_krona:
     output:
         "reports/krona/krona_mlca.html"
     script: # check grammar
-        "scripts/krona/ImportText.pl {input} -o {output}"
+        "ktImportText {input} -o {output}"
 
 
 
