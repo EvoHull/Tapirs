@@ -58,8 +58,9 @@ rule all:
 #-----------------------------------------------------
 # fastp, control for sequence quality and pair reads
 #-----------------------------------------------------
+# maybe this should be 2 rules, trim and then merge?
 rule fastp_trim_and_merge:
-    message: "Beginning fastp quality control of raw data"
+    # message: "Beginning fastp quality control of raw data"
     conda:
         "envs/tapirs.yaml"
     input:
@@ -71,7 +72,7 @@ rule fastp_trim_and_merge:
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
         out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
         out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged="results/02_trimmed/{library}/{sample}.merged.fastq.gz",
+        merged = "results/02_trimmed/{library}/{sample}.merged.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -244,8 +245,8 @@ rule blastn:
         -evalue {params.min_evalue} \
         -max_target_seqs {params.descriptions} \
         -query {input.query} \
-        -out {output}"
-
+        -out {output} \
+        "
 
 #-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
@@ -284,7 +285,8 @@ rule mlca:
         -id {params.identity} \
         -cov {params.coverage} \
         -m {params.majority} \
-        -hits {params.hits}"
+        -hits {params.hits} \
+        "
 
 #-----------------------------------------------------
 # Kraken, kmer based taxonomic id
@@ -310,7 +312,8 @@ rule kraken2:
         --threads {threads} \
         --confidence {params.confidence} \
         --output {output.kraken_outputs} \
-        --report {output.kraken_reports}"
+        --report {output.kraken_reports} \
+        "
 
 # could use --report-zero-counts if against small database
     # will add this t the config file - Mike
@@ -324,12 +327,13 @@ rule kraken_to_biom:
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
-        input=expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample),
+        input=expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample)
     shell:
         "kraken-biom \
         {params.input} \
         --max F \
-        -o {output}" \
+        -o {output} \
+        "
 
 #---------------------------------------------------
 # Biom convert, BIOM to tsv
@@ -351,7 +355,7 @@ rule biom_convert:
 #---------------------------------------------------
 rule sintax:
     input:
-        database="data/databases/sintax/12s.fas"
+        database="data/databases/sintax/12s.fas",
         query="results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
@@ -363,7 +367,8 @@ rule sintax:
         -db {input.database} \
         -tabbedout {output} \
         -strand both \
-        -sintax_cutoff {params.cutoff}"
+        -sintax_cutoff {params.cutoff} \
+        "
 
 #-------------------------------------------------
 # biom taxonomy transformation
@@ -403,7 +408,13 @@ rule mlca_to_krona:
     shell:
         "ktImportText {input} -o {output}"
 
-rule sintax_to_kronatext: # converts to format for importing with kronatext
+#-----------------------------------------------------
+# convert to tsv format for importing with kronatext
+# takes 4th column of input (ie taxonomy passing SINTAX cutoff)
+# and exports each unique taxonomy with a count to new tsv
+# then rule passes tsv to krona for html plots
+#-----------------------------------------------------
+rule sintax_to_kronatext:
     input:
         "results/sintax/{library}/{sample}_reads.sintax"
     output:
