@@ -15,9 +15,9 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 
 
 
-library = "N1"
+library = "testlib"
 
-sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
+sample,= glob_wildcards("data/01_demultiplexed/testlib/{sample}.R1.fastq.gz")
 
 R=["R1", "R2"]
 
