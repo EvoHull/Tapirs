@@ -13,6 +13,8 @@ report: "reports/tapirs.rst"   ### Check to make sure this works and that the ou
 ## This count be a rule wherein if the input is eg. .gz, it unzips,
 ## whereas if not it automatically continues to the next rule that takes unzipped - mike
 
+
+
 library="N1"
 
 sample,= glob_wildcards("data/01_demultiplexed/N1/{sample}.R1.fastq.gz")
@@ -244,6 +246,7 @@ rule blastn:
         -query {input.query} \
         -out {output}"
 
+
 #-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
@@ -281,8 +284,7 @@ rule mlca:
         -id {params.identity} \
         -cov {params.coverage} \
         -m {params.majority} \
-        -hits {params.hits} \
-        "
+        -hits {params.hits}"
 
 #-----------------------------------------------------
 # Kraken, kmer based taxonomic id
@@ -308,8 +310,7 @@ rule kraken2:
         --threads {threads} \
         --confidence {params.confidence} \
         --output {output.kraken_outputs} \
-        --report {output.kraken_reports} \
-        "
+        --report {output.kraken_reports}"
 
 # could use --report-zero-counts if against small database
     # will add this t the config file - Mike
@@ -328,8 +329,7 @@ rule kraken_to_biom:
         "kraken-biom \
         {params.input} \
         --max F \
-        -o {output} \
-        "
+        -o {output}" \
 
 #---------------------------------------------------
 # Biom convert, BIOM to tsv
@@ -372,11 +372,11 @@ rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "envs/tapirs.yaml"
     input:
-        "results/kraken/reports/{library}.{sample}.txt"
+        "results/kraken/outputs/{library}/{sample}.tsv"
     output:
         "reports/krona/kraken/{library}/{sample}.html"
     shell:
-        "ktImportText -q 2 -t 3 {input} -o {output}"
+        "ktImportTaxonomy -q 2 -t 3 {input} -o {output}"
 
 rule mlca_to_krona:
     conda:
