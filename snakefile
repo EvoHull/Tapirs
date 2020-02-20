@@ -59,8 +59,6 @@ rule all:
 #-----------------------------------------------------
 rule fastp_trim_and_merge:
     message: "Beginning fastp QC of raw data"
-    conda:
-        "envs/tapirs.yaml"
     input:
         read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
@@ -101,8 +99,6 @@ rule fastp_trim_and_merge:
 # vsearch, convert files from fastq to fasta
 #-----------------------------------------------------
 rule fastq_to_fasta:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -117,8 +113,6 @@ rule fastq_to_fasta:
 # vsearch fastq report
 #-----------------------------------------------------
 rule vsearch_fastq_report:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -137,8 +131,6 @@ rule vsearch_fastq_report:
 # dereplication
 #-----------------------------------------------------
 rule vsearch_dereplication:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fasta"
     output:
@@ -155,8 +147,6 @@ rule vsearch_dereplication:
 # denoise, remove sequence errors
 #-----------------------------------------------------
 rule vsearch_denoising:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
@@ -179,8 +169,6 @@ rule vsearch_denoising:
 # chimera removal, vsearch
 #-----------------------------------------------------
 rule vsearch_dechimerisation: # output needs fixing
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta"
     output: # fix
@@ -200,8 +188,6 @@ rule vsearch_dechimerisation: # output needs fixing
 # re-replication
 #-------------------------------------------------------
 rule vsearch_rereplication:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta" # check
     output:
@@ -219,8 +205,6 @@ rule vsearch_rereplication:
 #-----------------------------------------------------
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
-    conda:
-        "envs/tapirs.yaml"
     input:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
@@ -250,8 +234,6 @@ rule blastn:
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
 rule tax_to_blast:
-    conda:
-        "envs/tapirs.yaml"
     input:
         blast_out="results/blast/{library}/{sample}_blast.out",
         ranked_lineage="data/databases/new_taxdump/rankedlineage.dmp"
@@ -289,8 +271,6 @@ rule mlca:
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 rule kraken2:
-    conda:
-        "envs/tapirs.yaml"
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
@@ -318,8 +298,6 @@ rule kraken2:
 # Kraken output to BIOM format
 #-----------------------------------------------------
 rule kraken_to_biom:
-    conda:
-        "envs/tapirs.yaml"
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
@@ -334,8 +312,6 @@ rule kraken_to_biom:
 # Biom convert, BIOM to tsv
 #---------------------------------------------------
 rule biom_convert:
-    conda:
-        "envs/tapirs.yaml"
     input:
         expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment)
     output:
