@@ -23,7 +23,6 @@ my_experiment="testing_tapirs"
 #, = glob_wildcards("data/01_demultiplexed/{library}/")
 ## check libraries and library are named OK throughout
 
-conda_envs=["tapirs.yaml", "basta_LCA.yaml"]
 #sample,= glob_wildcards("data/01_demultiplexed/{library}/{sample}.R1.fastq")
 
 #-----------------------------------------------------
