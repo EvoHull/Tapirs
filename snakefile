@@ -407,36 +407,4 @@ rule conda_env:
     shell:
         "conda env export --file {output}"
 
-
-
 ##################################################################################################
-# EVERYTHING BELOW HERE IS SAVED FOR FUTURE USE/DELETION
-
-
-#-----------------------------------------------------
-# LCA, Last Comomon Ancestor analysis of blast using BASTA
-#-----------------------------------------------------
-# rule basta_LCA:
-#     conda:
-#         "envs/basta_LCA.yaml"
-#     input:
-#         "results/blast/{library}/{sample}_blast.out" #fix this
-#         # file of blast tabular -outfmt 6 from above
-#     params:
-#         nhits="50", # -n max number of  hits to consider for classification (default=0=all)
-#         minhits="3", # -m must have at least 3 hits, else ignored (default=3)
-#         evalue="1e-20", # -e min e-value of hit (default=0.00001)
-#         length="90", # -l match must be at least 90bp (default=100)
-#         minident="95", # -i minimum identity of hit (default=80)
-#         maj_percent="90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
-#         dir="/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
-#     output: # check library/sample syntax
-#         "results/LCA/{library}/{sample}.basta_LCA.out"
-#     shell:
-#         "basta sequence {input} {output} gb \
-#         -p {params.maj_percent} \
-#         -m {params.minhits} \
-#         -l {params.length} \
-#         -i {params.minident} \
-#         -n {params.nhits}"
-# #        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE"
