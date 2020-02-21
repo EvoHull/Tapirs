@@ -114,7 +114,9 @@
         
             <li><a class="toctree-l4" href="#envs">envs</a></li>
         
-            <li><a class="toctree-l4" href="#data">Data</a></li>
+            <li><a class="toctree-l4" href="#data">data</a></li>
+        
+            <li><a class="toctree-l4" href="#documentation">documentation</a></li>
         
             <li><a class="toctree-l4" href="#rules">rules</a></li>
         
@@ -123,8 +125,6 @@
             <li><a class="toctree-l4" href="#scripts">scripts</a></li>
         
             <li><a class="toctree-l4" href="#results">results</a></li>
-        
-            <li><a class="toctree-l4" href="#docs">docs</a></li>
         
         </ul>
     
@@ -137,9 +137,11 @@
         
             <li><a class="toctree-l4" href="#vsearch">vsearch</a></li>
         
-            <li><a class="toctree-l4" href="#blast-and-basta-lca">blast and BASTA-LCA</a></li>
+            <li><a class="toctree-l4" href="#blast-and-mlca">blast and MLCA</a></li>
         
             <li><a class="toctree-l4" href="#kraken2">Kraken2</a></li>
+        
+            <li><a class="toctree-l4" href="#sintax">sintax</a></li>
         
             <li><a class="toctree-l4" href="#graphical-display-of-results">graphical display of results</a></li>
         
@@ -192,7 +194,7 @@
             <div class="section">
               
                 <h1 id="directory-structure">DIRECTORY STRUCTURE</h1>
-<p>We set directory structure in the repository to standardise the workflow design.</p>
+<p>We set directory structure in the repository to standardise the workflow design. You will need to populate the data directory with your demultiplexed sequence (fastq.gz) files and the databases you wish to search them against (eg blast, kraken2, sintax).</p>
 <p><img alt="Directory Structure" src="../../images/dir_structure.png" /></p>
 <p><em>Above: the directory structure of a standard Tapirs workflow</em></p>
 <h2 id="snakefile">snakefile</h2>
@@ -201,11 +203,14 @@
 <p><code>config.yaml</code> is the experiment specific control file. You should edit this to name your experiment, specify the location of data, and edit any variable.</p>
 <h2 id="envs">envs</h2>
 <p>conda environments for each rule can be specified here. These are in addition to the general top-level environment.yaml and may not be required.</p>
-<h2 id="data">Data</h2>
-<h3 id="raw-data">raw data</h3>
-<p>Never analyse your raw data, make a copy to this folder. It then forms part of your experimental record.</p>
-<h3 id="demultiplexed-data">demultiplexed data</h3>
+<h2 id="data">data</h2>
+<p>We treat the data directory as read-only during operation of the workflow. It is the location for you to assemble sequences, and databases, and taxonomy, but the workflow will not write here.</p>
+<h3 id="demultiplexed">demultiplexed</h3>
 <p>We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the <code>config.yaml</code> file. Since de-multiplexing is different in different laboratories we teat this as a separate workflow.</p>
+<h3 id="databases">databases</h3>
+<p>The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called taxdump).</p>
+<h2 id="documentation">documentation</h2>
+<p>/docs contains the documentation for Tapirs, build with mkdocs.</p>
 <h2 id="rules">rules</h2>
 <p>This contains snakemake workflow description rules for separate tasks. We may have:
 - blast.smk
@@ -214,13 +219,11 @@
 - report.smk</p>
 <p>Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify.</p>
 <h2 id="reports">reports</h2>
-<p>Reports are written by some of the programs. Snakemake will also write a report.</p>
+<p>Reports are written by some of the programs. Snakemake will also write an overall  report.</p>
 <h2 id="scripts">scripts</h2>
 <p>Place here scripts called by the snakemake rules</p>
 <h2 id="results">results</h2>
 <p>This directory usually has subdirectories named by the program (eg blast). It is a convenient way of organising the output.</p>
-<h2 id="docs">docs</h2>
-<p>Documentation for Tapirs</p>
 <h1 id="analysis">ANALYSIS</h1>
 <h2 id="fastp">fastp</h2>
 <p>fastp is used for 2 separate jobs:</p>
@@ -237,13 +240,15 @@
 <li>chimera removal</li>
 </ol>
 <p>The sequences written by vsearch are the query sequences for taxonomic identification.</p>
-<h2 id="blast-and-basta-lca">blast and BASTA-LCA</h2>
+<h2 id="blast-and-mlca">blast and MLCA</h2>
 <h3 id="blast">blast</h3>
 <p>blastn is used to search a pre-prepared database for sequence matches. The hits for each query sequence are written including a taxonomic identifier.</p>
-<h3 id="basta">BASTA</h3>
-<p>BASTA will determine the Last Common Ancestor (LCA) of the blast hits for each query sequence.</p>
+<h3 id="mlca">MLCA</h3>
+<p>MLCA (Majority Lowest Common Ancestor) will determine the LCA of the blast hits for each query sequence. It has several options for customising your blast analysis. Majority means that it differs from other LCA scripts in that it can determine LCA from the majority rather than all the hits. Imagine a situation in which 9/10 high quality blast hits for a sequence are to the brine shrimp <em>Artemia franciscana</em> and one is to the Zebra fish <em>Danio rerio</em> (commonly fed on Artemia in the lab). If the LCA looks for the taxonomy shared by <strong>ALL</strong> the top 10 hits (including the likely misclassified Danio record) the LCA is Bilateria and almost all information is lost. If however we decide to set the majority parameter -m to 0.8 then the LCA will determine the taxonomy shared by 80% of the top hits, which will be Artemia franciscana. If you set -m to 1.0 then it will require 100% agreement, as other LCAs do. We find this flexibility useful.</p>
 <h2 id="kraken2">Kraken2</h2>
-<p>Kraken2 is an alternative to blast and BASTA-LCA. It uses a k-mer approach to determine taxonomy of query sequences by comparing to a databases built from reference sequences and taxonomic information. Databases are large, and require significant RAM and time to produce and their construction is not part of this workflow. Kraken2 searches themselves however are very fast and efficient.</p>
+<p>Kraken2 is an alternative to blast and LCA. It uses a k-mer approach to determine taxonomy of query sequences by comparing to a databases built from reference sequences and taxonomic information. Databases are large, and require significant RAM and time to produce and their construction is not part of this workflow. Kraken2 searches themselves however are very fast and efficient.</p>
+<h2 id="sintax">sintax</h2>
+<p>Sintax assigns taxonomy to query sequences by kmer similarity.</p>
 <h2 id="graphical-display-of-results">graphical display of results</h2>
 <p>Krona is used to make an interactive html page to display taxonomic summaries</p>
               

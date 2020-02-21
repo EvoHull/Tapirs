@@ -171,17 +171,19 @@
 <p>These instructions are to set up Tapirs after <a href="../installation/">installation</a> has been carried out.</p>
 </div>
 <h1 id="config-files">CONFIG FILES</h1>
-<p>The <code>config.yaml</code> file contains settings for the workflow's operation. Most of them have reasonable default values, but some (like specifying the location of your data) require your input. Open <code>config.yaml</code> in a text editor.</p>
+<p>The <code>config.yaml</code> file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in <code>config.yaml</code> have reasonable default values, but some may require your input. Open <code>config.yaml</code> in a text editor.</p>
 <ol>
 <li>set a name for your experiment (default=expt_name)</li>
 <li>set the directory containing your <strong>demultiplexed</strong> fastq.gz data (default=data/demultiplexed)</li>
-<li>set the location of your databases (ignore if not using the program)<ul>
-<li>blast database</li>
-<li>Kraken2 database</li>
+<li>check the location of your databases is correct and amend if they are elsewhere. Defaults are:<ul>
+<li><code>data/databases/blast</code></li>
+<li><code>data/databases/kraken</code></li>
+<li><code>data/databases/taxonomy</code></li>
 </ul>
 </li>
 <li>set fastp parameters for quality control and read merging</li>
 <li>set blast parameters</li>
+<li>set MLCA parameters</li>
 </ol>
 <h1 id="data">DATA</h1>
 <p>The <code>/data</code> directory should contain 2 subdirectories <code>/demultiplexed</code> <code>/databases</code></p>

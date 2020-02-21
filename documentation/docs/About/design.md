@@ -1,6 +1,6 @@
 # DIRECTORY STRUCTURE
 
-We set directory structure in the repository to standardise the workflow design.
+We set directory structure in the repository to standardise the workflow design. You will need to populate the data directory with your demultiplexed sequence (fastq.gz) files and the databases you wish to search them against (eg blast, kraken2, sintax).
 
 ![Directory Structure](../images/dir_structure.png)
 
@@ -11,11 +11,12 @@ The top level snakefile to control the workflow.
 `config.yaml` is the experiment specific control file. You should edit this to name your experiment, specify the location of data, and edit any variable.
 ## envs
 conda environments for each rule can be specified here. These are in addition to the general top-level environment.yaml and may not be required.
-## Data
+## data
 We treat the data directory as read-only during operation of the workflow. It is the location for you to assemble sequences, and databases, and taxonomy, but the workflow will not write here.
 ### demultiplexed
 We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the `config.yaml` file. Since de-multiplexing is different in different laboratories we teat this as a separate workflow.
 ### databases
+The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called taxdump).
 ## documentation
 /docs contains the documentation for Tapirs, build with mkdocs.
 ## rules
@@ -27,7 +28,7 @@ This contains snakemake workflow description rules for separate tasks. We may ha
 
 Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify.
 ## reports
-Reports are written by some of the programs. Snakemake will also write a report.
+Reports are written by some of the programs. Snakemake will also write an overall  report.
 ## scripts
 Place here scripts called by the snakemake rules
 ## results
@@ -59,6 +60,9 @@ MLCA (Majority Lowest Common Ancestor) will determine the LCA of the blast hits 
 
 ## Kraken2
 Kraken2 is an alternative to blast and LCA. It uses a k-mer approach to determine taxonomy of query sequences by comparing to a databases built from reference sequences and taxonomic information. Databases are large, and require significant RAM and time to produce and their construction is not part of this workflow. Kraken2 searches themselves however are very fast and efficient.
+
+## sintax
+Sintax assigns taxonomy to query sequences by kmer similarity.
 
 ## graphical display of results
 Krona is used to make an interactive html page to display taxonomic summaries

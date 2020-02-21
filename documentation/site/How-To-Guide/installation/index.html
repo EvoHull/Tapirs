@@ -62,16 +62,16 @@
     <a class="current" href="./">Installation</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#git-clone-tapirs">git clone tapirs</a></li>
+    <li class="toctree-l3"><a href="#install-miniconda">install miniconda</a></li>
     
 
-    <li class="toctree-l3"><a href="#install-miniconda">install miniconda</a></li>
+    <li class="toctree-l3"><a href="#git-clone-tapirs">git clone tapirs</a></li>
     
 
     <li class="toctree-l3"><a href="#create-and-activate-a-conda-environment">create and activate a conda environment</a></li>
     
 
-    <li class="toctree-l3"><a href="#create-a-second-environment-for-basta">create a second environment, for BASTA</a></li>
+    <li class="toctree-l3"><a href="#additional-databases-and-installs">Additional databases and installs</a></li>
     
 
     </ul>
@@ -166,23 +166,21 @@
 <p>These documents assume a unix system like OSX or Linux</p>
 </div>
 <p>Although you can install and run Tapirs without too many steps you will need some very basic knowledge of the command line. A basic knowledge of Snakemake will help you to modify and configure Tapirs. Snakemake is a relatively easy workflow manager, but we recommend that you familiarise yourself with it, perhaps carry out the <a href="https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html">tutorial</a>.</p>
-<h1 id="git-clone-tapirs">git clone tapirs</h1>
-<p>If you have git installed then clone the repository to your local environment with <code>git clone github_address</code></p>
-<p>You could alternatively download the repository from the <a href="https://github.com/davelunt/Tapirs">Tapirs github repository</a> using the green button. Then expand the zip file and navigate into the directory.</p>
 <h1 id="install-miniconda">install miniconda</h1>
 <p>Conda (miniconda) is a package manager and is required here to install software and their dependencies. Follow the <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/">installation instructions</a> for Miniconda for your operating system.</p>
+<h1 id="git-clone-tapirs">git clone tapirs</h1>
+<p>Make sure that you have git installed. At the command line type <code>git --version</code> and you should see the version number. If instead it reports <code>command not found: git</code> or similar then it is not installed. You can go to the <a href="https://git-scm.com/">git site</a> to get installation advice or slightly easier might be to try <code>conda install git</code> at the command line.</p>
+<p>If you have git installed then clone the repository to your local environment with <code>git clone https://github.com/davelunt/Tapirs.git</code></p>
+<p>You could alternatively download the repository from the <a href="https://github.com/davelunt/Tapirs">Tapirs github repository</a> using the green button. Then expand the zip file and navigate into the directory.</p>
 <h1 id="create-and-activate-a-conda-environment">create and activate a conda environment</h1>
 <p>Navigate to the tapirs directory.</p>
 <p><code>conda create env -f environment.yaml</code></p>
 <p><code>conda activate tapirs</code></p>
-<p>The software listed in environment.yaml file should now be installed. You also need to install BASTA, KronaTools, and a series of databases for blastn, BASTA, Krona, and Kraken2. Databases are large files, and everyone needs a different one, so they are not included with this install. BASTA can be problematic to install and requires its own python environment separate from the rest of the workflow.</p>
-<h1 id="create-a-second-environment-for-basta">create a second environment, for BASTA</h1>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>do we need to do this or will snakemake take care of creating the environment?</p>
-</div>
-<p>The LCA analysis software BASTA requires a different version of python (2.7) and needs to be run in its own environment. Snakemake will take of this but you should first create it from the <code>basta_env.yaml</code> file.</p>
-<p><code>conda create env -f envs/basta_env.yaml</code></p>
+<p>The software listed in environment.yaml file should now be installed.</p>
+<h1 id="additional-databases-and-installs">Additional databases and installs</h1>
+<p>Unfortunately you will need to complete the installation of KronaTools semi-manually with an install script. [Advice on installing Krona Tools(https://github.com/marbl/Krona/wiki/Installing)] is give on their Github wiki.</p>
+<p>In order to search a blast database, or a Kraken database, you will need to provide those databases yourself. Databases are large files, and everyone needs a different one, so they are not included with this install or Tapirs.</p>
+<p>Your databases should be placed into the <code>data/databases/blast</code> <code>data/databases/kraken</code> directories.</p>
               
             </div>
           </div>
