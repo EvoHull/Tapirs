@@ -10,11 +10,6 @@ configfile: "config.yaml"
 report: "../reports/tapirs.rst"
 
 #-----------------------------------------------------
-rule all_reports:
-    input:
-        expand("data/{sample}.R[1,2].fastq.gz", sample=SAMPLES)
-
-#-----------------------------------------------------
 # seqkit to write simple report on fasta files
 #-----------------------------------------------------
 rule seqkit_stats:
