@@ -14,8 +14,10 @@ configfile: "config.yaml"
 #---------------------------------------------------
 
 rule sintax:
+    conda:
+        "../envs/tapirs.yaml"
     input:
-        database = "data/databases/sintax/12s.fas",
+        database = "data/databases/sintax_test2.txt",
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
@@ -38,7 +40,7 @@ rule sintax_to_kronatext:
     output:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
     shell:
-        "awk '{print $4}' {input} | sort | uniq -c >> {output}"
+        "awk '{{print $4}}' {input} | sort | uniq -c >> {output}"
 
 rule sintaxtext_to_krona: # importing with kronatext to krona
     conda:
@@ -46,6 +48,6 @@ rule sintaxtext_to_krona: # importing with kronatext to krona
     input:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
     output:
-        "reports/krona/{library}/{sample}.sintax.html"
+        "reports/krona/sintax/{library}/{sample}.sintax.html"
     shell:
         "ktImportText {input} -o {output}"
