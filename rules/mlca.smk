@@ -3,7 +3,7 @@
 # MLCA, majority lowest common ancestor
 #-----------------------------------------------------
 
-configfile = "config.yaml"
+configfile: "config.yaml"
 
 rule mlca:
     input:

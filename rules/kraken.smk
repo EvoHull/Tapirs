@@ -3,7 +3,7 @@
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
 
-configfile = "config.yaml"
+configfile: "config.yaml"
 
 rule kraken2:
     conda:

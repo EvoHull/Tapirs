@@ -3,7 +3,7 @@
 # blastn, sequence similarity search
 #-----------------------------------------------------
 
-configfile= "config.yaml"
+configfile: "config.yaml"
 
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"

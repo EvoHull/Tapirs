@@ -5,6 +5,8 @@
 # taxonomic assignment
 #-----------------------------------------------------
 
+configfile: "config.yaml"
+
 report: "../reports/tapirs.rst"
 
 #-----------------------------------------------------

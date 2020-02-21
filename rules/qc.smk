@@ -3,7 +3,7 @@
 # fastp, control for sequence quality and pair reads
 #-----------------------------------------------------
 
-configfile= "config.yaml"
+configfile: "config.yaml"
 
 rule fastp_trim_and_merge:
     message:

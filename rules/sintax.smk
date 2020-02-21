@@ -1,7 +1,7 @@
 #####   SINTAX   #####
 #-----------------------------------------------------
 
-configfile = "config.yaml"
+configfile: "config.yaml"
 
 # convert to tsv format for importing with kronatext
 # takes 4th column of input (ie taxonomy passing SINTAX cutoff)
@@ -29,7 +29,7 @@ rule sintax:
         -strand both \
         -sintax_cutoff {params.cutoff} \
         "
-        
+
 rule sintax_to_kronatext:
     conda:
         "../envs/tapirs.yaml"
