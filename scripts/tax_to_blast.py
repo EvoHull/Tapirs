@@ -31,4 +31,4 @@ with open(args.infile,'r') as blasthits, open(args.outfile, 'w') as output:
         if taxid == 'N/A':
             output.write(hit.strip()+'\tunknown_kingdom/unknown_phylum/unknown_class/unknown_order/unknown_family/unknown_genus/unknown_species\n')
         else:
-            output.write(hit.strip()+'\t'+taxonomyDict[taxid]['superkingdom']+'/'+taxonomyDict[taxid]['phylum']+'/'+taxonomyDict[taxid]['class']+'/'+taxonomyDict[taxid]['order']+'/'+taxonomyDict[taxid]['family']+'/'+taxonomyDict[taxid]['genus']+'/'+taxonomyDict[taxid]['species']+'\n')
+            output.write(hit.strip()+'\t'+taxonomyDict[taxid]['superkingdom']+'/'+taxonomyDict[taxid]['phylum']+'/'+taxonomyDict[taxid]['class']+'/'+taxonomyDict[taxid]['order']+'/'+taxonomyDict[taxid]['family']+'/'+taxonomyDict[taxid]['genus']+'/'+taxonomyDict[taxid]['species'].split('_')[1]+'\n')
