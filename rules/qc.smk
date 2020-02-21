@@ -46,6 +46,13 @@ rule fastp_trim_and_merge:
         --correction \
         "
 
+# unpaired files need bringing back in
+
+    #     cat 3_qc/${library}/${sample}.R1.fastq >> 4_merged_fastq/${library}/${sample}_merged.fastq\n",
+    # "        cat 3_qc/${library}/${sample}_unpaired.R1.fastq >> 4_merged_fastq/${library}/${sample}_merged.fastq
+
+
+
 #-----------------------------------------------------
 # convert files from fastq to fasta
 #-----------------------------------------------------

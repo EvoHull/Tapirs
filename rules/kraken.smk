@@ -12,7 +12,7 @@ rule kraken2:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
-        kraken_reports = "results/kraken/reports/{library}.{sample}.txt"     #same here - Mike
+        kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
     threads:
         6
     params:
@@ -21,7 +21,6 @@ rule kraken2:
     shell:
         "kraken2 \
         --db data/databases/kraken2_db/ {input} \
-        --use-names \
         --memory-mapping \
         --threads {threads} \
         --confidence {params.confidence} \
@@ -43,12 +42,12 @@ rule kraken_to_biom:
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
-        input = expand("results/kraken/reports/{library}.{sample}.txt", library=library, sample=sample)
+        "results/kraken/reports/*/*.txt"
     shell:
         "kraken-biom \
-        {params.input} \
         --max F \
         -o {output} \
+        {params} \
         "
 
 
