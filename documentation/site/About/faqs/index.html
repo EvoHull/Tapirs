@@ -112,7 +112,10 @@
     <li class="toctree-l3"><a href="#ive-added-some-tools-do-you-want-my-changes">I've added some tools, do you want my changes?</a></li>
     
 
-    <li class="toctree-l3"><a href="#there-is-an-error-in-the-documentation">There is an error in the documentation</a></li>
+    <li class="toctree-l3"><a href="#there-is-an-errorhole-in-the-documentation">There is an error/hole in the documentation</a></li>
+    
+
+    <li class="toctree-l3"><a href="#it-works-on-one-machine-but-not-on-another">It works on one machine but not on another</a></li>
     
 
     <li class="toctree-l3"><a href="#who-do-i-contact-about-the-software">Who do I contact about the software?</a></li>
@@ -183,8 +186,10 @@
 <p>No, sorry. We really hope however that choosing a workflow manager (Snakemake) means that this is much easier than for any other metabarcoding package. Look at the <a href="../../How-To-Guide/extending/">extending Tapirs How-To guide</a>.</p>
 <h1 id="ive-added-some-tools-do-you-want-my-changes">I've added some tools, do you want my changes?</h1>
 <p>Yes please. Do this via a pull request on github.</p>
-<h1 id="there-is-an-error-in-the-documentation">There is an error in the documentation</h1>
-<p>You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help.</p>
+<h1 id="there-is-an-errorhole-in-the-documentation">There is an error/hole in the documentation</h1>
+<p>You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help. If you think that parts of the documentation are lacking, and you would like to significantly extend them, we also welcome that. If you prefer to discuss it before you start then pease do get in touch.</p>
+<h1 id="it-works-on-one-machine-but-not-on-another">It works on one machine but not on another</h1>
+<p>This run-anywhere portability is a real challenge in bioinformatics. Conda environments have proved really useful for us, but they aren't perfect. As a start just check that both machines are running the tapirs environment, and have not returned to the base environment. You could also take the very detailed exported environment (reports/archived_envs) from the successful machine and use it to create a new environment on the not-running machine. They should then have exactly the same software installed. Also it is worth double-checking both have the exact same version of Tapirs.</p>
 <h1 id="who-do-i-contact-about-the-software">Who do I contact about the software?</h1>
 <p>The best way is to flag this on GitHub. If you need to get in touch personally then contact Dave Lunt on Gmail.</p>
 <h1 id="is-it-licensed">Is it licensed?</h1>

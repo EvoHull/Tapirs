@@ -31,44 +31,61 @@ else:
     min_hits=float(args.min_hits)
 bit_threshold=float(args.bit_threshold)
 
-df=pd.read_csv(args.infile,sep='\t', header=None)
-df[df[4]>=float(args.identity)]
-df[df[4]>=float(args.coverage)]
-seq_ids=set(df[0])
-prop=1-(float(args.bit_threshold)/100)
-
+unid_tax=('\t'.join([str(x) for x in ['unidentified']*7]))
 taxonomy=('kingdom','phylum','class','order','family','genus','species')
 
-df=pd.read_csv(infile,sep='\t', header=None)
-df[df[4]>=identity]
-df[df[4]>=coverage]
-seq_ids=set(df[0])
-
-with open(outfile,'w') as lca_out:
-    lca_out.write('query\tlca_rank\tlca_taxon\tkingdom\tphylum\tclass\torder\tfamily\tgenus\tspecies\tmethod\n')
-    for seq_id in seq_ids:
-        lca=[]
-        seq=df[df[0] == seq_id]
+with open(infile,'r') as file:
+    count=0
+    for line in file.readlines():
+        count+=1
+    if count == 0:
+        with open(outfile,'w') as lca_out:
+            lca_out.write('query\tlca_rank\tlca_otu\tkingdom\tphylum\tclass\torder\tfamily\tgenus\tspecies\tmethod\n')
+    else:
+        df=pd.read_csv(infile,sep='\t', header=None)
+        df[df[4]>=identity]
+        df[df[4]>=coverage]
+        seq_ids=set(df[0])
         prop=1-(bit_threshold/100)
-        seq=seq[seq[7]>=max(seq[7])*prop]
-        taxon=seq[8].str.split("/", expand = True)
-        for col in taxon.columns:
-            taxa=np.unique(taxon[col],return_counts=True)
-            if max(taxa[1])/len(taxon[col]) >= majority/100:
-                lca.append(taxa[0][taxa[1]==max(taxa[1])])
 
-        lca_tax=[]
-        for i in lca:
-            lca_tax.append(i[0])
-        if len(lca_tax)<7:
-            lca_tax=lca_tax+(['unidentified']*(7-len(lca_tax)))
-        else:
-            lca_tax=lca_tax
-        lca_tax=('\t'.join([str(x) for x in lca_tax]))
-        unid_tax=('\t'.join([str(x) for x in ['unidentified']*7]))
-        if len(seq[col])>=min_hits and len(seq[col]) > 1:
-            lca_out.write('%s\t%s\t%s\t%s\tlca\n' %(seq_id,taxonomy[len(lca)-1],str(lca[-1][0]),lca_tax))
-        elif len(seq[col]) == 1 and min_hits == 1:
-            lca_out.write('%s\t%s\t%s\t%s\tsingle_hit\n' %(seq_id,taxonomy[len(lca)-1],str(lca[-1][0]),lca_tax))
-        else:
-            lca_out.write('%s\tunidentified\tunidentified\t%s\tunidentified\n' %(seq_id,unid_tax))
+
+        df=pd.read_csv(infile,sep='\t', header=None)
+        df[df[4]>=identity]
+        df[df[4]>=coverage]
+        seq_ids=set(df[0])
+
+        with open(outfile,'w') as lca_out:
+            lca_out.write('query\tlca_rank\tlca_otu\tkingdom\tphylum\tclass\torder\tfamily\tgenus\tspecies\tmethod\n')
+            for seq_id in seq_ids:
+                lca=[]
+                seq=df[df[0] == seq_id]
+                prop=1-(bit_threshold/100)
+                seq=seq[seq[7]>=max(seq[7])*prop]
+                taxon=seq[8].str.split("/", expand = True)
+                for col in taxon.columns:
+                    taxa=np.unique(taxon[col],return_counts=True)
+                    if max(taxa[1])/len(taxon[col]) >= majority/100:
+                        lca.append(taxa[0][taxa[1]==max(taxa[1])])
+
+                lca_tax=[]
+                for i in lca:
+                    lca_tax.append(i[0])
+                if len(lca_tax)<7:
+                    lca_tax=lca_tax+(['unidentified']*(7-len(lca_tax)))
+                else:
+                    lca_tax=lca_tax
+                lca_tax=('\t'.join([str(x) for x in lca_tax]))
+                
+                if len(lca)==7:
+                    otu_id=('_'.join([str(lca[5][0]),str(lca[6][0])]))
+                elif len(lca)==6:
+                    otu_id=('.'.join([str(lca_tax[5][0]),'_spp.']))
+                else:
+                    otu_id=str(lca[-1][0])
+
+                if len(seq[col])>=min_hits and len(seq[col]) > 1:
+                    lca_out.write('%s\t%s\t%s\t%s\tlca\n' %(seq_id,taxonomy[len(lca)-1],otu_id,lca_tax))
+                elif len(seq[col]) == 1 and min_hits == 1:
+                    lca_out.write('%s\t%s\t%s\t%s\tsingle_hit\n' %(seq_id,taxonomy[len(lca)-1],otu_id,lca_tax))
+                else:
+                    lca_out.write('%s\tunidentified\tunidentified\t%s\tunidentified\n' %(seq_id,unid_tax))

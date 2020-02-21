@@ -11,39 +11,57 @@ Tapirs was created by the EvoHull group, the University of Hull, UK
 
 
 
-### Instructions
+## Instructions
 
 #### CONDA and Snakemake
 
 First, ensure a version of conda is intalled on your machine. This can be either anaconda or miniconda.
 Miniconda is available at: https://docs.conda.io/en/latest/miniconda.html
 
-Next, ensure snakemake is installed in your base conda environment.
+Next, create and activate the tapirs conda environment.
 This can be done with the following command:
 
-$ conda activate base
-$ conda install -c bioconda -c conda-forge snakemake
+$ conda create --file envs/tapirs.yaml
+
+$ conda activate tapirs
 
 
-#### Database setup
+### Database setup
 
-##### BASTA
-From the base conda environment, ensuring you are in the "Tapirs/" directory, run the following commands:
-
-$ conda env create --file envs/basta_LCA.yaml
-$ conda activate basta_LCA
-$ basta download gb
-$ basta taxonomy
-$ conda deactivate
-
-##### BLAST
+#### BLAST
 BLAST requires a local custom database for the workflow to run efficiently.
-######## GS or DL - can you put a little bit in here about maing blast databases etc - Mike
+######## GS or DL - can you put a little bit in here about making blast databases etc - Mike ####
 
 
-#### Input wrangling
+#### KRONA
+Krona requires that its taxonomy database is updated/created
+To do this, run the following commands, making sure you are within the Tapirs/ directory and the 'tapirs' conda environment.
 
-Place all library directories within the "data/" directory, ensuring they have the suffix ".fastq.gz".
+$ mkdir data/databases/krona/
+
+$ ktUpdateTaxonomy.sh data/databases/krona/
+
+
+#### KRAKEN
+Kraken needs its database to run.
+######## GS, cna you sort this out please? - Mike   ########
+
+
+
+
+### Input wrangling
+
+Place all library directories within the "data/" directory (or edit path above), ensuring they follow the format "<library>.<sample>.<read>.fastq.gz".
+
+
+### Wildcard generation
+
+<insert command to run script to create tsvs for samples>
+
+$ bash wildcarding.sh
+
+
+### Config setup
 
 Open the configuration file "config.yaml" and follow steps there.
 

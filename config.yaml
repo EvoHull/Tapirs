@@ -1,40 +1,53 @@
 #####   TAPIRS: CONFIGFILE   #####
+
 ## Tapirs is highly configurable. Configuration is done before a run from within this file.
-## You must customise the next two sections to identify your data (wildcard variables) and database locations.
+## You must customise the next two sections to identify your wildcard variables and database locations.
+
+#---------------------------------------------------
+# DATABASE SETUP
+#---------------------------------------------------
+# Setup databases and set locations here
+# Defaults are in place for testing
+# Please edit to the location of your own databases
+
+# KRONA
+krona_taxdb: "data/databases/krona/" # or set location of own database
+                                     # this database can be generated from commands in the README.md
+
+# BLAST
+blast_db: "data/databases/12S_full/12s_full" # or set location of own database
+
+# KRAKEN
+kraken_db: "data/databases/kraken2_db/" # or set location of own database
+
 
 # --------------------------------------------------
 # WILDCARD VARIABLES
 # --------------------------------------------------
-# Set experiment-specific variables here. Specifically, wildcards for {library}, {sample}, and {experiment}.
-experiment: "my_experiment" # insert experiment name, no_spaces
+# Set experiment-specific variables here
 
-## Need to implement library iteration
-library: "N1" # "<library name>" or "[<list of libraries>]" # depending on how we iterate
-# but for now, manually
+my_experiment: "testing_tapirs" # insert experiment name, no_spaces
 
-# this will need altering once library iteration is implemented
-#sample,: glob_wildcards("data/01_dmpxd/N1/{sample}.R1.fastq")
+libraries: "libraries.tsv" # this file is generated from commands in README.md
 
-# this is for wildcarding forward and reverse reads
-R: ['R1', 'R2']
+samples: "samples.tsv" # this file is generated from commands in README.md
+
+R: ["R1","R2"]
+
+conda_envs: "tapirs.yaml"
+
 
 # -----------------------------------------------
-# LOCATION OF DATA FILES AND DATABASES
+# LOCATION OF DATA FILES
 # -----------------------------------------------
-data_dir: "./data" # <insert path> location of data directory on your file system
+data_dir: "data" # location of data directory on your file system
             # default is data/ - this should contain 'demultiplexed' directory
-blast_db: "<path to blast_nt_db>" # or set location of database
 
 
-# The following lines can potentially be removed depending on the implementation fo kraken and basta
-# If we do not use kraken or basta in the final pipeline, remove them from this configfile
-kraken_db: "<path to kraken db>" # or set location of database
-basta_tax_db: "<insert path>" # or install using "$ basta taxonomy" from within the basta_LCA conda_environment
-basta_map_db: "<insert path>" # or install using "$ basta download gb" from within the basta_LCA environment
 
 # *******************************************************
-# config parameters below here are optional,
-# ie if you don't change then default values will be used
+# Config parameters below here are optional,
+# ie, if you don't change then default values will be used
 # *******************************************************
 
 # -----------------------------------------------
@@ -54,28 +67,22 @@ FASTP_overlap_len: "90" # length of overlap required for MERGING
 max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
 max_trim2: "106"
 overlap_len: "<interger>" # length of overlap required for MERGING
-
 BLAST_Nhits: "50" # Number of descriptions
-
-# -----------------------------------------------
-# BASTA LAST COMMON ANCESTOR VARIABLES
-# -----------------------------------------------
-BASTA_nhits: "50", # -n max number of  hits to consider for classification (default=0=all)
-BASTA_minhits: "3", # -m must have at least 3 hits, else ignored (default=3)
-BASTA_evalue: "1e-20", # -e min e-value of hit (default=0.00001)
-BASTA_length: "90", # -l match must be at least 90bp (default=100)
-BASTA_minident: "95", # -i minimum identity of hit (default=80)
-BASTA_maj_percent: "90", # -p 90 = taxonomy shared by 9/10 hits, (default=100 = shared by all)
-BASTA_dir: "/media/mike/mikesdrive/" # -d directory of database files (default: $HOME/.basta/taxonomy)
 
 # -----------------------------------------------
 # SIMPLE-LCA VARIABLES
 # -----------------------------------------------
-SLCA_bitscore: "8", # '-b', '--bitscore', 'bitscore top percentage threshold'
-SLCA_id: "80", # -id identity threshold, required
-SLCA_coverage: "80", # -cov coverage threshold', required=True
-SLCA_tophit: "yes", # -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
-SLCA_tid: "99", # -tid 'identity treshold for the tophit', required=False, default='100'
-SLCA_tcov: "100", # -tcov query coverage threshold for the tophit', required=False,  default='100'
-SLCA_fh: "environmental", # -fh filter out hits that contain unwanted taxonomy'
-SLCA_flh: "unknown", # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'
+SLCA_bitscore: "8"
+# '-b''--bitscore', 'bitscore top percentage threshold'
+SLCA_id: "80"
+# -id identity threshold, required
+SLCA_coverage: "80"
+# -cov coverage threshold', required=True
+SLCA_tophit: "yes"
+# -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
+SLCA_tid: "99"
+# -tid 'identity treshold for the tophit', required=False, default='100'
+SLCA_tcov: "100" # -tcov query coverage threshold for the tophit', required=False,  default='100'
+SLCA_fh: "environmental"
+# -fh filter out hits that contain unwanted taxonomy'
+SLCA_flh: "unknown" # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'

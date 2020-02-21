@@ -2,18 +2,19 @@ name: tapirs
 channels:
   - bioconda
   - conda-forge
-  # - rmg
-  # - defaults
+  - rmg
+  - defaults
+  - anaconda
+
 dependencies:
-  - snakemake-minimal =5.2.4
+  - snakemake
   - python
-  - jinja2 =2.10
-  - matplotlib =2.2.3
-  - graphviz =2.38.0
+  - jinja2
+  - matplotlib
+  - graphviz
 
   # processing sequence reads
   - fastp # sequence trimming and processing
-  # - flash # paired end merging
   - vsearch # dereplication clustering etc
 
   # taxonomic ID and LCA

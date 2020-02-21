@@ -14,8 +14,11 @@ No, sorry. We really hope however that choosing a workflow manager (Snakemake) m
 # I've added some tools, do you want my changes?
 Yes please. Do this via a pull request on github.
 
-# There is an error in the documentation
-You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help.
+# There is an error/hole in the documentation
+You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help. If you think that parts of the documentation are lacking, and you would like to significantly extend them, we also welcome that. If you prefer to discuss it before you start then pease do get in touch.
+
+# It works on one machine but not on another
+This run-anywhere portability is a real challenge in bioinformatics. Conda environments have proved really useful for us, but they aren't perfect. As a start just check that both machines are running the tapirs environment, and have not returned to the base environment. You could also take the very detailed exported environment (reports/archived_envs) from the successful machine and use it to create a new environment on the not-running machine. They should then have exactly the same software installed. Also it is worth double-checking both have the exact same version of Tapirs.
 
 # Who do I contact about the software?
 The best way is to flag this on GitHub. If you need to get in touch personally then contact Dave Lunt on Gmail.

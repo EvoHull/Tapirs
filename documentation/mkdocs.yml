@@ -10,11 +10,12 @@ nav:
   - Tutorials:
     - 'Basic blast': 'Tutorials/blast_tutorial.md'
     - 'Kraken2': 'Tutorials/kraken_tutorial.md'
+    - 'SINTAX': 'Tutorials/sintax_tutorial.md'
   - About:
     - 'FAQs': 'About/faqs.md'
     - 'Design': 'About/design.md'
     - 'Background': 'About/background.md'
-    
+
 theme: readthedocs
 
 markdown_extensions:
