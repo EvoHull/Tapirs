@@ -1,91 +1,51 @@
+#####   BLASTing   #####
 #-----------------------------------------------------
-# Tapirs-blast
-# ---------
-# A metabarcoding workflow to make taxon assignments
-# using blast
+# blastn, sequence similarity search
 #-----------------------------------------------------
 
-# do I need to specify config.yaml here? Or does it inherit from top level snakemake file?
-configfile: "config.yaml" # specify a configuration file
+configfile= "config.yaml"
 
-# get the sequence files into a list
-SAMPLES, = glob_wildcards("results/seqkit/{sample}")
-
-
-#-----------------------------------------------------
-# target rule
-#-----------------------------------------------------
-rule all_blast:
-    input:
-        expand("results/seqkit/{sample}", sample=SAMPLES),
-        expand("results/blast/config[expt_name].out", sample=SAMPLES),
-        expand("results/basta/{sample}.basta_LCA.out", sample=SAMPLES),
-        expand("results/basta/{sample}.basta_LCA.out.biom", sample=SAMPLES)
-
-
-#-----------------------------------------------------
-# make blast database
-# this is done once and not strictly part of the workflow
-#-----------------------------------------------------
-# rule blast_db:
-#     input:
-#         "data/database/database.fas.gz"
-#     output:
-#         destination=directory("results/blast/database"),
-#         name="my_db_name"
-#     shell: # is this fastest way to process gz data?
-#         "gunzip -c {input} | makeblastdb -in - -dbtype nucl -title my_db -out {output.name}"
-
-
-#-----------------------------------------------------
-# blastn - get top hit
-#-----------------------------------------------------
-rule blast:
-    input:
-        database="config[blast_db]", # blast db is in data/blast as specified in config file
-        query="results/seqkit/{sample}.extendedFrags.fas"
-    params:
-        descriptions="50", # return maximum of 50 hits
-        outformat="'6 qseqid stitle pident evalue'"
-    output:
-        "results/blast/{config[expt_name]}.out" # experiment name from a config.yaml file
-    shell:
-        "blastn -db {input.database} -outfmt {params.outformat} -max_target_seqs {params.descriptions} -query {input.query} -out {output}"
-
-#-----------------------------------------------------
-# BASTA - Last Comomon Ancestor analysis of blast
-#-----------------------------------------------------
-rule basta:
-    input:
-        "results/blast/{sample}_blastn.out" #fix this
-        # file of blast tabular -outfmt 6 from above
-    params: # need to check --help to see how to flag these at shell
-        percentID="100%", # must be shared by all, 90% = taxonomy shared by 90% hits, try this
-        minhits="3", # must have at least 3 hits, else ignored
-        evalue= "10e‐20",#  try 1e‐8
-        length="100"
+rule blastn:
+    #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
-        "envs/basta_env.yaml" # Basta needs a python 2.7 environment
-    output:
-        "results/basta/{sample}.basta_LCA.out"
-    shell:
-        "./bin/basta sequence {input} {output} gb -p {params.percentID} -e {params.evalue} -l {params.length}"
-#        "./bin/basta multiple INPUT_DIRECTORY OUTPUT_FILE MAPPING_FILE_TYPE" from manual
-
-#-----------------------------------------------------
-# BASTA to BIOM - BASTA output tsv needs to go into BIOM
-# uses BIOM-convert
-#-----------------------------------------------------
-rule basta_BIOM:
+        "envs/tapirs.yaml"
     input:
-        "results/basta/basta_LCA.out"
+        #db = "nt", #specify in environment.yaml
+        query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        json="json",
-        hdf5="hdf5"
+        db_dir = directory("data/databases/12S_full/12s_full"), # database directory
+        descriptions = "50", # return maximum of 50 hits
+        outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
+        min_perc_ident = "100", # this needs to be 100%
+        min_evalue = "1e-20"
     output:
-        "results/basta/{sample}.basta_LCA.out.biom"
+        "results/blast/{library}/{sample}_blast.out"
+    threads:
+        6
     shell:
-        "biom convert -i {input} -o {output} --table-type='OTU table' --to-{params.json}"
+        "blastn \
+        -db {params.db_dir} \
+        -num_threads {threads} \
+        -outfmt {params.outformat} \
+        -perc_identity {params.min_perc_ident} \
+        -evalue {params.min_evalue} \
+        -max_target_seqs {params.descriptions} \
+        -query {input.query} \
+        -out {output} \
+        "
 
-# biom convert -i table.txt -o table.from_txt_json.biom --table-type="OTU table" --to-json
-# biom convert -i table.txt -o table.from_txt_hdf5.biom --table-type="OTU table" --to-hdf5
+
+#-----------------------------------------------------
+# tax_to_blast, adds taxonomy in a column to blast output
+#-----------------------------------------------------
+
+rule tax_to_blast:
+    conda:
+        "envs/tapirs.yaml"
+    input:
+        blast_out = "results/blast/{library}/{sample}_blast.out",
+        ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
+    output:
+        blast_taxonomy = "results/blast/{library}/{sample}_tax.tsv"
+    shell:
+        "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
