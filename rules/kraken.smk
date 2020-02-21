@@ -33,6 +33,22 @@ rule kraken2:
 
 
 #-----------------------------------------------------
+# Krona, interactive html graphics of taxonomic diversity
+#-----------------------------------------------------
+
+rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+    conda:
+        "../envs/tapirs.yaml"
+    input:
+        "results/kraken/outputs/{library}/{sample}.tsv"
+    output:
+        "reports/krona/kraken/{library}/{sample}.html"
+    params:
+        "data/databases/krona/"
+    shell:
+        "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
+
+#-----------------------------------------------------
 # Kraken output to BIOM format
 #-----------------------------------------------------
 
@@ -40,7 +56,7 @@ rule kraken_to_biom:
     conda:
         "../envs/tapirs.yaml"
     input:
-        expand("results/kraken/reports/{library}/{sample}.txt", library=library, sample=sample)
+        expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples())
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
@@ -80,20 +96,3 @@ rule biom_convert:
 #         "results/kraken/{my_experiment}.trans.tsv"
 #     run:
 #         "
-
-
-#-----------------------------------------------------
-# Krona, interactive html graphics of taxonomic diversity
-#-----------------------------------------------------
-
-rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
-    conda:
-        "../envs/tapirs.yaml"
-    input:
-        "results/kraken/outputs/{library}/{sample}.tsv"
-    output:
-        "reports/krona/kraken/{library}/{sample}.html"
-    params:
-        "data/databases/krona/"
-    shell:
-        "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"

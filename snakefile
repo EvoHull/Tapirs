@@ -27,24 +27,26 @@ sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.leve
 rule all:
     input:
 # results ----------------------------------------------------------------------
-        expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=config["R"]),
-        expand("results/02_trimmed/{library}/{sample}.unpaired.{R}.fastq.gz", library=library, sample=sample, R=config["R"]),
-        expand("results/02_trimmed/{library}/{sample}.merged.fastq.gz", library=library, sample=sample),
-        expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=config["R"]),
-        expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
-        #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
-        expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
+        #expand("results/02_trimmed/{sample.library}/{sample.sample}.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
+        #expand("results/02_trimmed/{sample.library}/{sample.sample}.unpaired.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
+        #expand("results/02_trimmed/{sample.library}/{sample.sample}.merged.fastq.gz", sample=sample.reset_index().itertuples()),
+        #expand("results/03_denoised/{sample.library}/{sample.sample}.fasta", sample=sample.reset_index().itertuples(), R=config["R"]),
+        #expand("results/blast/{sample.library}/{sample.sample}_blast.out", sample=sample.reset_index().itertuples()),
+        #expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv", sample=sample.reset_index().itertuples()),
+        #expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
+        #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
+        #expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),
 # reports ----------------------------------------------------------------------
-        expand("reports/fastp/{library}/{sample}.json", library=library, sample=sample),
-        expand("reports/fastp/{library}/{sample}.html", library=library, sample=sample),
-        expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
-        expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
-        expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
+        expand("reports/fastp/{sample.library}/{sample.sample}.json", sample=sample.reset_index().itertuples()),
+        expand("reports/fastp/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
+        expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
+        expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats", sample=sample.reset_index().itertuples()),
+        expand("reports/vsearch/{sample.library}/{sample.sample}_fq_readstats", sample=sample.reset_index().itertuples()),
         expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
-        expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
+        #expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
         expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
-        expand("reports/krona/mlca/{library}/{sample}.html", library=library, sample=sample)
+        expand("reports/krona/mlca/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples())
 
 #-----------------------------------------------------
 # Rule files
