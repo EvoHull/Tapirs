@@ -41,6 +41,7 @@ rule all:
         expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
         expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
+        expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
         expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
         expand("reports/krona/mlca/{library}/{sample}.html", library=library, sample=sample)
