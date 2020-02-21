@@ -10,3 +10,4 @@ results/*
 .Rhistory
 data/databases/new*
 data/databases/*
+*/.Rhistory
