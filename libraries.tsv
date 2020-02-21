@@ -1,3 +1,5 @@
-sample	condition
-EA01	lake_1
-EA02	lake_2
+library
+N1
+EA01
+testlib
+EA02

@@ -1,29 +1,28 @@
-#------------------------------------------------------
-# Tapirs
-# ---------
-# A reproducible metabarcoding workflow using snakemake
-#------------------------------------------------------
+###########################################################################################################################
 
-#configfile: "config.yaml"
+                                                ######   TAPIRS   #####
+                                # A reproducible metabarcoding workflow using snakemake
 
-# Flag "$ snakemake" with "--report" to use
-report: "reports/tapirs.rst"   ### Check to make sure this works and that the output is something sensible - Mike
+############################################################################################################################
+## Setup
 
-## Need to implement something to allow intake of both fastq and fastq.gz -Mike
-## This count be a rule wherein if the input is eg. .gz, it unzips,
-## whereas if not it automatically continues to the next rule that takes unzipped - mike
+# Config file
+configfile: "config.yaml"
 
+# Reporting
+report: "reports/tapirs.rst" # Flag "$ snakemake" with "--report" to use
 
+###########################################################################################################################
+## Wildcarding library and sample
 
-library = "testlib"
+import pandas as pd
 
-sample,= glob_wildcards("data/01_demultiplexed/testlib/{sample}.R1.fastq.gz")
+library = pd.read_table(config["libraries"], index_col="library")
+sample = pd.read_table(config["samples"], index_col=["library", "sample"], dtype=str)
+sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.levels])
 
-R=["R1", "R2"]
-
-my_experiment = "testing_tapirs"
-
-conda_envs = ["tapirs.yaml", "basta_LCA.yaml"]
+############################################################################################################################
+## Workflow
 
 #-------------------------------------------------------------------------------
 # Target rules
@@ -31,10 +30,10 @@ conda_envs = ["tapirs.yaml", "basta_LCA.yaml"]
 rule all:
     input:
 # results ----------------------------------------------------------------------
-        expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=R),
-        expand("results/02_trimmed/{library}/{sample}.unpaired.{R}.fastq.gz", library=library, sample=sample, R=R),
+        expand("results/02_trimmed/{library}/{sample}.{R}.fastq.gz", library=library, sample=sample, R=config["R"]),
+        expand("results/02_trimmed/{library}/{sample}.unpaired.{R}.fastq.gz", library=library, sample=sample, R=config["R"]),
         expand("results/02_trimmed/{library}/{sample}.merged.fastq.gz", library=library, sample=sample),
-        expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=R),
+        expand("results/03_denoised/{library}/{sample}.fasta", library=library, sample=sample, R=config["R"]),
         expand("results/blast/{library}/{sample}_blast.out", library=library, sample=sample),
         #expand("results/blast/{library}/{sample}_blast.taxed.out", library=library, sample=sample),
         expand("results/mlca/{library}/{sample}_lca.tsv", library=library, sample=sample),
@@ -44,30 +43,34 @@ rule all:
         expand("reports/vsearch/{library}/{sample}.denoise.biom", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_eestats", library=library, sample=sample),
         expand("reports/vsearch/{library}/{sample}_fq_readstats", library=library, sample=sample),
-        expand("reports/archived_envs/{conda_envs}", conda_envs=conda_envs),
-        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment),
-        expand("reports/krona/kraken/{library}/{sample}.html", library=library, sample=sample),
-        expand("reports/krona/{library}/{sample}.mlca.html", library=library, sample=sample)
+        expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
+        expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
+        expand("reports/krona/mlca/{library}/{sample}.html", library=library, sample=sample)
 
 #-----------------------------------------------------
 # Rule files
 #-----------------------------------------------------
-# include: "rules/reports.smk",
-# include: "rules/kraken.smk",
-# include: "rules/blast.smk",
 # include: "rules/qc.smk"
+# include: "rules/blast.smk"
+# include: "rules/kraken.smk"
+# include: "rules/mlca.smk"
+# include: "rules/sintax.smk"
 
+
+#####   Quality Control   #####
 #-----------------------------------------------------
 # fastp, control for sequence quality and pair reads
 #-----------------------------------------------------
-# maybe this should be 2 rules, trim and then merge?
+
 rule fastp_trim_and_merge:
-    # message: "Beginning fastp quality control of raw data"
+    message:
+        "Beginning fastp quality control of raw data"
     conda:
         "envs/tapirs.yaml"
     input:
-        read1 = "./data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
-        read2 = "./data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
+        read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
+        read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
     output:
         out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
         out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
@@ -104,6 +107,7 @@ rule fastp_trim_and_merge:
 #-----------------------------------------------------
 # convert files from fastq to fasta
 #-----------------------------------------------------
+
 rule fastq_to_fasta:
     conda:
         "envs/tapirs.yaml"
@@ -117,9 +121,11 @@ rule fastq_to_fasta:
         --fastaout {output} \
         "
 
+
 #-----------------------------------------------------
 # vsearch, fastq report
 #-----------------------------------------------------
+
 rule vsearch_fastq_report:
     conda:
         "envs/tapirs.yaml"
@@ -137,9 +143,11 @@ rule vsearch_fastq_report:
         --log {output.fqreadstats} \
         "
 
+
 #-----------------------------------------------------
 # dereplication
 #-----------------------------------------------------
+
 rule vsearch_dereplication:
     conda:
         "envs/tapirs.yaml"
@@ -155,9 +163,11 @@ rule vsearch_dereplication:
         --output {output} \
         "
 
+
 #-----------------------------------------------------
 # denoise
 #-----------------------------------------------------
+
 rule vsearch_denoising:
     conda:
         "envs/tapirs.yaml"
@@ -179,9 +189,11 @@ rule vsearch_denoising:
         #" --notrunclabels
         # --log {params.log} \
 
+
 #-----------------------------------------------------
 # chimera removal
 #-----------------------------------------------------
+
 rule vsearch_dechimerisation: # output needs fixing
     conda:
         "envs/tapirs.yaml"
@@ -200,9 +212,11 @@ rule vsearch_dechimerisation: # output needs fixing
         --nonchimeras {output.fasta} \
         "
 
+
 #------------------------------------------------------
 # re-replication
 #-------------------------------------------------------
+
 rule vsearch_rereplication:
     conda:
         "envs/tapirs.yaml"
@@ -218,9 +232,11 @@ rule vsearch_rereplication:
         --output {output} \
         "
 
+#####   BLASTing   #####
 #-----------------------------------------------------
 # blastn, sequence similarity search
 #-----------------------------------------------------
+
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
@@ -250,9 +266,11 @@ rule blastn:
         -out {output} \
         "
 
+
 #-----------------------------------------------------
 # tax_to_blast, adds taxonomy in a column to blast output
 #-----------------------------------------------------
+
 rule tax_to_blast:
     conda:
         "envs/tapirs.yaml"
@@ -264,9 +282,12 @@ rule tax_to_blast:
     shell:
         "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
 
+
+#####   MLCA   #####
 #-----------------------------------------------------
 # MLCA, majority lowest common ancestor
 #-----------------------------------------------------
+
 rule mlca:
     input:
         "results/blast/{library}/{sample}_tax.tsv"
@@ -290,9 +311,11 @@ rule mlca:
         -hits {params.hits} \
         "
 
+#####   KRAKEN   #####
 #-----------------------------------------------------
 # Kraken, kmer based taxonomic id
 #-----------------------------------------------------
+
 rule kraken2:
     conda:
         "envs/tapirs.yaml"
@@ -320,9 +343,11 @@ rule kraken2:
 # could use --report-zero-counts if against small database
     # will add this t the config file - Mike
 
+
 #-----------------------------------------------------
 # Kraken output to BIOM format
 #-----------------------------------------------------
+
 rule kraken_to_biom:
     conda:
         "envs/tapirs.yaml"
@@ -337,24 +362,28 @@ rule kraken_to_biom:
         -o {output} \
         "
 
+
 #---------------------------------------------------
 # Biom convert, BIOM to tsv
 #---------------------------------------------------
+
 rule biom_convert:
     conda:
         "envs/tapirs.yaml"
     input:
-        expand("results/kraken/{my_experiment}.biom", my_experiment=my_experiment)
+        expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"])
     output:
-        expand("results/kraken/{my_experiment}.tsv", my_experiment=my_experiment)
+        expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"])
     threads:
         6
     shell:
         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
 
+
 #---------------------------------------------------
 # sintax, kmer similarity taxonomic ID
 #---------------------------------------------------
+
 rule sintax:
     input:
         database = "data/databases/sintax/12s.fas",
@@ -372,6 +401,7 @@ rule sintax:
         -sintax_cutoff {params.cutoff} \
         "
 
+
 #-------------------------------------------------
 # biom taxonomy transformation
 #-------------------------------------------------
@@ -384,12 +414,12 @@ rule sintax:
 #     run:
 #         "
 
+
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 # Multiple files can be given separated by comma.
 
-# requires running : $ ktUpdateTaxonomy
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "envs/tapirs.yaml"
@@ -406,7 +436,7 @@ rule mlca_to_krona:
     input:
         "results/mlca/{library}/{sample}_lca.tsv"
     output:
-        "reports/krona/{library}/{sample}.mlca.html"
+        "reports/krona/mlca/{library}/{sample}.html"
     shell:
         "ktImportText {input} -o {output}"
 
@@ -441,7 +471,7 @@ rule sintaxtext_to_krona: # importing with kronatext to krona
 #-----------------------------------------------------
 rule snakemake_report:
     output:
-        expand("reports/{my_experiment}_smk-report.html", my_experiment=my_experiment)
+        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"])
     shell:
         "snakemake --report {output}"
 
