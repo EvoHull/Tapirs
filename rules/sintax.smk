@@ -38,9 +38,11 @@ rule sintax_to_kronatext:
     input:
         "results/sintax/{library}/{sample}_reads.sintax"
     output:
-        "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
+        "results/sintax/{library}/{sample}_sintax_taxcount.tsv"  ### this needs transfromation before itll go into krona - Mike
     shell:
         "awk '{{print $4}}' {input} | sort | uniq -c >> {output}"
+
+# works to here
 
 rule sintaxtext_to_krona: # importing with kronatext to krona
     conda:
