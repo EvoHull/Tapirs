@@ -16,18 +16,26 @@ If you have git installed then clone the repository to your local environment wi
 You could alternatively download the repository from the [Tapirs github repository](https://github.com/davelunt/Tapirs) using the green button. Then expand the zip file and navigate into the directory.
 
 # create and activate a conda environment
+Make sure you are in the tapirs directory, then give these 2 commands:
 
-Navigate to the tapirs directory.
+```
+conda create env -f envs/tapirs.yaml
+conda activate tapirs
+```
 
-`conda create env -f environment.yaml`
+The software listed in the `tapirs.yaml` environment file should now be installed.
 
-`conda activate tapirs`
+# KronaTools install
+Unfortunately you will need to complete the installation of KronaTools semi-manually with an install script. [Advice on installing Krona Tools](https://github.com/marbl/Krona/wiki/Installing)] is give on their Github wiki.
 
-The software listed in environment.yaml file should now be installed.
+Instructions are also given on the Tapirs [setup page](setup.md). Make sure that you have issued the two commands:
 
-# Additional databases and installs
-Unfortunately you will need to complete the installation of KronaTools semi-manually with an install script. [Advice on installing Krona Tools(https://github.com/marbl/Krona/wiki/Installing)] is give on their Github wiki.
+```
+mkdir data/databases/krona/
+ktUpdateTaxonomy.sh data/databases/krona/
+```
 
-In order to search a blast database, or a Kraken database, you will need to provide those databases yourself. Databases are large files, and everyone needs a different one, so they are not included with this install or Tapirs.
+# Databases and data
+In order to search a reference database with your query sequences you will need to provide both. Databases are large files, and everyone needs a different one, so they are not included with Tapirs.
 
-Your databases should be placed into the `data/databases/blast` `data/databases/kraken` directories.
+Instructions of what files are required are provided on the Tapirs [setup](setup.md) page.
