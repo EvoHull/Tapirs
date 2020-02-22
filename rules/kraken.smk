@@ -34,24 +34,51 @@ rule kraken2:
 # could use --report-zero-counts if against small database
     # will add this t the config file - Mike
 
+#-----------------------------------------------------
+# reformat kraken output for krona
+#-----------------------------------------------------
+
+rule kraken2_reformat:
+    input:
+        "results/kraken/outputs/{library}/{sample}.tsv"
+    output:
+        "results/kraken/krona_inputs/{library}/{sample}.tsv"
+    shell:
+        "cut -f3,5 {input} > {output}"
+
 
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-
-rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+# see here: https://www.gitmemory.com/issue/DerrickWood/kraken2/114/524767339
+rule kraken_to_krona:
     conda:
         "../envs/tapirs.yaml"
     input:
-        "results/kraken/outputs/{library}/{sample}.tsv"
+        "results/kraken/krona_inputs/{library}/{sample}.tsv"
     output:
         "reports/krona/kraken/{library}/{sample}.html"
-    params:
-        "data/databases/krona/"
     shell:
-        "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
+        "ktImportTaxonomy {input} -o {output} -t 2 -m 1"
 
 
+#-----------------------------------------------------
+# Krona, interactive html graphics of taxonomic diversity
+#-----------------------------------------------------
+#
+# rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+#     conda:
+#         "../envs/tapirs.yaml"
+#     input:
+#         "results/kraken/outputs/{library}/{sample}.tsv"
+#     output:
+#         "reports/krona/kraken/{library}/{sample}.html"
+#     params:
+#         "data/databases/krona/"
+#     shell:
+#         "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
+#
+#
 #-----------------------------------------------------
 # Kraken output to BIOM format
 #-----------------------------------------------------
