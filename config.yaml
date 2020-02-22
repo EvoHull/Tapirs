@@ -1,30 +1,10 @@
 #####   TAPIRS: CONFIGFILE   #####
 
 ## Tapirs is highly configurable. Configuration is done before a run from within this file.
-## You must customise the next two sections to identify your wildcard variables and database locations.
-
-#---------------------------------------------------
-# DATABASE SETUP
-#---------------------------------------------------
-# Setup databases and set locations here
-# Defaults are in place for testing
-# Please edit to the location of your own databases
-
-# KRONA
-krona_taxdb: "data/databases/krona/" # or set location of own database
-                                     # this database can be generated from commands in the README.md
-
-# BLAST
-blast_db: "data/databases/12S_full/12s_full" # or set location of own database
-
-# KRAKEN
-kraken_db: "data/databases/kraken2_db/" # or set location of own database
-
 
 # --------------------------------------------------
-# WILDCARD VARIABLES
+# WILDCARD VARIABLES: Set experiment-specific info
 # --------------------------------------------------
-# Set experiment-specific variables here
 
 my_experiment: "testing_tapirs" # insert experiment name, no_spaces
 
@@ -36,19 +16,31 @@ R: ["R1","R2"]
 
 conda_envs: "tapirs.yaml"
 
+## You must customise the next two sections to identify your wildcard variables and database locations.
+
+#---------------------------------------------------
+# DATABASE LOCATIONS
+#---------------------------------------------------
+# Place your reference databses in these locations
+# or edit to specify the location
+# BLAST
+blast_db: "data/databases/12S_full/12s_full"
+# KRAKEN
+kraken_db: "data/databases/kraken2_db/"
+# KRONA
+krona_taxdb: "data/databases/krona/"
+# this KRONA database can be generated from commands, see docs
 
 # -----------------------------------------------
 # LOCATION OF DATA FILES
 # -----------------------------------------------
 data_dir: "data" # location of data directory on your file system
-            # default is data/ - this should contain 'demultiplexed' directory
+            # default is data/ - this should contain '01_demultiplexed' directory
 
-
-
-# *******************************************************
+# ********************************************************
 # Config parameters below here are optional,
 # ie, if you don't change then default values will be used
-# *******************************************************
+# ********************************************************
 
 # -----------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES
@@ -68,21 +60,3 @@ max_trim1: "106" #is this needed in general of is it always 106? not enough meta
 max_trim2: "106"
 overlap_len: "<interger>" # length of overlap required for MERGING
 BLAST_Nhits: "50" # Number of descriptions
-
-# -----------------------------------------------
-# SIMPLE-LCA VARIABLES
-# -----------------------------------------------
-SLCA_bitscore: "8"
-# '-b''--bitscore', 'bitscore top percentage threshold'
-SLCA_id: "80"
-# -id identity threshold, required
-SLCA_coverage: "80"
-# -cov coverage threshold', required=True
-SLCA_tophit: "yes"
-# -t 'Check the best hit first, if it is above the given threshold the tophit will become the output', required=False, choices=['no', 'yes'], default='no')
-SLCA_tid: "99"
-# -tid 'identity treshold for the tophit', required=False, default='100'
-SLCA_tcov: "100" # -tcov query coverage threshold for the tophit', required=False,  default='100'
-SLCA_fh: "environmental"
-# -fh filter out hits that contain unwanted taxonomy'
-SLCA_flh: "unknown" # -flh', filter lca hits', dest='filterLcaHits', help='ignore this in the lca determination'

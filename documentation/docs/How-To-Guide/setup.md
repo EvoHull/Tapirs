@@ -6,7 +6,7 @@
 The `config.yaml` file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in `config.yaml` have reasonable default values, but some may require your input. Open `config.yaml` in a text editor.
 
 1. set a name for your experiment (default=expt_name)
-2. set the directory containing your **demultiplexed** fastq.gz data (default=data/demultiplexed)
+2. set the directory containing your **demultiplexed** fastq.gz data (default=data/01_demultiplexed)
 3. check the location of your databases is correct and amend if they are elsewhere. Defaults are:
     - `data/databases/blast`
     - `data/databases/kraken2`
