@@ -39,7 +39,7 @@ rule all:
 # reports ----------------------------------------------------------------------
         expand("reports/fastp/{sample.library}/{sample.sample}.json", sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
-        expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
+        #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_readstats", sample=sample.reset_index().itertuples()),
         expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
