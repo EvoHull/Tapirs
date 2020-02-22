@@ -77,7 +77,7 @@ ktUpdateTaxonomy.sh data/databases/krona/
 ```
 
 # DRY RUN SNAKEFILE
-Make sure you are in the directory containing the snakefile then type `snakefile -npr`  or `$ snakemake -s snakefile --use-conda --printshellcmds -n` to dry-run the workflow.
+Make sure you are in the directory containing the snakefile then type `snakefile -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n` to dry-run the workflow.
 
 If all has gone well Snakemake will report the jobs it needs to perform without any complaint. If not (and it is the usual situation) you will need to diagnose and fix any minor issues.
 
