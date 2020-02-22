@@ -1,9 +1,12 @@
-#####   KRAKEN   #####
-#-----------------------------------------------------
-# Kraken, kmer based taxonomic id
-#-----------------------------------------------------
+# ==================================================
+# KRAKEN ANALYSIS
+# ==================================================
 
 configfile: "config.yaml"
+
+# --------------------------------------------------
+# Kraken, kmer based taxonomic id
+# --------------------------------------------------
 
 rule kraken2:
     conda:
@@ -48,6 +51,7 @@ rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     shell:
         "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
 
+
 #-----------------------------------------------------
 # Kraken output to BIOM format
 #-----------------------------------------------------
@@ -84,6 +88,7 @@ rule biom_convert:
         6
     shell:
         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
+
 
 #-------------------------------------------------
 # biom taxonomy transformation

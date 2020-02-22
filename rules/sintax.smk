@@ -1,5 +1,6 @@
-#####   SINTAX   #####
-#-----------------------------------------------------
+# ==================================================
+# SINTAX ANALYSIS
+# ==================================================
 
 configfile: "config.yaml"
 
@@ -7,11 +8,10 @@ configfile: "config.yaml"
 # takes 4th column of input (ie taxonomy passing SINTAX cutoff)
 # and exports each unique taxonomy with a count to new tsv
 # then rule passes tsv to krona for html plots
-#-----------------------------------------------------
 
-#---------------------------------------------------
+# --------------------------------------------------
 # sintax, kmer similarity taxonomic ID
-#---------------------------------------------------
+# --------------------------------------------------
 
 rule sintax:
     conda:
@@ -32,6 +32,11 @@ rule sintax:
         -sintax_cutoff {params.cutoff} \
         "
 
+
+# --------------------------------------------------
+# convert sintax output to tsv compatible with krona
+# --------------------------------------------------
+
 rule sintax_to_kronatext:
     conda:
         "../envs/tapirs.yaml"
@@ -44,7 +49,12 @@ rule sintax_to_kronatext:
 
 # works to here
 
-rule sintaxtext_to_krona: # importing with kronatext to krona
+
+# --------------------------------------------------
+# convert format and pass to krona
+# --------------------------------------------------
+
+rule sintaxtext_to_krona:
     conda:
         "../envs/tapirs.yaml"
     input:

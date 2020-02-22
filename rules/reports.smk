@@ -1,17 +1,14 @@
-#-----------------------------------------------------
-# Tapirs-report
-# -------------
-# A metabarcoding workflow to report on QC and
-# taxonomic assignment
-#-----------------------------------------------------
+# ==================================================
+# TAPIRS REPORT GENERATION
+# ==================================================
+# A workflow reporting on QC and taxonomic assignment
 
 configfile: "config.yaml"
-
 report: "../reports/tapirs.rst"
 
-#-----------------------------------------------------
-# seqkit to write simple report on fasta files
-#-----------------------------------------------------
+# --------------------------------------------------
+# seqkit, write simple report on fasta files
+# --------------------------------------------------
 rule seqkit_stats:
         input:
             "results/02_trimmed/{library}/{sample}.merged.fasta"
@@ -20,22 +17,22 @@ rule seqkit_stats:
         shell:
             "seqkit stats {input} | csvtk csv2md -t -o {output}"
 
-#-----------------------------------------------------
+# --------------------------------------------------
 # Vegan
-#-----------------------------------------------------
+# --------------------------------------------------
 
-#-----------------------------------------------------
+# --------------------------------------------------
 # Snakemake report
-#-----------------------------------------------------
+# --------------------------------------------------
 rule snakemake_report:
     output:
         expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"])
     shell:
         "snakemake --report {output}"
 
-#-----------------------------------------------------
+# --------------------------------------------------
 # Archive conda environment
-#-----------------------------------------------------
+# --------------------------------------------------
 
 rule conda_env:
     conda:

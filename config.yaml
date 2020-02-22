@@ -1,6 +1,7 @@
-#####   TAPIRS: CONFIGFILE   #####
-
-## Tapirs is highly configurable. Configuration is done before a run from within this file.
+# ==================================================
+#               TAPIRS: CONFIGFILE
+# ==================================================
+# Configuration of Tapirs is done by editing data within this file
 
 # --------------------------------------------------
 # WILDCARD VARIABLES: Set experiment-specific info
@@ -16,7 +17,7 @@ R: ["R1","R2"]
 
 conda_envs: "tapirs.yaml"
 
-## You must customise the next two sections to identify your wildcard variables and database locations.
+## Customise the next two sections to identify your data and database locations.
 
 #---------------------------------------------------
 # DATABASE LOCATIONS
@@ -34,8 +35,10 @@ krona_taxdb: "data/databases/krona/"
 # -----------------------------------------------
 # LOCATION OF DATA FILES
 # -----------------------------------------------
-data_dir: "data" # location of data directory on your file system
-            # default is data/ - this should contain '01_demultiplexed' directory
+data_dir: "data"
+# default is data/ and should contain '01_demultiplexed' directory
+# containing your demultiplexed .fastq.gz files for analysis
+
 
 # ********************************************************
 # Config parameters below here are optional,

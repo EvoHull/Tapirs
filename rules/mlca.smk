@@ -1,9 +1,12 @@
-#####   MLCA   #####
-#-----------------------------------------------------
-# MLCA, majority lowest common ancestor
-#-----------------------------------------------------
+# ==================================================
+# LCA: LOWEST COMMON ANCESTOR ANALYSIS
+# ==================================================
 
 configfile: "config.yaml"
+
+# --------------------------------------------------
+# MLCA, majority lowest common ancestor
+# --------------------------------------------------
 
 rule mlca:
     input:
@@ -27,6 +30,7 @@ rule mlca:
         -m {params.majority} \
         -hits {params.hits} \
         "
+
 
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
