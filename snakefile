@@ -1,34 +1,32 @@
-# =====================================================
-# TAPIRS
-# A reproducible metabarcoding workflow using snakemake
-# =====================================================
+###########################################################################################################################
 
-# -----------------------------------------------------
-# Setup
-# -----------------------------------------------------
+                                                ######   TAPIRS   #####
+                                # A reproducible metabarcoding workflow using snakemake
 
+############################################################################################################################
+## Setup
+
+# Config file
 configfile: "config.yaml"
-report: "reports/tapirs.rst"
 
+# Reporting
+report: "reports/tapirs.rst" # Flag "$ snakemake" with "--report" to use
 
-# -----------------------------------------------------
-# Wildcarding library and sample
-# -----------------------------------------------------
+###########################################################################################################################
+## Wildcarding library and sample
 
 import pandas as pd
 
 library = pd.read_table(config["libraries"], index_col="library")
-
 sample = pd.read_table(config["samples"], index_col=["library", "sample"], dtype=str)
 sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.levels])
 
-
-# -----------------------------------------------------
+############################################################################################################################
+#-------------------------------------------------------------------------------
 # Target rules
-# -----------------------------------------------------
 rule all:
     input:
-# results ---------------------------------------------
+# results ----------------------------------------------------------------------
         #expand("results/02_trimmed/{sample.library}/{sample.sample}.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
         #expand("results/02_trimmed/{sample.library}/{sample.sample}.unpaired.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
         #expand("results/02_trimmed/{sample.library}/{sample.sample}.merged.fastq.gz", sample=sample.reset_index().itertuples()),
@@ -38,7 +36,7 @@ rule all:
         #expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
         #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
         #expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),
-# reports ---------------------------------------------
+# reports ----------------------------------------------------------------------
         expand("reports/fastp/{sample.library}/{sample.sample}.json", sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
@@ -49,9 +47,8 @@ rule all:
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
         expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
         expand("reports/krona/mlca/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
-        expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
+#        expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples())
-
 
 #-----------------------------------------------------
 # Rule files
@@ -62,3 +59,5 @@ include: "rules/kraken.smk"
 include: "rules/mlca.smk"
 include: "rules/sintax.smk"
 include: "rules/reports.smk"
+
+##################################################################################################

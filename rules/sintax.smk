@@ -17,16 +17,16 @@ rule sintax:
     conda:
         "../envs/tapirs.yaml"
     input:
-        database = "data/databases/sintax_test2.txt",
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
-        cutoff = "0.8"
+        cutoff = "0.8",
+        database = "data/databases/sintax_test2.txt"
     shell:
         "vsearch -sintax \
         {input.query} \
-        -db {input.database} \
+        -db {params.database} \
         -tabbedout {output} \
         -strand both \
         -sintax_cutoff {params.cutoff} \
