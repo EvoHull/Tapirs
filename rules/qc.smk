@@ -21,7 +21,7 @@ rule fastp_trim_and_merge:
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
         out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
         out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged = "results/02_trimmed/{library}/{sample}.merged.fastq.gz",
+        merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -48,10 +48,17 @@ rule fastp_trim_and_merge:
         --correction \
         "
 
-# unpaired files need bringing back in
 
-    #     cat 3_qc/${library}/${sample}.R1.fastq >> 4_merged_fastq/${library}/${sample}_merged.fastq\n",
-    # "        cat 3_qc/${library}/${sample}_unpaired.R1.fastq >> 4_merged_fastq/${library}/${sample}_merged.fastq
+#rule merge_fastp:
+#input:
+#merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
+#out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
+#out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz"
+#output:
+#"results/02_trimmed/{library}/{sample}.merged.fastq.gz"
+#shell:
+#"cat {input.out_unpaired1} >> {input.merged} \
+#&& cat {input.outunpaired2} >> {output}"
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
