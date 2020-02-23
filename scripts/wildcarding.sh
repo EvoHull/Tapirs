@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo -e "library\tsample" > samples.tsv
+find data/01_demultiplexed/* -name *fastq.gz | sed -r 's/\//\t/g' |  cut -f 3- | sed -r 's/\./\t/g' | cut -f 1-2 | sort | uniq >> samples.tsv
+cut -f 1 samples.tsv | sort | uniq >> libraries.tsv
