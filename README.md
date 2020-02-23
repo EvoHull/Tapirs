@@ -22,12 +22,27 @@ Instructions for installation, setup, and modification are contained within the 
 First, ensure a version of conda is intalled on your machine. This can be either anaconda or miniconda.
 Miniconda is available at: https://docs.conda.io/en/latest/miniconda.html
 
-Next, create and activate the tapirs conda environment.
+##### 1. The env-calling way
+
+Activate your base conda environment and intsll snakemake within it.
+This can be done with the following command:
+
+$ conda activte base
+
+$ conda install -c bioconda -c conda-forge snakemake
+
+Snakemake must be ran with the --use-conda flag.
+
+##### 2. The global env way
+
+Create and activate the tapirs conda environment.
 This can be done with the following command:
 
 $ conda create --file envs/tapirs.yaml
 
 $ conda activate tapirs
+
+Run the workflow from within this environment. The --use-conda flag will not be needed.
 
 
 ### Database setup
@@ -51,18 +66,23 @@ Kraken needs its database to run.
 ######## GS, cna you sort this out please? - Mike   ########
 
 
+#### SINTAX
+Sintax also needs its own database.
+
 
 
 ### Input wrangling
 
-Place all library directories within the "data/" directory (or edit path above), ensuring they follow the format "<library>.<sample>.<read>.fastq.gz".
+The workflow assumes that input data has already been demultiplexed.
+
+Place all library directories within the "data/01_demultiplexed/" directory (or edit path above), ensuring they follow the format "data/01_demultiplexed/<library>/<sample>.<read>.fastq.gz".
 
 
 ### Wildcard generation
 
 <insert command to run script to create tsvs for samples>
 
-$ bash wildcarding.sh
+$ bash scripts/wildcarding.sh
 
 
 ### Config setup
@@ -83,3 +103,5 @@ The above line will start a dryrun. Assess the joblist of the dryrun and the fna
 If all looks well, run the workflow for real with the following code:
 
 $ snakemake -s snakefile --use-conda --printshellcmds
+
+Note: If using environment method 2, the --use-conda flag should not be used.
