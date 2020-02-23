@@ -27,7 +27,7 @@ Miniconda is available at: https://docs.conda.io/en/latest/miniconda.html
 Activate your base conda environment and intsll snakemake within it.
 This can be done with the following command:
 
-$ conda activte base
+$ conda activate base
 
 $ conda install -c bioconda -c conda-forge snakemake
 
@@ -38,7 +38,7 @@ Snakemake must be ran with the --use-conda flag.
 Create and activate the tapirs conda environment.
 This can be done with the following command:
 
-$ conda create --file envs/tapirs.yaml
+$ conda env create --file envs/tapirs.yaml
 
 $ conda activate tapirs
 
