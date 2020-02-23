@@ -59,7 +59,7 @@ rule kraken_to_krona:
     output:
         "reports/krona/kraken/{library}/{sample}.html"
     shell:
-        "ktImportTaxonomy {input} -o {output} -t 2 -m 1"
+        "ktImportTaxonomy {input} -o {output} -t 2 -m 1 -tax data/databases/krona/"
 
 
 #-----------------------------------------------------

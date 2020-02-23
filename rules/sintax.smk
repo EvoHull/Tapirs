@@ -22,7 +22,7 @@ rule sintax:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
         cutoff = "0.8",
-        database = "data/databases/sintax_test2.txt"
+        database = "data/databases/sintax/sintax_test2_db.fas"
     shell:
         "vsearch -sintax \
         {input.query} \
