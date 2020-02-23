@@ -29,7 +29,7 @@ This can be done with the following command:
 
 $ conda activate base
 
-$ conda install -c bioconda -c conda-forge snakemake
+$ conda install -c bioconda -c conda-forge snakemake krona
 
 Snakemake must be ran with the --use-conda flag.
 
