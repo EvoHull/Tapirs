@@ -63,21 +63,21 @@ rule kraken_to_krona:
 
 
 #-----------------------------------------------------
-# Krona, interactive html graphics of taxonomic diversity
+#Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-#
-# rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
-#     conda:
-#         "../envs/tapirs.yaml"
-#     input:
-#         "results/kraken/outputs/{library}/{sample}.tsv"
-#     output:
-#         "reports/krona/kraken/{library}/{sample}.html"
-#     params:
-#         "data/databases/krona/"
-#     shell:
-#         "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
-#
+
+rule kraken_to_krona2: # see here: https://github.com/marbl/Krona/issues/117
+    conda:
+        "../envs/tapirs.yaml"
+    input:
+        "results/kraken/outputs/{library}/{sample}.tsv"
+    output:
+        "reports/krona/kraken/{library}/{sample}.2.html"
+    params:
+        "data/databases/krona/"
+    shell:
+        "ktImportTaxonomy -q 2 -t 3 {input} -o {output} -tax {params}"
+
 #
 #-----------------------------------------------------
 # Kraken output to BIOM format
