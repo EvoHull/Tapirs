@@ -1,4 +1,4 @@
-name: tapirs
+name: tapirs2
 channels:
   - bioconda
   - conda-forge

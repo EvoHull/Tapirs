@@ -17,7 +17,7 @@ rule sintax:
     conda:
         "../envs/tapirs.yaml"
     input:
-        database = "data/databases/sintax_test2.txt",
+        database = "data/databases/sintax/sintax_test2.txt",
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
