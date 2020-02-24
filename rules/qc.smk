@@ -49,16 +49,16 @@ rule fastp_trim_and_merge:
         "
 
 
-#rule merge_fastp:
-#input:
-#merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
-#out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
-#out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz"
-#output:
-#"results/02_trimmed/{library}/{sample}.merged.fastq.gz"
-#shell:
-#"cat {input.out_unpaired1} >> {input.merged} \
-#&& cat {input.outunpaired2} >> {output}"
+rule merge_fastp:
+    input:
+        merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
+        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz"
+    output:
+        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
+    shell:
+        "cat {input.out_unpaired1} >> {input.merged} \
+        && cat {input.out_unpaired2} >> {output}"
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
@@ -177,7 +177,7 @@ rule vsearch_rereplication:
     conda:
         "../envs/tapirs.yaml"
     input:
-        "results/03_denoised/{library}/{sample}.fasta" # check
+        "results/03_denoised/{library}/nc_{sample}.fasta"
     output:
         "results/rereplicated/{library}/{sample}.fasta"
     threads:

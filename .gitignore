@@ -3,6 +3,7 @@
 .ipynb_checkpoints
 data/01_demultiplexed/E*
 data/01_demultiplexed/N*
+data/01_demultiplexed/P*
 data/databases/new_taxdump
 .git/
 reports/*
@@ -11,3 +12,5 @@ results/*
 data/databases/new*
 data/databases/krona
 */.Rhistory
+libraries.tsv
+samples.tsv
