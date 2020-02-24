@@ -17,16 +17,16 @@ rule sintax:
     conda:
         "../envs/tapirs.yaml"
     input:
-        database = "data/databases/sintax/sintax_test2.txt",
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
-        cutoff = "0.8"
+        cutoff = "0.8",
+        database = "data/databases/sintax/sintax_test2_db.fas"
     shell:
         "vsearch -sintax \
         {input.query} \
-        -db {input.database} \
+        -db {params.database} \
         -tabbedout {output} \
         -strand both \
         -sintax_cutoff {params.cutoff} \
@@ -45,13 +45,18 @@ rule sintax_to_kronatext:
     output:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"  ### this needs transfromation before itll go into krona - Mike
     shell:
-        "awk '{{print $4}}' {input} | sort | uniq -c >> {output}"
-
-# works to here
+        "awk '{{print $4}}' {input} | \
+        sort | \
+        uniq -c | \
+        sed -e 's/^[ \t]*//' \
+        | sed -e 's/ /\t/g' | \
+        sed -e 's/:/\t/g' | \
+        sed -e 's/,/\t/g' | \
+        cut -f 1,3,5,7,9,11,13,15 >> {output}"
 
 
 # --------------------------------------------------
-# convert format and pass to krona
+# Sintax to krona
 # --------------------------------------------------
 
 rule sintaxtext_to_krona:
