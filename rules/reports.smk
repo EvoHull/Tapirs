@@ -46,15 +46,15 @@ rule conda_env:
 #---------------------------------------------------
 # MultiQC
 #-----------------------------------------------------
-rule multiqc:
-    conda:
-        "../envs/tapirs.yaml"
-    input:
-        "reports/fastp/{library}/"
-    output:
-        "reports/multiqc/{library}.multiqc.html"
-    params:
-        out = "reports/multiqc/",
-        n = "{library}.multiqc.html"
-    shell:
-        "multiqc {input} -n {params.n} -o {params.out}"
+# rule multiqc:
+#     conda:
+#         "../envs/tapirs.yaml"
+#     input:
+#         "reports/fastp/{library}/"
+#     output:
+#         "reports/multiqc/{library}.multiqc.html"
+#     params:
+#         out = "reports/multiqc/",
+#         n = "{library}.multiqc.html"
+#     shell:
+#         "multiqc {input} -n {params.n} -o {params.out}"
