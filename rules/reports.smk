@@ -41,3 +41,20 @@ rule conda_env:
         "reports/archived_envs/{conda_envs}"
     shell:
         "conda env export --file {output}"
+
+
+#---------------------------------------------------
+# MultiQC
+#-----------------------------------------------------
+rule multiqc:
+    conda:
+        "../envs/tapirs.yaml"
+    input:
+        "reports/fastp/{library}/"
+    output:
+        "reports/multiqc/{library}.multiqc.html"
+    params:
+        out = "reports/multiqc/",
+        n = "{library}.multiqc.html"
+    shell:
+        "multiqc {input} -n {params.n} -o {params.out}"

@@ -25,12 +25,15 @@ conda_envs: "tapirs.yaml"
 # Place your reference databses in these locations
 # or edit to specify the location
 # BLAST
-blast_db: "data/databases/12S_full/12s_full"
+blast_db: "data/databases/verts_blast_db/12s_verts"
+# VSEARCH vsearch_dechimerisation             # point this at the fasta within the blast database
+dechim_blast_db: "data/databases/verts_blast_db/12s_verts.fasta"
 # KRAKEN
-kraken_db: "data/databases/kraken2_db/"
+kraken_db: "data/databases/verts_kraken2_db/"
 # KRONA
 krona_taxdb: "data/databases/krona/"
 # this KRONA database can be generated from commands, see docs
+sintax_db: "data/databases/sintax/verts_sintax_db.txt"
 
 # -----------------------------------------------
 # LOCATION OF DATA FILES

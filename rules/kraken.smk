@@ -20,10 +20,10 @@ rule kraken2:
         6
     params:
         confidence = "0.0",
-        kraken_db = directory("data/databases/kraken/kraken2_db") # This is specified but not called in the shell command - Mike
+        kraken_db = directory(config["kraken_db"]) # This is specified but not called in the shell command - Mike
     shell:
         "kraken2 \
-        --db data/databases/kraken2_db/ {input} \
+        --db {params.kraken_db} {input} \
         --memory-mapping \
         --threads {threads} \
         --confidence {params.confidence} \

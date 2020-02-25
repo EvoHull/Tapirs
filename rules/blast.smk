@@ -15,7 +15,7 @@ rule blastn:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
-        db_dir = directory("data/databases/12S_full/12s_full"), # database directory
+        db_dir = directory(config["blast_db"]), # database directory
         descriptions = "50", # return maximum of 50 hits
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
         min_perc_ident = "100", # this needs to be 100%

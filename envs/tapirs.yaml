@@ -44,6 +44,7 @@ dependencies:
   - lz4-c=1.8.3=he1b5a44_1001
   - mmtf-python=1.0.2=py27_0
   - msgpack-python=0.6.2=py27hc9558a2_0
+  - multiqc
   - ncurses=6.1=hf484d3e_1002
   - nettle=3.4.1=h1bed415_1002
   - numpy=1.16.5=py27h95a1406_0

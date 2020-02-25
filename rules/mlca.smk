@@ -32,6 +32,34 @@ rule mlca:
         "
 # GS - The mlca script needs changing because o fan error. The final species name is output seperated by a tab and not an undderscore or space; is this something you can fix?
 
+#-------------------------------------------------------
+# Mlca to tsv
+#---------------------------------------------------------
+
+rule mlca2tsv_transform:
+    input:
+        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
+    output:
+        directory("reports/mlca/mlcatmp/")
+    params:
+        "reports/mlca/mlcatmp/"
+    shell:
+        "rm -rf {params} \
+        && mkdir {params} \
+        && cp {input} {params}"
+
+rule mlca2tsv:
+    input:
+        "reports/mlca/mlcatmp/"
+    output:
+        "reports/mlca/mlca2tsv/{my_experiment}.tsv"
+    params:
+        outdir = "reports/mlca/{my_experiment}",
+        indir = directory("reports/mlca/mlcatmp/")
+    shell:
+        "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
+
+
 
 #------------------------------------------------------
 # Converting mlca tsv to krona friendly input

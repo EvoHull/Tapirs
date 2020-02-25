@@ -158,10 +158,12 @@ rule vsearch_dechimerisation: # output needs fixing
     output: # fix
         text = "results/03_denoised/{library}/{sample}_chimera.txt",
         fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
+    params:
+        db = config["dechim_blast_db"]
     shell:
         "vsearch \
         --uchime_ref {input} \
-        --db data/databases/12S_full/12s_full.fasta \
+        --db {params.db} \
         --mindiffs 1 \
         --mindiv 0.8 \
         --uchimeout {output.text} \
