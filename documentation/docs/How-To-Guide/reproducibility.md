@@ -1,13 +1,14 @@
 # Reproducible Analyses
 
-Reproducibility is important. The main person it is helping is you.
+Reproducibility is important professionally, but the main person it is helping is future-you.
 
 # Exit Strategy
 When an experiment is finished you should have an 'exit strategy' checklist to make sure your work is as reproducible as possible. We hope that we have made this achievable in Tapirs
+
 - data provinance
-  + data archive is possible
+    - data archive is possible
 - list of all software, sources, and versions
-  + conda export of environment, all software conda installable
+    + conda export of environment, all software conda installable
 - workflow
 - human readable reports
 - easy to archive

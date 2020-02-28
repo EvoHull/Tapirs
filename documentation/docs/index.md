@@ -7,7 +7,7 @@ Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to reproducibl
 The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences. There are three key sections to its workflow:
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
-2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, and Karken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
+2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, SINTAX kmer analysis, and Kraken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
 3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package is used to calculate diversity statistics and plots.
 
 # Quickstart
@@ -18,8 +18,8 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 3. create and activate a conda environment from the Tapirs `environment.yaml` file
     - `conda env create --file environment.yaml`
 4. edit the `config.yaml` to identify the location of demultiplexed data and databases
-5. dry run `snakemake -npr` to identify any issues
-6. run `snakemake`
+5. dry run `snakemake --use-conda -npr` to identify any issues
+6. run `snakemake --use-conda`
 
 See the [installation](How-To-Guide/installation.md) and [setup](How-To-Guide/setup.md) pages for more detailed help
 
@@ -38,3 +38,7 @@ URL:    https://github.com/davelunt/Tapirs
 ```
 
 **Please also cite the software generating the analyses.** An appropriate way to do this would be: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using vsearch [2], blast [3], Kraken2 [4], and Krona [5]."
+
+### A graph of a typical Tapirs workflow
+As part of its report-writing Tapirs will create a DAG illustration of its workflow.
+![DAG](images/dag.png)
