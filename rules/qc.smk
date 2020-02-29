@@ -49,7 +49,7 @@ rule fastp_trim_and_merge:
         "
 
 
-rule merge_fastp:
+rule keep_fwd_unpaired:  # needs work
     input:
         merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
@@ -57,8 +57,7 @@ rule merge_fastp:
     output:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     shell:
-        "cat {input.out_unpaired1} >> {input.merged} \
-        && cat {input.out_unpaired2} >> {output}"
+        "cat {input.out_unpaired1} >> {input.merged}"
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
