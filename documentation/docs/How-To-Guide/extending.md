@@ -1,7 +1,7 @@
 Advice on extending the workflow by adding tools, and other approaches.
 
 ## Rationale
-What is the best approach for your data analysis?  Whatever you think is the answer you will need to gather evidence. Workflow systems like snakemake allow relatively easy addition and extension of the analyses. This is very useful in comparative analyses. If a new paper claims taxonomic assignment method Y is better than method X then you may wish to carry out both and compare the results, while standardising the other parts of you workflow.
+What is the best approach for your data analysis?  Whatever you think is the answer you will need to gather evidence. Workflow systems like snakemake allow relatively easy addition and extension of the analyses. This is very useful in comparative analyses. If a new paper claims taxonomic assignment method Y is better than method X then you may wish to carry out both and compare the results, while standardising the other parts of your workflow.
 
 ## Adding tools
 Although familiarity with Snakemake is helpful, in many situations you may be able to add a tool by modifying an existing rule.
@@ -15,7 +15,7 @@ Teaching and trouble-shooting Snakemake and bioinformatics are beyond the scope 
 
 Most problems are because you have a typo
 
-If you have multiple lines of input or output each line except the last must finish in a comma.
+If you have multiple lines of input or output each line except the last must finish in a comma. Look at the line that begins "file1"
 
 ```
 rule test:
@@ -27,6 +27,11 @@ rule test:
   shell:
     "cat {input.file1} {input.file2} >> {output}"
 ```
+
+## The graph can help you understand
+You should make a DAG to view the flow of information through your workflow. It is often possible to spot problems this way when you have added rules. It can also help in planning to add a rule, making you clearer on where the data comes from and where it goes.
+
+![DAG](../images/dag.png)
 
 ## Contributing your improvements to Tapirs
 We would love to hear from you about the improvements you've made. A pull-request for your git branch would probably be best.

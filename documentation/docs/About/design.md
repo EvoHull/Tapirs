@@ -14,13 +14,14 @@ conda environments for each rule can be specified here. These are in addition to
 ## data
 We treat the data directory as read-only during operation of the workflow. It is the location for you to assemble sequences, and databases, and taxonomy, but the workflow will not write here.
 ### demultiplexed
-We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the `config.yaml` file. Since de-multiplexing is different in different laboratories we teat this as a separate workflow.
+We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the `config.yaml` file. Since de-multiplexing is different in different laboratories we treat this as a separate workflow.
 ### databases
 The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called taxdump).
 ## documentation
-/docs contains the documentation for Tapirs, build with mkdocs.
+/docs contains the documentation for Tapirs, built with [mkdocs](https://www.mkdocs.org/).
 ## rules
 This contains snakemake workflow description rules for separate tasks. We may have:
+
 - blast.smk
 - kraken.smk
 - qc.smk
@@ -32,14 +33,14 @@ Reports are written by some of the programs. Snakemake will also write an overal
 ## scripts
 Place here scripts called by the snakemake rules
 ## results
-This directory usually has subdirectories named by the program (eg blast). It is a convenient way of organising the output.
+This directory usually has subdirectories named by program (eg blast). It is a convenient way of organising the output.
 
 # ANALYSIS
 ## fastp
 fastp is used for 2 separate jobs:
 
 1. quality control, filter reads by score and length
-2. merge Forward and reverse reads. It additionally does error correction if merged reads have a mismatch, taking the highest quality nucleotide
+2. merge Forward and Reverse reads. It additionally does error correction if merged reads have a mismatch, taking the highest quality nucleotide
 
 ## vsearch
 vsearch does several jobs:

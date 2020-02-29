@@ -29,7 +29,7 @@ This can be done with the following command:
 
 $ conda activate base
 
-$ conda install -c bioconda -c conda-forge snakemake krona
+$ conda install -c bioconda -c conda-forge snakemake
 
 Snakemake must be ran with the --use-conda flag.
 
@@ -52,8 +52,9 @@ BLAST requires a local custom database for the workflow to run efficiently.
 ######## GS or DL - can you put a little bit in here about making blast databases etc - Mike ####
 
 
-#### KRONA
+#### KRONA - IF USING THE GLOBAL ENV WAY
 Krona requires that its taxonomy database is updated/created
+This is performed within the snakemake workflow if using the 1)the env calling way and onyl needs doing if using the global env method
 To do this, run the following commands, making sure you are within the Tapirs/ directory and the 'tapirs' conda environment.
 
 $ mkdir data/databases/krona/
@@ -62,7 +63,7 @@ $ ktUpdateTaxonomy.sh data/databases/krona/
 
 
 #### KRAKEN
-Kraken needs its database to run.
+Kraken needs either the full Kraken database or a custom database to run.
 ######## GS, cna you sort this out please? - Mike   ########
 
 
