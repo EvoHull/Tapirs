@@ -9,7 +9,7 @@ Although you can install and run Tapirs without too many steps you will need som
 Conda (miniconda) is a package manager and is required here to install software and their dependencies. Follow the [installation instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) for Miniconda for your operating system.
 
 # git clone tapirs
-Make sure that you have git installed. At the command line type `git --version` and you should see the version number. If instead it reports `command not found: git` or similar then it is not installed. You can go to the [git site](https://git-scm.com/) to get installation advice or slightly easier might be to try `conda install git` at the command line while within your conda base environment.
+Apple OSX and Linux should both come with git already installed. At the command line type `git --version` and you should see the version number. If instead it reports `command not found: git` or similar then it is not installed. You can go to the [git site](https://git-scm.com/) to get installation advice or slightly easier might be to try `conda install git` at the command line while within your conda base environment.
 
 If you have git installed then clone the repository to your local machine with `git clone https://github.com/davelunt/Tapirs.git`
 

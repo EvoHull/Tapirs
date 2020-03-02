@@ -13,7 +13,7 @@ The `config.yaml` file contains settings for the workflow's operation. In an ide
     - `data/databases/taxonomy`
     - `data/databases/sintax`
 
-In addition you may wish to fine-tune the analysis parameters of the programs. These parameters have reasonable defaults and changing them is not comulsory (unlike the options above, where you _must_ identify your data).
+In addition you may wish to fine-tune the analysis parameters of the programs. These parameters have reasonable defaults and changing them is not compulsory (unlike the options above, where you _must_ identify your data).
 
 - set fastp parameters for quality control and read merging
 - set blast parameters
@@ -72,12 +72,7 @@ SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifie
 A sintax database is created using specific taxonomic information in the header line of the fasta file. We provide a script to help with this formatting.
 
 ### krona
-Krona requires that its taxonomy database is updated/created. To do this, run the following commands, making sure you are within both the main `Tapirs/` directory and the 'tapirs' conda environment:
-
-```
-mkdir data/databases/krona/
-ktUpdateTaxonomy.sh data/databases/krona/
-```
+Krona should self-install from the snakemake rule supplied.
 
 # DRY RUN TAPIRS
 Make sure you are in the directory containing the snakefile then type `snakefile --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n` to dry-run the workflow.
