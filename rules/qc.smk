@@ -21,7 +21,7 @@ rule fastp_trim_and_merge:
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
         out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
         out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
+        merged = "results/02_trimmed/{library}/{sample}.merged.paired.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -51,13 +51,12 @@ rule fastp_trim_and_merge:
 
 rule keep_fwd_unpaired:  # needs work
     input:
-        merged = "results/02_trimmed/{library}/{sample}.merged.nounpaired.fastq.gz",
-        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
-        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz"
+        merged = "results/02_trimmed/{library}/{sample}.merged.paired.fastq.gz",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
     output:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     shell:
-        "cat {input.out_unpaired1} >> {input.merged}"
+        "cat {input.out_unpaired1} {input.merged} > {output}"
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
