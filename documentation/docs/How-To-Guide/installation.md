@@ -15,25 +15,13 @@ If you have git installed then clone the repository to your local machine with `
 
 You could alternatively download the repository from the [Tapirs github repository](https://github.com/davelunt/Tapirs) using the green "Clone or download" button. Then expand the zip file and navigate into the directory.
 
-# Create and activate a conda environment
-Make sure you are in the tapirs directory, then give these 2 commands:
+# Install Snakemake in your base conda environment
+Once conda is installed you will see "(base)" at the start of your command prompt. If this is not the case run `conda activate base`. With (base) activated, install Snakemake:
 
 ```
-conda create env -f envs/tapirs.yaml
-conda activate tapirs
+conda install -c bioconda -c conda-forge snakemake
 ```
-
-The first command has created a new environment (called "tapirs") containing all the software specified in the tapirs.yaml file. The second command has activated that new environment, making all the software available to you.
-
-# KronaTools install
-Krona is used to produce active html reports on the taxonomy. You will need to complete the installation of KronaTools semi-manually with an install script. [Advice on installing Krona Tools](https://github.com/marbl/Krona/wiki/Installing) is given on their Github wiki.
-
-Instructions are also given on the Tapirs [setup page](setup.md). Make sure that you have issued the two commands:
-
-```
-mkdir data/databases/krona/
-ktUpdateTaxonomy.sh data/databases/krona/
-```
+Snakemake is the only dependency that requires manually installing; it will install and manage all other packages itself using conda.
 
 # Databases and data
 You should now have installed all the software required for your analysis. You will also require some data and databases however.
