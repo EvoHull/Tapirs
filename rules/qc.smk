@@ -7,6 +7,8 @@
 
 configfile: "config.yaml"
 
+# ruleorder: fasta_derep_workaround > vsearch_rereplication
+
 rule fastp_trim_and_merge:
     message:
         "Beginning fastp quality control of raw data"
