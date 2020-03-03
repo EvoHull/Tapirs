@@ -61,18 +61,6 @@ rule kraken2:
 #     shell:
 #         "ktImportTaxonomy {input} -o {output} -t 2 -m 1 -tax data/databases/krona/"
 
-rule kt_taxonomy:
-    conda:
-        "../envs/tapirs.yaml"
-    output:
-        directory("data/databases/krona/")
-    params:
-        "data/databases/krona/"
-    shell:
-        "rm -rf {params} \
-        && mkdir {params} \
-        && ktUpdateTaxonomy.sh {params}"
-
 
 #-----------------------------------------------------
 #Krona, interactive html graphics of taxonomic diversity
