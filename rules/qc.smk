@@ -7,7 +7,7 @@
 
 configfile: "config.yaml"
 
-# ruleorder: fasta_derep_workaround > vsearch_rereplication
+# ruleorder: vsearch_dereplication > empty_fasta_workaround > vsearch_rereplication
 
 rule fastp_trim_and_merge:
     message:
@@ -120,7 +120,7 @@ rule vsearch_dereplication:
         "
 
 
-
+#
 # rule empty_fasta_workaround:
 #     input:
 #         "results/02_trimmed/{library}/{sample}.merged.tmp.derep.fasta"
@@ -131,13 +131,24 @@ rule vsearch_dereplication:
 #         1
 #     shell:
 #         """
-#         def numfasta = grep -c ^'>' {input}
-#         if [[ $numfasta -gt 0 ]] ; then
-#             mv {input} {output.denoise}
+#         if wc -l {input} > 0
+#         then
+#             cp {input} {output.denoise}
 #         else
-#             mv {input} {output.rerep}
+#             cp {input} {output.rerep}
 #         fi
 #         """
+
+# with open({input},'r') as file:
+#     count=0
+#     for line in file.readlines():
+#         count+=1
+#         if count > 0:
+#             df=pd.read_csv(file.name, sep='\t', header=None,skiprows=1)
+#             df[0]=pd.to_numeric(df[0].str.split(r"size=", expand=True)[1])
+#         else:
+#             df=pd.DataFrame([([0])+(['unidentified']*10)])
+
 
 # -----------------------------------------------------
 # denoise
@@ -149,14 +160,13 @@ rule vsearch_denoising:
     input:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
-        fasta = "results/03_denoised/{library}/{sample}.fasta",
-        biom = "reports/vsearch/{library}/{sample}.denoise.biom"
+        fasta = "results/03_denoised/{library}/{sample}.fasta"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
         """
         set +e
-        vsearch --cluster_unoise {input} --centroids {output.fasta} --biomout {output.biom} --minsize 3 --unoise_alpha 0.5
+        vsearch --sizein --sizeout --cluster_unoise {input} --centroids {output.fasta} --minsize 1 --unoise_alpha 0.5
         exitcode=$?
         if [ $exitcode -eq 1 ]
         then
@@ -182,14 +192,17 @@ rule vsearch_dechimerisation: # output needs fixing
     params:
         db = config["dechim_blast_db"]
     shell:
-        "vsearch \
-        --uchime_ref {input} \
-        --db {params.db} \
-        --mindiffs 1 \
-        --mindiv 0.8 \
-        --uchimeout {output.text} \
-        --nonchimeras {output.fasta} \
-        "
+        """
+        set +e
+        vsearch --uchime_ref {input} --db {params.db} --mindiffs 1 --mindiv 0.8 --uchimeout {output.text} --nonchimeras {output.fasta}
+        exitcode=$?
+        if [ $exitcode -eq 1 ]
+        then
+            exit 0
+        else
+            exit 0
+        fi
+        """
 
 
 # ------------------------------------------------------
@@ -206,7 +219,14 @@ rule vsearch_rereplication:
     threads:
         6
     shell:
-        "vsearch \
-        --rereplicate {input} \
-        --output {output} \
-        "
+        """
+        set +e
+        vsearch --rereplicate {input} --output {output}
+        exitcode=$?
+        if [ $exitcode -eq 1 ]
+        then
+            exit 0
+        else
+            exit 0
+        fi
+        """
