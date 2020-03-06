@@ -29,9 +29,9 @@ This contains snakemake workflow description rules for separate tasks. We may ha
 
 Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify.
 ## reports
-Reports are written by some of the programs. Snakemake will also write an overall  report.
+Reports are written by some of the programs. Snakemake will also write an overall report.
 ## scripts
-Place here scripts called by the snakemake rules
+Scripts called by snakemake rules are placed here.
 ## results
 This directory usually has subdirectories named by program (eg blast). It is a convenient way of organising the output.
 
@@ -49,6 +49,7 @@ vsearch does several jobs:
 2. dereplication, removal of identical sequences
 3. denoising, removal of sequencing errors
 4. chimera removal
+5. rereplication, tracing consensus sequences back to original reads
 
 The sequences written by vsearch are the query sequences for taxonomic identification.
 

@@ -15,8 +15,8 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
     - `git clone https://github.com/davelunt/Tapirs`
-3. create and activate a conda environment from the Tapirs `environment.yaml` file
-    - `conda env create --file environment.yaml`
+3. install snakemake in your base conda environment
+    - `conda install -c bioconda -c conda-forge snakemake`
 4. edit the `config.yaml` to identify the location of demultiplexed data and databases
 5. dry run `snakemake --use-conda -npr` to identify any issues
 6. run `snakemake --use-conda`
@@ -25,7 +25,7 @@ See the [installation](How-To-Guide/installation.md) and [setup](How-To-Guide/se
 
 # Licence and citation
 
-Project led by [Dave Lunt](https://davelunt.net), Mike Winter, Graham Sellers, Marco Benucci, and the EvoHull group at the University of Hull, UK.
+Project led by [Dave Lunt](https://davelunt.net), Michael Winter, Graham Sellers, Marco Benucci, and the EvoHull group at the University of Hull, UK.
 
 The software is released as CC0, public domain, you may do as you wish.
 
