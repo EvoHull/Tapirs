@@ -213,7 +213,8 @@ rule vsearch_rereplication:
     conda:
         "../envs/tapirs.yaml"
     input:
-        "results/03_denoised/{library}/nc_{sample}.fasta"
+        "results/03_denoised/{library}/nc_{sample}.fasta",
+        # rule("empty_fasta_workaround")
     output:
         "results/rereplicated/{library}/{sample}.fasta"
     threads:
