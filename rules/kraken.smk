@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule kraken2:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/rereplicated/{library}/{sample}.fasta"
     output:
@@ -53,7 +53,7 @@ rule kraken2:
 # # see here: https://www.gitmemory.com/issue/DerrickWood/kraken2/114/524767339
 # rule kraken_to_krona:
 #     conda:
-#         "../envs/tapirs.yaml"
+#         "../envs/environment.yaml"
 #     input:
 #         "results/kraken/krona_inputs/{library}/{sample}.tsv"
 #     output:
@@ -68,7 +68,7 @@ rule kraken2:
 
 rule kraken_to_krona2: # see here: https://github.com/marbl/Krona/issues/117
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         tsv = "results/kraken/outputs/{library}/{sample}.tsv"
     output:
@@ -85,7 +85,7 @@ rule kraken_to_krona2: # see here: https://github.com/marbl/Krona/issues/117
 
 rule kraken_to_biom:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples())
     output:
@@ -106,7 +106,7 @@ rule kraken_to_biom:
 
 rule biom_convert:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"])
     output:

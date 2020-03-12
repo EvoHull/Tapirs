@@ -55,7 +55,7 @@ rule mlca2tsv:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
         outdir = "reports/mlca/{my_experiment}",
-        indir = "reports/mlca/mlcatmp/"
+        indir = "reports/mlca/mlcatmp"
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
 
@@ -78,7 +78,7 @@ rule mlca2kronatext:
 #-----------------------------------------------------
 rule mlca_to_krona:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/mlca/krona_input/{library}/{sample}_lca.kronatext.tsv"
     output:

@@ -6,6 +6,7 @@ channels:
   - defaults
   - rmg
 dependencies:
+  - argparse
   - _libgcc_mutex=0.1=main
   - biopython=1.68=py27_0
   - blast=2.9.0=h20b68b9_1

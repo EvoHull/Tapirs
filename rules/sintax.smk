@@ -15,7 +15,7 @@ configfile: "config.yaml"
 
 rule sintax:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
@@ -38,7 +38,7 @@ rule sintax:
 
 rule sintax_to_kronatext:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/sintax/{library}/{sample}_reads.sintax"
     output:
@@ -60,7 +60,7 @@ rule sintax_to_kronatext:
 
 rule sintaxtext_to_krona:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
     output:

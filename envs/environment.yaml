@@ -8,13 +8,12 @@ channels:
 
 dependencies:
   - snakemake
-  - python
-  - jinja2
+  - python=3.7
   - matplotlib
   - graphviz
   - biopython
   - pandas
-  -
+
 
   # processing sequence reads
   - fastp # sequence trimming and processing

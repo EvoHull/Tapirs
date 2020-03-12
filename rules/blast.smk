@@ -10,7 +10,7 @@ configfile: "config.yaml"
 rule blastn:
     #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
@@ -40,7 +40,7 @@ rule blastn:
 
 rule tax_to_blast:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         blast_out = "results/blast/{library}/{sample}_blast.out",
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"

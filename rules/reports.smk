@@ -48,7 +48,7 @@ rule conda_env:
 #-----------------------------------------------------
 # rule multiqc:
 #     conda:
-#         "../envs/tapirs.yaml"
+#         "../envs/environment.yaml"
 #     input:
 #         "reports/fastp/{library}/"
 #     output:

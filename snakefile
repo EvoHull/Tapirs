@@ -69,7 +69,7 @@ include: "rules/reports.smk"
 
 # rule kt_taxonomy:
 #     conda:
-#         "envs/tapirs.yaml"
+#         "envs/environment.yaml"
 #     output:
 #         "data/databases/krona/taxonomy.tab"
 #     params:

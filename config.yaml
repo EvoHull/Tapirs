@@ -19,7 +19,7 @@ samples: "samples.tsv" # this file is generated from commands in README.md
 
 R: ["R1","R2"] # leave this unedited
 
-conda_envs: "tapirs.yaml" # leave this unedited
+conda_envs: "environment.yaml" # leave this unedited
 
 ## Customise the next two sections to identify your data and database locations.
 

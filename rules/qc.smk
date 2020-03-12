@@ -13,7 +13,7 @@ rule fastp_trim_and_merge:
     message:
         "Beginning fastp quality control of raw data"
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
@@ -66,7 +66,7 @@ rule keep_fwd_unpaired:  # needs work
 
 rule fastq_to_fasta:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -84,7 +84,7 @@ rule fastq_to_fasta:
 
 rule vsearch_fastq_report:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
     output:
@@ -106,7 +106,7 @@ rule vsearch_fastq_report:
 
 rule vsearch_dereplication:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.fasta"
     output:
@@ -156,7 +156,7 @@ rule vsearch_dereplication:
 
 rule vsearch_denoising:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
     output:
@@ -183,7 +183,7 @@ rule vsearch_denoising:
 
 rule vsearch_dechimerisation: # output needs fixing
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/03_denoised/{library}/{sample}.fasta"
     output: # fix
@@ -211,7 +211,7 @@ rule vsearch_dechimerisation: # output needs fixing
 
 rule vsearch_rereplication:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/03_denoised/{library}/nc_{sample}.fasta",
         # rule("empty_fasta_workaround")
