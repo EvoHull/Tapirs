@@ -55,7 +55,7 @@ rule mlca2tsv:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
         outdir = "reports/mlca/{my_experiment}",
-        indir = directory("reports/mlca/mlcatmp/")
+        indir = "reports/mlca/mlcatmp/"
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
 

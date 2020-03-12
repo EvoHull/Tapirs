@@ -55,8 +55,8 @@ data_dir: "data"
 # -----------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES
 # -----------------------------------------------
-FASTP_max_trim1: "106" # this is the amplicon size
-FASTP_max_trim2: "106" # this is the amplicon size
+FASTP_max_len1: "106" # this is the amplicon size
+FASTP_max_len2: "106" # this is the amplicon size
 FASTP_trim_front1: "20"
 FASTP_trim_front2: "20"
 FASTP_len_required: "90" # reads shorter than this will be discarded
@@ -64,9 +64,37 @@ FASTP_qual_phred: "30" # quality value that a base is qualified. 30 means phred 
 FASTP_overlap_len: "90" # length of overlap required for MERGING
 
 # -----------------------------------------------
+# VSEARCH VARIABLES
+# -----------------------------------------------
+# dereplication
+VSEARCH_minuniqsize: "3"
+# denoising
+VSEARCH_minsize: "1"
+VSEARCH_unoise_alpha: "0.5"
+# dechimerisation
+VSEARCH_mindiffs: "1"
+VSEARCH_mindiv: "0.8"
+
+# -----------------------------------------------
 # BLAST VARIABLES
 # -----------------------------------------------
-max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
-max_trim2: "106"
-overlap_len: "<interger>" # length of overlap required for MERGING
-BLAST_Nhits: "50" # Number of descriptions
+BLAST_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+BLAST_max_trim2: "106"
+BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
+BLAST_max_target_seqs: "50" # Number of descriptions
+BLAST_min_perc_ident: "100"
+BLAST_min_evalue: "1e-20"
+
+# ------------------------------------------------
+# MLCA VARIABLES
+# ------------------------------------------------
+MLCA_bitscore: "10"
+MLCA_identity: "100"
+MCLA_coverage: "60"
+MLCA_majority: "100"
+MLCA_hits: "1"
+
+# -------------------------------------------------
+# SINTAX
+# -------------------------------------------------
+SINTAX_cutoff: "0.8"

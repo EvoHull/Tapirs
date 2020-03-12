@@ -37,16 +37,16 @@ rule fastp_trim_and_merge:
         --failed_out {output.out_failed} \
         -j {output.json} \
         -h {output.html} \
-        --qualified_quality_phred 30 \
-        --length_required 90 \
+        --qualified_quality_phred {config[FASTP_qual_phred]} \
+        --length_required {config[FASTP_len_required]} \
         --cut_tail \
-        --trim_front1 20 \
-        --trim_front2 20 \
-        --max_len1 106 \
-        --max_len2 106 \
+        --trim_front1 {config[FASTP_trim_front1]} \
+        --trim_front2 {config[FASTP_trim_front2]} \
+        --max_len1 {config[FASTP_max_len1]} \
+        --max_len2 {config[FASTP_max_len2]} \
         --merge \
         --merged_out {output.merged} \
-        --overlap_len_require 90 \
+        --overlap_len_require {config[FASTP_overlap_len]} \
         --correction \
         "
 
@@ -115,7 +115,7 @@ rule vsearch_dereplication:
         "vsearch \
         --derep_fulllength {input} \
         --sizeout \
-        --minuniquesize 3 \
+        --minuniquesize {config[VSEARCH_minuniqsize]} \
         --output {output} \
         "
 
@@ -166,7 +166,7 @@ rule vsearch_denoising:
     shell:
         """
         set +e
-        vsearch --sizein --sizeout --cluster_unoise {input} --centroids {output.fasta} --minsize 1 --unoise_alpha 0.5
+        vsearch --sizein --sizeout --cluster_unoise {input} --centroids {output.fasta} --minsize {config[VSEARCH_minsize]} --unoise_alpha {config[VSEARCH_unoise_alpha]}
         exitcode=$?
         if [ $exitcode -eq 1 ]
         then
@@ -194,7 +194,7 @@ rule vsearch_dechimerisation: # output needs fixing
     shell:
         """
         set +e
-        vsearch --uchime_ref {input} --db {params.db} --mindiffs 1 --mindiv 0.8 --uchimeout {output.text} --nonchimeras {output.fasta}
+        vsearch --uchime_ref {input} --db {params.db} --mindiffs {config[VSEARCH_mindiffs]} --mindiv {config[VSEARCH_mindiv]} --uchimeout {output.text} --nonchimeras {output.fasta}
         exitcode=$?
         if [ $exitcode -eq 1 ]
         then

@@ -21,16 +21,14 @@ rule sintax:
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
-        cutoff = "0.8",
         database = config["sintax_db"]
-
     shell:
         "vsearch -sintax \
         {input.query} \
         -db {params.database} \
         -tabbedout {output} \
         -strand both \
-        -sintax_cutoff {params.cutoff} \
+        -sintax_cutoff {config[SINTAX_cutoff]} \
         "
 
 
