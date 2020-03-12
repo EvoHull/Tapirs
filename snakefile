@@ -50,7 +50,7 @@ rule all:
 #        expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
         expand("reports/mlca/mlca2tsv/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
-        directory("data/databases/krona/")
+        "data/databases/krona/taxonomy.tab"
         #expand("reports/multiqc/{sample.library}.multiqc.html", sample=sample.reset_index().itertuples())
 #-----------------------------------------------------
 # Rule files
@@ -68,7 +68,7 @@ rule kt_taxonomy:
     conda:
         "envs/tapirs.yaml"
     output:
-        directory("data/databases/krona/")
+        "data/databases/krona/taxonomy.tab"
     params:
         "data/databases/krona/"
     priority:
