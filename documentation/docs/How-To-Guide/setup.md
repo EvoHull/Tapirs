@@ -43,22 +43,35 @@ Create two text files `libraries.tsv` and `samples.tsv` each using tab separated
 ### Kraken2
 In order to run a Kraken analysis you will need to create a Kraken database for the program to search your query sequences against. These databases can be large and require a lot of RAM and time to build them. They only need to be made once however and then all subsequent analyses can be performed against the same database. If you are building a custom database from a few thousand sequences then database construction will likely be quick.
 
+Creating a local Kraken2 database for Tapirs requires a fasta input file containing all reference sequences.
+
+Database creation has 3 steps:
+1. Download taxonomy:
+`kraken2-build --download-taxonomy --db fish_kraken --threads 6`
+2. Add sequences to library:
+`kraken2-build --add-to-library databases/12s_verts.fasta --no-masking --db fish_kraken --threads 6`
+the `--no-masking` flag improved accuracy for short reads
+3. Build database:
+`kraken2-build --build --minimizer-spaces 1 --kmer-len 31 --db fish_kraken --threads 6`
+it is important to have some minimizer-spaces in lmers, having 1 makes for more accurate taxonomic assignment. Having kmer same length as lmer for shorter reads makes for more accurate taxonomic assignment
+
 See the [Kraken Tutorial](../Tutorials/kraken_tutorial.md) and the [Kraken2 manual](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) for information on building Kraken databases.
-
-!!! note "create a Kraken database"
-    If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database, then you could create a kraken database with the command:
-
-    `database creation example here`
 
 It is essential for reproducibility that you publicly archive your database at the end of the experiment. [Zenodo.org](zenodo.org) is a suitable location.
 
 ### blast
 You will need to build a blastn database from a collection of fasta files. Information on this can be found at the NCBI site [Blast help pages](https://www.ncbi.nlm.nih.gov/books/NBK279680/).
 
+You will require:
+* Fasta input file containing all reference sequences
+* Accession to taxid map. See [NCBI blast instructions](https://www.ncbi.nlm.nih.gov/books/NBK279688/) for more details.
+
 !!! note "create a blast database"
     If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database, then you could create a blast database with the command:
 
-    `database creation example here`
+    `makeblastdb -in blast_db/allseqs.fasta -input_type fasta -dbtype nucl \
+    -parse_seqids -taxid_map blast_db/tax_map.txt -out blast_db/allseqs`
+
 See the [Blast Tutorial](../Tutorials/blast_tutorial.md) for more detailed help
 
 It is essential for reproducibility that you publicly archive your database at the end of the experiment. [Zenodo.org](zenodo.org) is a suitable location.

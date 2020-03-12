@@ -1,8 +1,8 @@
 name: tapirs_env
 channels:
-  - anaconda
   - bioconda
   - conda-forge
+  - anaconda
   - defaults
   - rmg
 dependencies:

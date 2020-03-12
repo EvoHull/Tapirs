@@ -1,14 +1,14 @@
 # ==================================================
 # BLAST ANALYSIS
 # ==================================================
+
+configfile: "config.yaml"
+
 # --------------------------------------------------
 # blastn, sequence similarity search
 # --------------------------------------------------
 
-configfile: "config.yaml"
-
 rule blastn:
-    #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
         "../envs/tapirs.yaml"
     input:
