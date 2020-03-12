@@ -10,18 +10,30 @@ First make sure that your new method produces the results you expect when run at
 
 Snakemake rules have 3 integral parts; input, output, and the command to turn the first into the second.
 
+See the [Snakemake Documentation](https://snakemake.readthedocs.io/en/stable/#)
+
 ## Common problems
 Teaching and trouble-shooting Snakemake and bioinformatics are beyond the scope of this document. A couple of pointers however can save a lot of time.
 
-Most problems are because you have a typo
+1, Most problems are because you have a typo
 
-If you have multiple lines of input or output each line except the last must finish in a comma. Look at the line that begins "file1"
+2, If you have multiple lines of input or output each line except the last must finish in a comma. Look at the line that begins "file1"
 
+3, Take note of the tabbed indentation structure as this can cause problems when incorrect.
+
+4, The output of your rule must be added to the `rule all` in the snakefile.
+
+5, Commands requiring `"` or `{}` must be escaped through duplication.
+  Eg, `ls -l | awk '{if ($3 == "rahmu") print $0;}'`
+  becomes
+  `ls -l | awk '{{if ($3 == ""rahmu"") print $0;}}'`
+
+6, Here is an example rule.
 ```
 rule test:
   input:
-    file1: "firstfile.fasta",
-    file2: "secondfile.fasta"
+    file1 = "firstfile.fasta",
+    file2 = "secondfile.fasta"
   output:
     "allseqs.fasta"
   shell:
@@ -32,6 +44,12 @@ rule test:
 You should make a DAG to view the flow of information through your workflow. It is often possible to spot problems this way when you have added rules. It can also help in planning to add a rule, making you clearer on where the data comes from and where it goes.
 
 ![DAG](../images/dag.png)
+
+To create a DAG (requires graphviz installed) use:
+`snakemake --rulegraph | dot -Tsvg > dag.svg`
+
+To create a DAG also showing individual samples use:
+`snakemake --dag | dot -Tsvg > dag.svg`
 
 ## Contributing your improvements to Tapirs
 We would love to hear from you about the improvements you've made. A pull-request for your git branch would probably be best.

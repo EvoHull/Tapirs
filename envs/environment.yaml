@@ -1,21 +1,29 @@
-name: tapirs_env
+name: tapirs2
 channels:
   - bioconda
   - conda-forge
-  - anaconda
-  - defaults
-  - rmg
+
 dependencies:
-  - biopython
-  - blast
-  - fastp
-  - flash
-  - pandas
   - snakemake
-  - vsearch
-  - kraken2
-  - python
-  - krona
-  - kraken-biom
-  - biom-format
-  - seqkit
+  - python=3.7
+  - matplotlib
+  - graphviz
+  - biopython
+  - pandas
+
+
+  # processing sequence reads
+  - fastp # sequence trimming and processing
+  - vsearch # dereplication clustering etc
+
+  # taxonomic ID and LCA
+  - blast # sequence search
+  - kraken2 # kmer search
+  - kraken-biom # creates BIOM from kraken output
+
+  # reports and outputs
+  - biom-format # converts tsv to BIOM1 or BIOM2
+  - multiqc # creates a report of qc reports
+  - seqkit # format conversion and stats reporting
+  - csvtk # csv file toolkit, used in seqkit stats
+  - krona # html visualisation of taxonomy

@@ -15,22 +15,20 @@ configfile: "config.yaml"
 
 rule sintax:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         query = "results/rereplicated/{library}/{sample}.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:
-        cutoff = "0.8",
         database = config["sintax_db"]
-
     shell:
         "vsearch -sintax \
         {input.query} \
         -db {params.database} \
         -tabbedout {output} \
         -strand both \
-        -sintax_cutoff {params.cutoff} \
+        -sintax_cutoff {config[SINTAX_cutoff]} \
         "
 
 
@@ -40,7 +38,7 @@ rule sintax:
 
 rule sintax_to_kronatext:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/sintax/{library}/{sample}_reads.sintax"
     output:
@@ -62,7 +60,7 @@ rule sintax_to_kronatext:
 
 rule sintaxtext_to_krona:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         "results/sintax/{library}/{sample}_sintax_taxcount.tsv"
     output:

@@ -30,6 +30,7 @@ if float(args.min_hits)=='':
 else:
     min_hits=float(args.min_hits)
 bit_threshold=float(args.bit_threshold)
+prop=1-(bit_threshold/100)
 
 unid_tax=('\t'.join([str(x) for x in ['unidentified']*7]))
 taxonomy=('kingdom','phylum','class','order','family','genus','species')
@@ -43,15 +44,8 @@ with open(infile,'r') as file:
             lca_out.write('query\tlca_rank\tlca_otu\tkingdom\tphylum\tclass\torder\tfamily\tgenus\tspecies\tmethod\n')
     else:
         df=pd.read_csv(infile,sep='\t', header=None)
-        df[df[4]>=identity]
-        df[df[4]>=coverage]
-        seq_ids=set(df[0])
-        prop=1-(bit_threshold/100)
-
-
-        df=pd.read_csv(infile,sep='\t', header=None)
-        df[df[4]>=identity]
-        df[df[4]>=coverage]
+        df=df[df[4]>=identity]
+        df=df[df[5]>=coverage]
         seq_ids=set(df[0])
 
         with open(outfile,'w') as lca_out:
@@ -68,6 +62,8 @@ with open(infile,'r') as file:
                         lca.append(taxa[0][taxa[1]==max(taxa[1])])
 
                 lca_tax=[]
+                if len(lca)==0:
+                    lca.append('unidentified')
                 for i in lca:
                     lca_tax.append(i[0])
                 if len(lca_tax)<7:
@@ -79,7 +75,7 @@ with open(infile,'r') as file:
                 if len(lca)==7:
                     otu_id=('_'.join([str(lca[5][0]),str(lca[6][0])]))
                 elif len(lca)==6:
-                    otu_id=('.'.join([str(lca_tax[5][0]),'_spp.']))
+                    otu_id=('_'.join([str(lca[5][0]),'spp.']))
                 else:
                     otu_id=str(lca[-1][0])
 

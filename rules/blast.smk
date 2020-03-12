@@ -10,16 +10,13 @@ configfile: "config.yaml"
 
 rule blastn:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/nc_{sample}.fasta"
     params:
         db_dir = directory(config["blast_db"]), # database directory
-        descriptions = "50", # return maximum of 50 hits
-        outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'",
-        min_perc_ident = "100", # this needs to be 100%
-        min_evalue = "1e-20"
+        outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     output:
         "results/blast/{library}/{sample}_blast.out"
     threads:
@@ -29,9 +26,9 @@ rule blastn:
         -db {params.db_dir} \
         -num_threads {threads} \
         -outfmt {params.outformat} \
-        -perc_identity {params.min_perc_ident} \
-        -evalue {params.min_evalue} \
-        -max_target_seqs {params.descriptions} \
+        -perc_identity {config[BLAST_min_perc_ident]} \
+        -evalue {config[BLAST_min_evalue]} \
+        -max_target_seqs {config[BLAST_max_target_seqs]} \
         -query {input.query} \
         -out {output} \
         "
@@ -43,7 +40,7 @@ rule blastn:
 
 rule tax_to_blast:
     conda:
-        "../envs/tapirs.yaml"
+        "../envs/environment.yaml"
     input:
         blast_out = "results/blast/{library}/{sample}_blast.out",
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"

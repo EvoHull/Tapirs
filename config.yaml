@@ -2,6 +2,8 @@
 #               TAPIRS: CONFIGFILE
 # ==================================================
 # Configuration of Tapirs is done by editing data within this file
+# Please proceed through the file, ensuring each setting is set to your preference.
+# If nothing is changed, the workflow will run with default settings and parameters.
 
 # --------------------------------------------------
 # WILDCARD VARIABLES: Set experiment-specific info
@@ -10,12 +12,14 @@
 my_experiment: "testing_tapirs" # insert experiment name, no_spaces
 
 libraries: "libraries.tsv" # this file is generated from commands in README.md
+                            # leave this unedited
 
 samples: "samples.tsv" # this file is generated from commands in README.md
+                            # leave this unedited
 
-R: ["R1","R2"]
+R: ["R1","R2"] # leave this unedited
 
-conda_envs: "tapirs.yaml"
+conda_envs: "environment.yaml" # leave this unedited
 
 ## Customise the next two sections to identify your data and database locations.
 
@@ -31,8 +35,8 @@ dechim_blast_db: "data/databases/verts_blast_db/12s_verts.fasta"
 # KRAKEN
 kraken_db: "data/databases/verts_kraken2_db/"
 # KRONA
-krona_taxdb: "data/databases/krona/"
-# this KRONA database can be generated from commands, see docs
+krona_taxdb: "data/databases/krona/" # leave this unedited
+# SINTAX
 sintax_db: "data/databases/sintax/verts_sintax_db.txt"
 
 # -----------------------------------------------
@@ -51,8 +55,8 @@ data_dir: "data"
 # -----------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES
 # -----------------------------------------------
-FASTP_max_trim1: "106"
-FASTP_max_trim2: "106"
+FASTP_max_len1: "106" # this is the amplicon size
+FASTP_max_len2: "106" # this is the amplicon size
 FASTP_trim_front1: "20"
 FASTP_trim_front2: "20"
 FASTP_len_required: "90" # reads shorter than this will be discarded
@@ -60,9 +64,37 @@ FASTP_qual_phred: "30" # quality value that a base is qualified. 30 means phred 
 FASTP_overlap_len: "90" # length of overlap required for MERGING
 
 # -----------------------------------------------
+# VSEARCH VARIABLES
+# -----------------------------------------------
+# dereplication
+VSEARCH_minuniqsize: "3"
+# denoising
+VSEARCH_minsize: "1"
+VSEARCH_unoise_alpha: "0.5"
+# dechimerisation
+VSEARCH_mindiffs: "1"
+VSEARCH_mindiv: "0.8"
+
+# -----------------------------------------------
 # BLAST VARIABLES
 # -----------------------------------------------
-max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
-max_trim2: "106"
-overlap_len: "<interger>" # length of overlap required for MERGING
-BLAST_Nhits: "50" # Number of descriptions
+BLAST_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+BLAST_max_trim2: "106"
+BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
+BLAST_max_target_seqs: "50" # Number of descriptions
+BLAST_min_perc_ident: "100"
+BLAST_min_evalue: "1e-20"
+
+# ------------------------------------------------
+# MLCA VARIABLES
+# ------------------------------------------------
+MLCA_bitscore: "10"
+MLCA_identity: "100"
+MCLA_coverage: "60"
+MLCA_majority: "100"
+MLCA_hits: "1"
+
+# -------------------------------------------------
+# SINTAX
+# -------------------------------------------------
+SINTAX_cutoff: "0.8"
