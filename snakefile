@@ -1,10 +1,8 @@
-###########################################################################################################################
-
-                                                ######   TAPIRS   #####
-                                # A reproducible metabarcoding workflow using snakemake
-
-############################################################################################################################
-## Setup
+# ==============================================================================
+# TAPIRS
+# A reproducible metabarcoding workflow using snakemake
+# ==============================================================================
+# Setup
 
 # Config file
 configfile: "config.yaml"
@@ -12,18 +10,18 @@ configfile: "config.yaml"
 # Reporting
 report: "reports/tapirs.rst" # Flag "$ snakemake" with "--report" to use
 
-###########################################################################################################################
-## Wildcarding library and sample
-
+# --------------------------------------------------
+# Wildcarding library and sample
+# --------------------------------------------------
 import pandas as pd
 
 library = pd.read_table(config["libraries"], index_col="library")
 sample = pd.read_table(config["samples"], index_col=["library", "sample"], dtype=str)
 sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.levels])
 
-############################################################################################################################
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Target rules
+# ------------------------------------------------------------------------------
 rule all:
     input:
 # krona taxonomy database
@@ -65,7 +63,7 @@ include: "rules/mlca.smk"
 include: "rules/sintax.smk"
 include: "rules/reports.smk"
 
-##################################################################################################
+# ------------------------------------------------------------------------------
 
 # rule kt_taxonomy:
 #     conda:
