@@ -23,7 +23,7 @@ rule fastp_trim_and_merge:
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
         out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
         out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged = "results/02_trimmed/{library}/{sample}.merged.paired.fastq.gz",
+        merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -53,10 +53,10 @@ rule fastp_trim_and_merge:
 
 rule keep_fwd_unpaired:  # needs work
     input:
-        merged = "results/02_trimmed/{library}/{sample}.merged.paired.fastq.gz",
+        merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
     output:
-        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
     shell:
         "cat {input.out_unpaired1} {input.merged} > {output}"
 
@@ -68,9 +68,9 @@ rule fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
     output:
-        "results/02_trimmed/{library}/{sample}.merged.fasta",
+        "results/02_trimmed/{library}/{sample}_merged.fasta",
     shell:
         "vsearch \
         --fastq_filter {input} \
@@ -86,7 +86,7 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}.merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -108,9 +108,9 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}.merged.fasta"
+        "results/02_trimmed/{library}/{sample}_merged.fasta"
     output:
-        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}_derep.fasta"
     shell:
         "vsearch \
         --derep_fulllength {input} \
@@ -120,7 +120,6 @@ rule vsearch_dereplication:
         "
 
 
-#
 # rule empty_fasta_workaround:
 #     input:
 #         "results/02_trimmed/{library}/{sample}.merged.tmp.derep.fasta"
@@ -158,9 +157,9 @@ rule vsearch_denoising:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}.merged.derep.fasta"
+        "results/02_trimmed/{library}/{sample}_derep.fasta"
     output:
-        fasta = "results/03_denoised/{library}/{sample}.fasta"
+        fasta = "results/03_denoised/{library}/{sample}_denoise.fasta"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
@@ -185,10 +184,10 @@ rule vsearch_dechimerisation: # output needs fixing
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_denoised/{library}/{sample}.fasta"
+        "results/03_denoised/{library}/{sample}_denoise.fasta"
     output: # fix
         text = "results/03_denoised/{library}/{sample}_chimera.txt",
-        fasta = "results/03_denoised/{library}/nc_{sample}.fasta"
+        fasta = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db = config["dechim_blast_db"]
     shell:
@@ -213,7 +212,7 @@ rule vsearch_rereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_denoised/{library}/nc_{sample}.fasta",
+        "results/03_denoised/{library}/{sample}_nc.fasta",
         # rule("empty_fasta_workaround")
     output:
         "results/rereplicated/{library}/{sample}_rerep.fasta"

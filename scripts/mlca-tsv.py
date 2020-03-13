@@ -8,6 +8,8 @@ parser.add_argument('-i', '--indir', metavar='mlca output', dest='indir', type=s
             help='directory containing mlca outputs to be combined', default='', required=True)
 parser.add_argument('-o', '--outfile',metavar='output file', dest='outfile', type=str,
             help='output tsv file', required=True)
+#parser.add_argument('-r', '--rerep',metavar='rerep folder', dest='rerep', type=str,
+#            help='Folder with rereplicated samples', required=True)
 args = parser.parse_args()
 
 final_out=pd.DataFrame()
@@ -46,7 +48,7 @@ for library in libraries:
 
         assigned_reads=dfob[sample].sum()
 
-        total_reads=len([1 for line in open('6_denoise_uc/rerep/'+file_name+'_rerep.fasta') \
+        total_reads=len([1 for line in open('results/rereplicated/') \
                          if line.startswith('>')])
 
         unassigned_reads=total_reads-assigned_reads
@@ -70,9 +72,8 @@ for otu in final_out.index:
         tfob.loc[otu]=tax_add
     else:
         tfob.loc[otu]='u__unassigned'
-        
+
 final_out=(pd.concat([final_out, tfob], axis=1, sort=False)).fillna(0).sort_index()
 final_out.index.name='#OTU_ID'
 final_out=final_out.drop('unassigned', axis=0).append(final_out.loc[['unassigned'],:])
 final_out.to_csv(args.outfile+'.tsv', sep='\t',index=True, header=True)
-
