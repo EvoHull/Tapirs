@@ -7,13 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../../img/favicon.ico">
   <title>Design - Tapirs</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -24,7 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js" defer></script>
   <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
@@ -35,6 +36,7 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href="../.." class="icon icon-home"> Tapirs</a>
         <div role="search">
@@ -45,121 +47,67 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../..">Home</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">How-To-Guide</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/installation/">Installation</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/setup/">Setup Tapirs</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/extending/">Extending the Workflow</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/reproducibility/">Reproducibiility</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Tutorials</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../../Tutorials/blast_tutorial/">Basic blast</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../Tutorials/kraken_tutorial/">Kraken2</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">About</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../faqs/">FAQs</a>
-                </li>
-                <li class=" current">
-                    
-    <a class="current" href="./">Design</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#directory-structure">DIRECTORY STRUCTURE</a></li>
-    
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">How-To-Guide</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/installation/">Installation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/setup/">Setup Tapirs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/extending/">Extending the Workflow</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/reproducibility/">Reproducibiility</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Tutorials</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Tutorials/blast_tutorial/">Basic blast</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Tutorials/kraken_tutorial/">Kraken2</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Tutorials/sintax_tutorial/">SINTAX</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">About</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../faqs/">FAQs</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Design</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#snakefile">snakefile</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#config-file">config file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#envs">envs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#data">data</a>
         <ul>
-        
-            <li><a class="toctree-l4" href="#snakefile">snakefile</a></li>
-        
-            <li><a class="toctree-l4" href="#config-file">config file</a></li>
-        
-            <li><a class="toctree-l4" href="#envs">envs</a></li>
-        
-            <li><a class="toctree-l4" href="#data">data</a></li>
-        
-            <li><a class="toctree-l4" href="#documentation">documentation</a></li>
-        
-            <li><a class="toctree-l4" href="#rules">rules</a></li>
-        
-            <li><a class="toctree-l4" href="#reports">reports</a></li>
-        
-            <li><a class="toctree-l4" href="#scripts">scripts</a></li>
-        
-            <li><a class="toctree-l4" href="#results">results</a></li>
-        
+    <li class="toctree-l3"><a class="reference internal" href="#demultiplexed">demultiplexed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#databases">databases</a>
+    </li>
         </ul>
-    
-
-    <li class="toctree-l3"><a href="#analysis">ANALYSIS</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#fastp">fastp</a></li>
-        
-            <li><a class="toctree-l4" href="#vsearch">vsearch</a></li>
-        
-            <li><a class="toctree-l4" href="#blast-and-mlca">blast and MLCA</a></li>
-        
-            <li><a class="toctree-l4" href="#kraken2">Kraken2</a></li>
-        
-            <li><a class="toctree-l4" href="#sintax">sintax</a></li>
-        
-            <li><a class="toctree-l4" href="#graphical-display-of-results">graphical display of results</a></li>
-        
-        </ul>
-    
-
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation">documentation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rules">rules</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reports">reports</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scripts">scripts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#results">results</a>
+    </li>
     </ul>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../background/">Background</a>
-                </li>
-    </ul>
-	    </li>
-          
-        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../background/">Background</a>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -188,6 +136,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -206,30 +155,32 @@
 <h2 id="data">data</h2>
 <p>We treat the data directory as read-only during operation of the workflow. It is the location for you to assemble sequences, and databases, and taxonomy, but the workflow will not write here.</p>
 <h3 id="demultiplexed">demultiplexed</h3>
-<p>We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the <code>config.yaml</code> file. Since de-multiplexing is different in different laboratories we teat this as a separate workflow.</p>
+<p>We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the <code>config.yaml</code> file. Since de-multiplexing is different in different laboratories we treat this as a separate workflow.</p>
 <h3 id="databases">databases</h3>
 <p>The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called taxdump).</p>
 <h2 id="documentation">documentation</h2>
-<p>/docs contains the documentation for Tapirs, build with mkdocs.</p>
+<p>/docs contains the documentation for Tapirs, built with <a href="https://www.mkdocs.org/">mkdocs</a>.</p>
 <h2 id="rules">rules</h2>
-<p>This contains snakemake workflow description rules for separate tasks. We may have:
-- blast.smk
-- kraken.smk
-- qc.smk
-- report.smk</p>
+<p>This contains snakemake workflow description rules for separate tasks. We may have:</p>
+<ul>
+<li>blast.smk</li>
+<li>kraken.smk</li>
+<li>qc.smk</li>
+<li>report.smk</li>
+</ul>
 <p>Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify.</p>
 <h2 id="reports">reports</h2>
-<p>Reports are written by some of the programs. Snakemake will also write an overall  report.</p>
+<p>Reports are written by some of the programs. Snakemake will also write an overall report.</p>
 <h2 id="scripts">scripts</h2>
-<p>Place here scripts called by the snakemake rules</p>
+<p>Scripts called by snakemake rules are placed here.</p>
 <h2 id="results">results</h2>
-<p>This directory usually has subdirectories named by the program (eg blast). It is a convenient way of organising the output.</p>
+<p>This directory usually has subdirectories named by program (eg blast). It is a convenient way of organising the output.</p>
 <h1 id="analysis">ANALYSIS</h1>
 <h2 id="fastp">fastp</h2>
 <p>fastp is used for 2 separate jobs:</p>
 <ol>
 <li>quality control, filter reads by score and length</li>
-<li>merge Forward and reverse reads. It additionally does error correction if merged reads have a mismatch, taking the highest quality nucleotide</li>
+<li>merge Forward and Reverse reads. It additionally does error correction if merged reads have a mismatch, taking the highest quality nucleotide</li>
 </ol>
 <h2 id="vsearch">vsearch</h2>
 <p>vsearch does several jobs:</p>
@@ -238,6 +189,7 @@
 <li>dereplication, removal of identical sequences</li>
 <li>denoising, removal of sequencing errors</li>
 <li>chimera removal</li>
+<li>rereplication, tracing consensus sequences back to original reads</li>
 </ol>
 <p>The sequences written by vsearch are the query sequences for taxonomic identification.</p>
 <h2 id="blast-and-mlca">blast and MLCA</h2>
@@ -273,7 +225,7 @@
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
       
         </div>
@@ -283,7 +235,7 @@
 
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
@@ -297,6 +249,11 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>

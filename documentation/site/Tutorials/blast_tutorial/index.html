@@ -7,13 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../../img/favicon.ico">
   <title>Basic blast - Tapirs</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   
   <script>
     // Current page data
@@ -24,7 +25,7 @@
   
   <script src="../../js/jquery-2.1.1.min.js" defer></script>
   <script src="../../js/modernizr-2.8.3.min.js" defer></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
@@ -35,6 +36,7 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href="../.." class="icon icon-home"> Tapirs</a>
         <div role="search">
@@ -45,94 +47,51 @@
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../..">Home</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">How-To-Guide</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/installation/">Installation</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/setup/">Setup Tapirs</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/extending/">Extending the Workflow</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../How-To-Guide/reproducibility/">Reproducibiility</a>
-                </li>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">How-To-Guide</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/installation/">Installation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/setup/">Setup Tapirs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/extending/">Extending the Workflow</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../How-To-Guide/reproducibility/">Reproducibiility</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Tutorials</span></p>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Basic blast</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#reference-data">Reference data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-a-blast-database">Build a blast database</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#blast-parameters">blast parameters</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mlca">mlca</a>
+    </li>
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">Tutorials</span>
-    <ul class="subnav">
-                <li class=" current">
-                    
-    <a class="current" href="./">Basic blast</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#basic-blast-tutorial">Basic blast tutorial</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#reference-data">Reference data</a></li>
-        
-            <li><a class="toctree-l4" href="#build-a-blast-database">Build a blast database</a></li>
-        
-            <li><a class="toctree-l4" href="#blast-parameters">blast parameters</a></li>
-        
-            <li><a class="toctree-l4" href="#mlca">mlca</a></li>
-        
-            <li><a class="toctree-l4" href="#outputs">outputs</a></li>
-        
-        </ul>
-    
-
-    </ul>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../kraken_tutorial/">Kraken2</a>
-                </li>
-    </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <span class="caption-text">About</span>
-    <ul class="subnav">
-                <li class="">
-                    
-    <a class="" href="../../About/faqs/">FAQs</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../About/design/">Design</a>
-                </li>
-                <li class="">
-                    
-    <a class="" href="../../About/background/">Background</a>
-                </li>
-    </ul>
-	    </li>
-          
-        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../kraken_tutorial/">Kraken2</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../sintax_tutorial/">SINTAX</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">About</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../About/faqs/">FAQs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../About/design/">Design</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../About/background/">Background</a>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -161,6 +120,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -172,17 +132,16 @@
 <h2 id="build-a-blast-database">Build a blast database</h2>
 <p>There are many online guides to building a blast database, including detailed ones at the NCBI.</p>
 <h2 id="blast-parameters">blast parameters</h2>
-<p><strong>Minimum percentage identity</strong> <code>min_perc_ident = "100"</code> identifies perfect matches but may be a little restrictive unless you know that you have all the potential hits in you database. Lower the value on a few test cases until you feel you are getting too much noise and not enough signal.</p>
-<p><strong>e-value</strong> <code>min_evalue = "1e-20"</code> may work for you, again you can explore. Using the NCBI web blast page for a few sequences can sometimes give you an idea of the sort of e-values you would expect for your data.</p>
-<p><strong>number of hits</strong> <code>descriptions = "50"</code> ie return maximum of 50 hits is a good default, though you may also change if you wish.</p>
+<p><strong>Minimum percentage identity:</strong> <code>min_perc_ident = "100"</code> identifies perfect matches but may be a little restrictive unless you know that you have all the potential hits in you database. Lower the value on a few test cases until you feel you are getting too much noise and not enough signal. Somewhere between that point and "100" is your optimum.</p>
+<p><strong>e-value:</strong> <code>min_evalue = "1e-20"</code> may work for you, again you can explore hw stringent to be with this parameter. Using the NCBI web blast page for a few sequences can sometimes give you an idea of the sort of e-values you would expect for your data.</p>
+<p><strong>number of hits:</strong> <code>descriptions = "50"</code> ie return maximum of 50 hits is a good default, though you may also change if you wish.</p>
 <h2 id="mlca">mlca</h2>
-<p>Investigating the correct parameters for LCA analysis is an overlooked part of many experimental designs. LCA however is responsible for turning your 50 blast hits into an assigned taxonomy, so it can be exceptionally important.</p>
-<p><strong>bitscore threshold</strong> This will restrict the hits to a certain percentage of the to bitscore. Default=10 (within 10%) which may be a little too strict if you do not have close blast hits.</p>
-<p><strong>identity</strong> Minimum percentage identity value accepted for the hits. "100" restricts to perfect matches only.</p>
-<p><strong>coverage</strong> Percentage coverage of query on top hit. Default = "60"</p>
-<p><strong>majority taxonomic concensus</strong> Percentage match requirement across hit taxonomies. "90" indicates that 1 out of 10 may disagree in its taxonomy without the assigned taxonomy moving back to a deeper common ancestor.</p>
-<p><strong>minimum number of hits</strong> Useful with small reference databases. Default = 2, ie requires at least 2 hits in the blast database. hits = "1" is not a true LCA but rather takes the top hit.</p>
-<h2 id="outputs">outputs</h2>
+<p>Investigating the correct parameters for LCA analysis is an overlooked part of many experimental designs. LCA however is responsible for turning your 50 blast hits into an assigned taxonomy, so it can be exceptionally important. MLCA is short for Majority Lowest Common Ancestor, and our script allows you to modify several parameters of the LCA estimation, including whether to accept the majority taxonomy returned, or require ALL hits to have the same taxonomy.</p>
+<p><strong>bitscore threshold:</strong> This will restrict the hits to a certain percentage of the top bitscore. Default=10 (within 10% of top hit) which may be a little too strict if you do not have close blast hits. Experiment with reducing it.</p>
+<p><strong>identity:</strong> Minimum percentage identity value accepted for the hits. "100" restricts to perfect matches only.</p>
+<p><strong>coverage:</strong> Percentage coverage of query on top hit. Default = "60"</p>
+<p><strong>majority taxonomic concensus:</strong> Percentage match requirement across hit taxonomies. "90" indicates that 1 out of 10 may disagree in its taxonomy without the assigned taxonomy moving back to a deeper common ancestor.</p>
+<p><strong>minimum number of hits:</strong> Useful with small reference databases. Default = 2, ie requires at least 2 hits in the blast database. hits = "1" is not a true LCA but rather takes the top hit.</p>
               
             </div>
           </div>
@@ -205,7 +164,7 @@
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
       
         </div>
@@ -215,7 +174,7 @@
 
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
@@ -229,6 +188,11 @@
     <script>var base_url = '../..';</script>
     <script src="../../js/theme.js" defer></script>
       <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>
