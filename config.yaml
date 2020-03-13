@@ -29,9 +29,9 @@ conda_envs: "environment.yaml" # leave this unedited
 # Place your reference databses in these locations
 # or edit to specify the location
 # BLAST
-blast_db: "data/databases/verts_blast_db/12s_verts"
+blast_db: "data/databases/verts_blast_db/12s_full"
 # VSEARCH vsearch_dechimerisation             # point this at the fasta within the blast database
-dechim_blast_db: "data/databases/verts_blast_db/12s_verts.fasta"
+dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
 # KRAKEN
 kraken_db: "data/databases/verts_kraken2_db/"
 # KRONA
