@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule mlca:
+    conda:
+        "../envs/environment.yaml"
     input:
         "results/blast/{library}/{sample}_tax.tsv"
     output:
@@ -36,26 +38,16 @@ rule mlca:
 # Mlca to tsv
 #---------------------------------------------------------
 
-rule mlca2tsv_transform:
+rule mlca_to_tsv:
+    conda:
+        "../envs/environment.yaml"
     input:
-        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
-    output:
-        directory("reports/mlca/mlcatmp/")
-    params:
-        "reports/mlca/mlcatmp/"
-    shell:
-        "rm -rf {params} \
-        && mkdir {params} \
-        && cp {input} {params}"
-
-rule mlca2tsv:
-    input:
-        "reports/mlca/mlcatmp/"
+        files = expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
     output:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
-        outdir = "reports/mlca/{my_experiment}",
-        indir = "reports/mlca/mlcatmp"
+        outdir = "reports/mlca/mlca2tsv/{my_experiment}",
+        indir = "reports/mlca"
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
 
@@ -64,7 +56,7 @@ rule mlca2tsv:
 #------------------------------------------------------
 # Converting mlca tsv to krona friendly input
 #-------------------------------------------------------
-rule mlca2kronatext:
+rule mlca_krona_transformation:
     input:
         "results/mlca/{library}/{sample}_lca.tsv"
     output:
@@ -76,7 +68,7 @@ rule mlca2kronatext:
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-rule mlca_to_krona:
+rule mlca_krona_plot:
     conda:
         "../envs/environment.yaml"
     input:

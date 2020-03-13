@@ -12,7 +12,7 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/rereplicated/{library}/{sample}.fasta"
+        "results/rereplicated/{library}/{sample}_rerep.fasta"
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
@@ -31,48 +31,17 @@ rule kraken2:
         --report {output.kraken_reports} \
         "
 
-# could use --report-zero-counts if against small database
-    # will add this t the config file - Mike
-
-# #-----------------------------------------------------
-# # reformat kraken output for krona
-# #-----------------------------------------------------
-#
-# rule kraken2_reformat:
-#     input:
-#         "results/kraken/outputs/{library}/{sample}.tsv"
-#     output:
-#         "results/kraken/krona_inputs/{library}/{sample}.tsv"
-#     shell:
-#         "cut -f3,5 {input} > {output}"
-#
-#
-# #-----------------------------------------------------
-# # Krona, interactive html graphics of taxonomic diversity
-# #-----------------------------------------------------
-# # see here: https://www.gitmemory.com/issue/DerrickWood/kraken2/114/524767339
-# rule kraken_to_krona:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         "results/kraken/krona_inputs/{library}/{sample}.tsv"
-#     output:
-#         "reports/krona/kraken/{library}/{sample}.html"
-#     shell:
-#         "ktImportTaxonomy {input} -o {output} -t 2 -m 1 -tax data/databases/krona/"
-
-
 #-----------------------------------------------------
 #Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 
-rule kraken_to_krona2: # see here: https://github.com/marbl/Krona/issues/117
+rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "../envs/environment.yaml"
     input:
         tsv = "results/kraken/outputs/{library}/{sample}.tsv"
     output:
-        "reports/krona/kraken/{library}/{sample}.2.html"
+        "reports/krona/kraken/{library}/{sample}.html"
     params:
         db = "data/databases/krona/"
     shell:

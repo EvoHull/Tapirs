@@ -13,7 +13,7 @@ rule blastn:
         "../envs/environment.yaml"
     input:
         #db = "nt", #specify in environment.yaml
-        query = "results/03_denoised/{library}/nc_{sample}.fasta"
+        query = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db_dir = directory(config["blast_db"]), # database directory
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
@@ -38,7 +38,7 @@ rule blastn:
 # tax_to_blast, adds taxonomy column to blast output
 # -----------------------------------------------------
 
-rule tax_to_blast:
+rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:
