@@ -42,14 +42,15 @@ rule mlca_to_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        files = expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
+        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
     output:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
         outdir = "reports/mlca/mlca2tsv/{my_experiment}",
-        indir = "reports/mlca"
+        indir = "reports/mlca/",
+        rerep = "results/rereplicated/"
     shell:
-        "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
+        "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir} -r {params.rerep}"
 
 
 

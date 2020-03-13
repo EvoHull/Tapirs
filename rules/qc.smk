@@ -56,7 +56,7 @@ rule keep_fwd_unpaired:  # needs work
         merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
     output:
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
     shell:
         "cat {input.out_unpaired1} {input.merged} > {output}"
 
@@ -68,9 +68,9 @@ rule fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
     output:
-        "results/02_trimmed/{library}/{sample}_merged.fasta",
+        "results/02_trimmed/{library}/{sample}_catted.fasta",
     shell:
         "vsearch \
         --fastq_filter {input} \
@@ -86,7 +86,7 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -108,7 +108,7 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_merged.fasta"
+        "results/02_trimmed/{library}/{sample}_catted.fasta"
     output:
         "results/02_trimmed/{library}/{sample}_derep.fasta"
     shell:
