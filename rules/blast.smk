@@ -38,7 +38,7 @@ rule blastn:
 # tax_to_blast, adds taxonomy column to blast output
 # -----------------------------------------------------
 
-rule tax_to_blast:
+rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:

@@ -216,7 +216,7 @@ rule vsearch_rereplication:
         "results/03_denoised/{library}/nc_{sample}.fasta",
         # rule("empty_fasta_workaround")
     output:
-        "results/rereplicated/{library}/{sample}.fasta"
+        "results/rereplicated/{library}/{sample}_rerep.fasta"
     threads:
         6
     shell:
