@@ -48,7 +48,7 @@ rule mlca_to_tsv:
     params:
         outdir = "reports/mlca/mlca2tsv/{my_experiment}",
         indir = "reports/mlca/",
-        rerep = "results/rereplicated/" # syntax
+        rerep = "results/rereplicated/" # syntax of directory()?
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -o {output} -r {params.rerep}"
 
