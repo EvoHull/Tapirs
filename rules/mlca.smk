@@ -14,6 +14,7 @@ rule mlca:
     output:
         "results/mlca/{library}/{sample}_lca.tsv"
     params:
+        out = "results/mlca/{library}/{sample}_lca.tsv",
         bitscore = "10", # -b blast hit bitscore upper threshold
         identity = "100", # -id percent identity
         coverage = "60", # -cov percentage coverage
@@ -36,28 +37,29 @@ rule mlca:
 # Mlca to tsv
 #---------------------------------------------------------
 
-rule mlca2tsv_transform:
-    input:
-        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
-    output:
-        directory("reports/mlca/mlcatmp/")
-    params:
-        "reports/mlca/mlcatmp/"
-    shell:
-        "rm -rf {params} \
-        && mkdir {params} \
-        && cp {input} {params}"
+# rule mlca2tsv_transform:
+#     input:
+#         expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
+#     output:
+#         directory("reports/mlca/mlcatmp/")
+#     params:
+#         "reports/mlca/mlcatmp/"
+#     shell:
+#         "rm -rf {params} \
+#         && mkdir {params} \
+#         && cp {input} {params}"
 
 rule mlca2tsv:
-    input:
-        "reports/mlca/mlcatmp/"
+    # input:
+    #     "results/mlca/{library}/{sample}_lca.tsv"
     output:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
-        outdir = "reports/mlca/{my_experiment}",
-        indir = "reports/mlca/mlcatmp"
+        outdir = "reports/mlca/mlca2tsv/{my_experiment}",
+        indir = "reports/mlca/",
+        rerep = "results/rereplicated/"
     shell:
-        "python scripts/mlca-tsv.py -i {params.indir} -o {params.outdir}"
+        "python scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {params.outdir}"
 
 
 

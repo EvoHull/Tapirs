@@ -5,7 +5,9 @@ import glob
 
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('-i', '--indir', metavar='mlca output', dest='indir', type=str,
-            help='directory containing mlca outputs to be combined', default='', required=True)
+            help='directory containing mlca outputs', default='', required=True)
+parser.add_argument('-r', '--rerep',metavar='rerep output', dest='rerep', type=str,
+            help='directory containing vsearch rereplicated outputs', required=True)
 parser.add_argument('-o', '--outfile',metavar='output file', dest='outfile', type=str,
             help='output tsv file', required=True)
 args = parser.parse_args()
@@ -16,17 +18,17 @@ pd.set_option('max_colwidth',400)
 
 libraries=sorted(glob.glob(args.indir+'/*'))
 for library in libraries:
-    files=sorted(glob.glob(library+'/*_lca.tsv'))
+    library=library.split('/')[-1]
+    files=sorted(glob.glob(args.indir+'/'+library+'/*_lca.tsv'))
     for file in files:
-        file_name=file.split('/',1)[1].split('_')[0]
-        sample=file_name.split('/',1)[1]
+        sample=file.split('/')[-1].split('_')[0]
         with open(file,'r') as file:
             count=0
             for line in file.readlines():
                 count+=1
                 if count > 1:
                     df=pd.read_csv(file.name, sep='\t', header=None,skiprows=1)
-                    df[0]=pd.to_numeric(df[0].str.split(r"size=", expand=True)[1])
+                    df[0]=pd.to_numeric(df[0].str.split(r";size=", expand=True)[1])
                 else:
                     df=pd.DataFrame([([0])+(['unidentified']*10)])
 
@@ -46,7 +48,7 @@ for library in libraries:
 
         assigned_reads=dfob[sample].sum()
 
-        total_reads=len([1 for line in open('6_denoise_uc/rerep/'+file_name+'_rerep.fasta') \
+        total_reads=len([1 for line in open(args.rerep+'/'+library+'/'+sample+'_rerep.fasta') \
                          if line.startswith('>')])
 
         unassigned_reads=total_reads-assigned_reads
@@ -74,5 +76,5 @@ for otu in final_out.index:
 final_out=(pd.concat([final_out, tfob], axis=1, sort=False)).fillna(0).sort_index()
 final_out.index.name='#OTU_ID'
 final_out=final_out.drop('unassigned', axis=0).append(final_out.loc[['unassigned'],:])
-final_out.to_csv(args.outfile+'.tsv', sep='\t',index=True, header=True)
+final_out.to_csv(args.outfile, sep='\t',index=True, header=True)
 
