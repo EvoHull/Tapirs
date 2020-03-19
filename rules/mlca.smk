@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule mlca:
     input:
-        "results/blast/{library}/{sample}_tax.tsv"
+        "results/blasttax/{library}/{sample}_tax.tsv"
     output:
         "results/mlca/{library}/{sample}_lca.tsv"
     params:
