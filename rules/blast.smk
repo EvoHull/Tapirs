@@ -44,6 +44,9 @@ rule add_taxonomy_to_blast:
         blast_out = "results/blast/{library}/{sample}_blast.tsv",
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
-        blast_taxonomy = "results/blasttax/{library}/{sample}_tax.tsv"
+        "results/blasttax/{library}/{sample}_tax.tsv",
+    # params:
+    #     indir = "results/blast",
+    #     outdir = "results/blasttax"
     shell:
-        "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
+        "python scripts/tax_to_blast.py -i results/blast -o results/blasttax -lin {input.ranked_lineage}"

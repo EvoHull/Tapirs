@@ -36,7 +36,6 @@ rule kraken2:
 #-----------------------------------------------------
 
 rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
-
     conda:
         "../envs/environment.yaml"
     input:

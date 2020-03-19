@@ -56,7 +56,6 @@ rule keep_fwd_unpaired:  # needs work
         merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
     output:
-<<<<<<< HEAD
         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
     shell:
         "cat {input.out_unpaired1} {input.merged} > {output}"
