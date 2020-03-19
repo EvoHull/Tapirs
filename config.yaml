@@ -31,7 +31,7 @@ conda_envs: "environment.yaml" # leave this unedited
 # BLAST
 blast_db: "data/databases/verts_blast_db/12s_full"
 # VSEARCH vsearch_dechimerisation             # point this at the fasta within the blast database
-dechim_blast_db: "data/databases/verts_blast_db/12s_verts.fasta"
+dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
 # KRAKEN
 kraken_db: "data/databases/verts_kraken2_db/"
 # KRONA

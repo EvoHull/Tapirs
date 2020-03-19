@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule mlca:
+    conda:
+        "../envs/environment.yaml"
     input:
         "results/blasttax/{library}/{sample}_tax.tsv"
     output:
@@ -37,6 +39,7 @@ rule mlca:
 # Mlca to tsv
 #---------------------------------------------------------
 
+<<<<<<< HEAD
 # rule mlca2tsv_transform:
 #     input:
 #         expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
@@ -52,21 +55,34 @@ rule mlca:
 rule mlca2tsv:
     # input:
     #     "results/mlca/{library}/{sample}_lca.tsv"
+=======
+rule mlca_to_tsv:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     output:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
         outdir = "reports/mlca/mlca2tsv/{my_experiment}",
         indir = "reports/mlca/",
+<<<<<<< HEAD
         rerep = "results/rereplicated/"
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {params.outdir}"
+=======
+        rerep = "results/rereplicated/" # syntax
+    shell:
+        "python scripts/mlca-tsv.py -i {params.indir} -o {output} -r {params.rerep}"
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
 
 
 
 #------------------------------------------------------
 # Converting mlca tsv to krona friendly input
 #-------------------------------------------------------
-rule mlca2kronatext:
+rule mlca_krona_transformation:
     input:
         "results/mlca/{library}/{sample}_lca.tsv"
     output:
@@ -78,7 +94,7 @@ rule mlca2kronatext:
 #-----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-rule mlca_to_krona:
+rule mlca_krona_plot:
     conda:
         "../envs/environment.yaml"
     input:

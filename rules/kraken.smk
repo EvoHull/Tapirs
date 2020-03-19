@@ -31,42 +31,15 @@ rule kraken2:
         --report {output.kraken_reports} \
         "
 
-# could use --report-zero-counts if against small database
-    # will add this t the config file - Mike
-
-# #-----------------------------------------------------
-# # reformat kraken output for krona
-# #-----------------------------------------------------
-#
-# rule kraken2_reformat:
-#     input:
-#         "results/kraken/outputs/{library}/{sample}.tsv"
-#     output:
-#         "results/kraken/krona_inputs/{library}/{sample}.tsv"
-#     shell:
-#         "cut -f3,5 {input} > {output}"
-#
-#
-# #-----------------------------------------------------
-# # Krona, interactive html graphics of taxonomic diversity
-# #-----------------------------------------------------
-# # see here: https://www.gitmemory.com/issue/DerrickWood/kraken2/114/524767339
-# rule kraken_to_krona:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         "results/kraken/krona_inputs/{library}/{sample}.tsv"
-#     output:
-#         "reports/krona/kraken/{library}/{sample}.html"
-#     shell:
-#         "ktImportTaxonomy {input} -o {output} -t 2 -m 1 -tax data/databases/krona/"
-
-
 #-----------------------------------------------------
 #Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 
+<<<<<<< HEAD
 rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
+=======
+rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     conda:
         "../envs/environment.yaml"
     input:

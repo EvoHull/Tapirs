@@ -5,7 +5,11 @@ import glob
 
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('-i', '--indir', metavar='mlca output', dest='indir', type=str,
+<<<<<<< HEAD
             help='directory containing mlca outputs', default='', required=True)
+=======
+            help='directory containing mlca outputs to be combined', default='', required=True)
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
 parser.add_argument('-r', '--rerep',metavar='rerep output', dest='rerep', type=str,
             help='directory containing vsearch rereplicated outputs', required=True)
 parser.add_argument('-o', '--outfile',metavar='output file', dest='outfile', type=str,
@@ -48,7 +52,11 @@ for library in libraries:
 
         assigned_reads=dfob[sample].sum()
 
+<<<<<<< HEAD
         total_reads=len([1 for line in open(args.rerep+'/'+library+'/'+sample+'_rerep.fasta') \
+=======
+        total_reads=len([1 for line in open(args.rerep+'/'+file_name+'_rerep.fasta') \
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
                          if line.startswith('>')])
 
         unassigned_reads=total_reads-assigned_reads
@@ -72,9 +80,12 @@ for otu in final_out.index:
         tfob.loc[otu]=tax_add
     else:
         tfob.loc[otu]='u__unassigned'
-        
+
 final_out=(pd.concat([final_out, tfob], axis=1, sort=False)).fillna(0).sort_index()
 final_out.index.name='#OTU_ID'
 final_out=final_out.drop('unassigned', axis=0).append(final_out.loc[['unassigned'],:])
 final_out.to_csv(args.outfile, sep='\t',index=True, header=True)
+<<<<<<< HEAD
 
+=======
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca

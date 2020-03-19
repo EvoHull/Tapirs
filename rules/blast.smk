@@ -1,17 +1,21 @@
 # ==================================================
 # BLAST ANALYSIS
 # ==================================================
+
+configfile: "config.yaml"
+
 # --------------------------------------------------
 # blastn, sequence similarity search
 # --------------------------------------------------
 
-configfile: "config.yaml"
-
 rule blastn:
-    #message: "executing blast analsyis of sequences against database {input.database}"
     conda:
         "../envs/environment.yaml"
     input:
+<<<<<<< HEAD
+=======
+        #db = "nt", #specify in environment.yaml
+>>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
         query = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db_dir = config["blast_db"],
@@ -37,7 +41,7 @@ rule blastn:
 # tax_to_blast, adds taxonomy column to blast output
 # -----------------------------------------------------
 
-rule tax_to_blast:
+rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:

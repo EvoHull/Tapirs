@@ -36,7 +36,7 @@ rule sintax:
 # convert sintax output to tsv compatible with krona
 # --------------------------------------------------
 
-rule sintax_to_kronatext:
+rule sintax_to_krona_transformation:
     conda:
         "../envs/environment.yaml"
     input:
@@ -58,7 +58,7 @@ rule sintax_to_kronatext:
 # Sintax to krona
 # --------------------------------------------------
 
-rule sintaxtext_to_krona:
+rule sintax_krona_plot:
     conda:
         "../envs/environment.yaml"
     input:

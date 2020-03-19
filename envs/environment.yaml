@@ -2,9 +2,6 @@ name: tapirs2
 channels:
   - bioconda
   - conda-forge
-  - rmg
-  - defaults
-  - anaconda
 
 dependencies:
   - snakemake
@@ -20,7 +17,7 @@ dependencies:
   - vsearch # dereplication clustering etc
 
   # taxonomic ID and LCA
-  - blast # sequence search
+  - blast=2.9 # sequence search
   - kraken2 # kmer search
   - kraken-biom # creates BIOM from kraken output
 

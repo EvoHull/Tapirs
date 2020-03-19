@@ -15,72 +15,18 @@ Instructions for installation, setup, and modification are contained within the 
 
 ![workflow graph](documentation/docs/images/dag.svg)
 
-## Instructions
+## Quickstart
+Detailed instructions are given in the documentation.
 
-#### CONDA and Snakemake
-
-First, ensure a version of conda is intalled on your machine. This can be either anaconda or miniconda.
-Miniconda is available at: https://docs.conda.io/en/latest/miniconda.html
-
-Once conda is installed, activate your base conda environment and install snakemake within it.
-This can be done with the following command:
-
-`conda activate base`
-
-`conda install -c bioconda -c conda-forge snakemake`
-
-Snakemake must be ran with the --use-conda flag.
-
-Run the workflow from within this environment.
-
-### Database setup
-
-#### BLAST
-BLAST requires a local custom database for the workflow to run efficiently.
-######## GS or DL - can you put a little bit in here about making blast databases etc - Mike ####
-
-
-#### KRONA
-Kronas taxonomy database is updated/created from within the snakemake workflow.
-
-#### KRAKEN
-Kraken needs either the full Kraken database or a custom database to run.
-######## GS, cna you sort this out please? - Mike   ########
-
-
-#### SINTAX
-Sintax also needs its own database.
-
-
-### Input wrangling
-
-The workflow assumes that input data has already been demultiplexed.
-
-Place all library directories within the "data/01_demultiplexed/" directory (or edit path above), ensuring they follow the format,
+1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
+2. git clone the Tapirs repository
+    - `git clone https://github.com/davelunt/Tapirs`
+3. install snakemake in your base conda environment
+    - `conda activate base`
+    - `conda install -c bioconda -c conda-forge snakemake`
+4. Place all library directories within the "data/01_demultiplexed/" directory ensuring they follow the format:
 `data/01_demultiplexed/<library>/<sample>.<read>.fastq.gz`
-
-
-### Wildcard generation
-Once input files have been placed in the `01_demultiplexed` directory, run the following script to create the library and sample lists.
-
+5. Run the script to create the library and sample lists from your data.
 `bash scripts/wildcarding.sh`
-
-
-### Config setup
-
-Open the configuration file `config.yaml` and follow steps there.
-
-Once this file has been configured we are ready to run the workflow.
-
-
-#### Running the workflow
-
-The workflow can be ran with the following line of code:
-
-`snakemake -s snakefile --use-conda --printshellcmds -n`
-
-The above line will start a dryrun. Assess the joblist of the dryrun and the fnal output files to ensure that your libraries and samples are being detected by the iteration steps.
-
-If all looks well, run the workflow for real with the following code:
-
-`snakemake -s snakefile --use-conda --printshellcmds`
+5. dry run `snakemake -s snakefile --use-conda --printshellcmds -n` to identify any issues
+6. run `snakemake -s snakefile --use-conda --printshellcmds`
