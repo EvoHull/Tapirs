@@ -70,7 +70,8 @@ FASTP_overlap_len: "90" # length of overlap required for MERGING
 VSEARCH_minuniqsize: "3"
 # denoising
 VSEARCH_minsize: "1"
-VSEARCH_unoise_alpha: "0.5"
+VSEARCH_unoise_alpha: "2.0"
+VSEARCH_id: "0.99"
 # dechimerisation
 VSEARCH_mindiffs: "1"
 VSEARCH_mindiv: "0.8"

@@ -18,12 +18,12 @@ rule fastp_trim_and_merge:
         read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
     output:
-        out1 = "results/02_trimmed/{library}/{sample}.R1.fastq.gz",
-        out2 = "results/02_trimmed/{library}/{sample}.R2.fastq.gz",
-        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz",
-        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq.gz",
-        out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq.gz",
-        merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
+        out1 = "results/02_trimmed/{library}/{sample}.R1.fastq",
+        out2 = "results/02_trimmed/{library}/{sample}.R2.fastq",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq",
+        out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq",
+        out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq",
+        merged = "results/02_trimmed/{library}/{sample}_merged.fastq",
         json = "reports/fastp/{library}/{sample}.json",
         html = "reports/fastp/{library}/{sample}.html"
     shell:
@@ -48,36 +48,47 @@ rule fastp_trim_and_merge:
         --merged_out {output.merged} \
         --overlap_len_require {config[FASTP_overlap_len]} \
         --correction \
-        "
+        -w 6"
 
 
 rule keep_fwd_unpaired:  # needs work
     input:
-        merged = "results/02_trimmed/{library}/{sample}_merged.fastq.gz",
-        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
+        merged = "results/02_trimmed/{library}/{sample}_merged.fastq",
+        out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq",
+        R1 = "results/02_trimmed/{library}/{sample}.R1.fastq"
     output:
-        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_catted.fastq"
     shell:
-        "cat {input.out_unpaired1} {input.merged} > {output}"
+        "cat {input.merged} >> {output} \
+        && cat {input.R1} >> {output} \
+        && cat {input.out_unpaired1} >> {output}"
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
 # -----------------------------------------------------
 
-rule fastq_to_fasta:
+# rule fastq_to_fasta:
+#     conda:
+#         "../envs/environment.yaml"
+#     input:
+#         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
+#     output:
+#         "results/02_trimmed/{library}/{sample}_catted.fasta"
+#     shell:
+#         "vsearch \
+#         --fastq_filter {input} \
+#         --fastaout {output} \
+#         "
+
+rule seqkit fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
+        "4_merged_fastq/${library}/${sample}_catted.fastq"
     output:
         "results/02_trimmed/{library}/{sample}_catted.fasta"
     shell:
-        "vsearch \
-        --fastq_filter {input} \
-        --fastaout {output} \
-        "
-
-
+        "seqkit fq2fa {input} -o {output}"
 # -----------------------------------------------------
 # vsearch, fastq report
 # -----------------------------------------------------
@@ -122,18 +133,15 @@ rule vsearch_dereplication:
 
 # rule empty_fasta_workaround:
 #     input:
-#         "results/02_trimmed/{library}/{sample}.merged.tmp.derep.fasta"
+#         "results/02_trimmed/{library}/{sample}_derep.fasta"
 #     output:
-#         denoise = "results/02_trimmed/{library}/{sample}.merged.derep.fasta",
-#         rerep = "results/rereplicated/{library}/{sample}.fasta"
+#         rerep = "results/rereplicated/tmp1/{library}/{sample}_rerep.tmp1.fasta"
 #     priority:
 #         1
 #     shell:
 #         """
 #         if wc -l {input} > 0
 #         then
-#             cp {input} {output.denoise}
-#         else
 #             cp {input} {output.rerep}
 #         fi
 #         """
@@ -159,21 +167,32 @@ rule vsearch_denoising:
     input:
         "results/02_trimmed/{library}/{sample}_derep.fasta"
     output:
-        fasta = "results/03_denoised/{library}/{sample}_denoise.fasta"
+        centroids = "results/03_denoised/{library}/{sample}_denoise.fasta",
+        uc = "results/03_denoised/clusters/{library}/{sample}_denoise.txt"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
-        """
-        set +e
-        vsearch --sizein --sizeout --cluster_unoise {input} --centroids {output.fasta} --minsize {config[VSEARCH_minsize]} --unoise_alpha {config[VSEARCH_unoise_alpha]}
-        exitcode=$?
-        if [ $exitcode -eq 1 ]
-        then
-            exit 0
-        else
-            exit 0
-        fi
-        """
+        "vsearch \
+        --cluster_unoise {input} \
+        --sizein \
+        --sizeout \
+        --minsize {config[VSEARCH_minsize]} \
+        --unoise_alpha {config[VSEARCH_unoise_alpha]} \
+        --id {config[VSEARCH_id]} \
+        --centroids {output.centroids} \
+        --uc {output.uc}"
+
+        # """
+        # set +e
+        # vsearch --sizein --sizeout --cluster_unoise {input} --centroids {output.fasta} --minsize {config[VSEARCH_minsize]} --unoise_alpha {config[VSEARCH_unoise_alpha]} --id {config[VSEARCH_id]}
+        # exitcode=$?
+        # if [ $exitcode -eq 1 ]
+        # then
+        #     exit 0
+        # else
+        #     exit 0
+        # fi
+        # """
 
 
 # -----------------------------------------------------
@@ -186,21 +205,13 @@ rule vsearch_dechimerisation: # output needs fixing
     input:
         "results/03_denoised/{library}/{sample}_denoise.fasta"
     output: # fix
-        text = "results/03_denoised/{library}/{sample}_chimera.txt",
+        text = "results/03_denoised/{library}/{sample}_chimera.fasta",
         fasta = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db = config["dechim_blast_db"]
     shell:
         """
-        set +e
-        vsearch --uchime_ref {input} --db {params.db} --mindiffs {config[VSEARCH_mindiffs]} --mindiv {config[VSEARCH_mindiv]} --uchimeout {output.text} --nonchimeras {output.fasta}
-        exitcode=$?
-        if [ $exitcode -eq 1 ]
-        then
-            exit 0
-        else
-            exit 0
-        fi
+        vsearch --uchime_ref {input} --db {params.db} --mindiffs {config[VSEARCH_mindiffs]} --mindiv {config[VSEARCH_mindiv]} --chimeras {output.text} --borderline {output.text} --nonchimeras {output.fasta}
         """
 
 
@@ -219,14 +230,25 @@ rule vsearch_rereplication:
     threads:
         6
     shell:
-        """
-        set +e
-        vsearch --rereplicate {input} --output {output}
-        exitcode=$?
-        if [ $exitcode -eq 1 ]
-        then
-            exit 0
-        else
-            exit 0
-        fi
-        """
+        "vsearch --rereplicate {input} --output {output}"
+        # """
+        # set +e
+        # vsearch --rereplicate {input} --output {output}
+        # exitcode=$?
+        # if [ $exitcode -eq 1 ]
+        # then
+        #     exit 0
+        # else
+        #     exit 0
+        # fi
+        # """
+
+# rule add blanks:
+#     input:
+#         rereps = "results/rereplicated/tmp2/{library}/{sample}_rerep.tmp2.fasta",
+#         blanks = "results/rereplicated/tmp1/{library}/{sample}_rerep.tmp1.fasta"
+#     output:
+#         "results/rereplicated/{library}/{sample}_rerep.fasta"
+#     shell:
+#         "cat {input.rereps} {input.blanks} > {output} \
+#         && rm -rf results/rereplicated/tmp*"

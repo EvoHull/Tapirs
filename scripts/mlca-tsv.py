@@ -60,7 +60,7 @@ for library in libraries:
 
 tfob=pd.DataFrame(columns=['taxonomy'],index=final_out.index)
 for otu in final_out.index:
-    if otu != 'unassigned':
+    if otu !='unassigned':
         ranks=taxonomy[taxonomy.index==otu].to_string(index=False,header=False).split('  ')
         tax_add=('; '.join(['k__'+ranks[0].replace(' ',''), \
                             'p__'+ranks[1], \
@@ -72,9 +72,8 @@ for otu in final_out.index:
         tfob.loc[otu]=tax_add
     else:
         tfob.loc[otu]='u__unassigned'
-        
+
 final_out=(pd.concat([final_out, tfob], axis=1, sort=False)).fillna(0).sort_index()
 final_out.index.name='#OTU_ID'
 final_out=final_out.drop('unassigned', axis=0).append(final_out.loc[['unassigned'],:])
 final_out.to_csv(args.outfile, sep='\t',index=True, header=True)
-
