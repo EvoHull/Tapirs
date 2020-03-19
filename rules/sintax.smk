@@ -17,7 +17,7 @@ rule sintax:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/rereplicated/{library}/{sample}.fasta"
+        query = "results/rereplicated/{library}/{sample}_rerep.fasta"
     output:
         "results/sintax/{library}/{sample}_reads.sintax"
     params:

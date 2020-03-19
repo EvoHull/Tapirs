@@ -12,7 +12,7 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/rereplicated/{library}/{sample}.fasta"
+        "results/rereplicated/{library}/{sample}_rerep.fasta"
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
@@ -66,13 +66,13 @@ rule kraken2:
 #Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 
-rule kraken_to_krona2: # see here: https://github.com/marbl/Krona/issues/117
+rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
     conda:
         "../envs/environment.yaml"
     input:
         tsv = "results/kraken/outputs/{library}/{sample}.tsv"
     output:
-        "reports/krona/kraken/{library}/{sample}.2.html"
+        "reports/krona/kraken/{library}/{sample}.html"
     params:
         db = "data/databases/krona/"
     shell:
