@@ -29,7 +29,7 @@ conda_envs: "environment.yaml" # leave this unedited
 # Place your reference databses in these locations
 # or edit to specify the location
 # BLAST
-blast_db: "data/databases/verts_blast_db/12s_verts"
+blast_db: "data/databases/verts_blast_db/12s_full"
 # VSEARCH vsearch_dechimerisation             # point this at the fasta within the blast database
 dechim_blast_db: "data/databases/verts_blast_db/12s_verts.fasta"
 # KRAKEN
@@ -82,7 +82,7 @@ BLAST_max_trim1: "106" #is this needed in general of is it always 106? not enoug
 BLAST_max_trim2: "106"
 BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
 BLAST_max_target_seqs: "20" # Number of descriptions
-BLAST_min_perc_ident: "98"
+BLAST_min_perc_ident: "100"
 BLAST_min_evalue: "1e-20"
 
 # ------------------------------------------------
