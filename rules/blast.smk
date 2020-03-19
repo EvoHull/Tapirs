@@ -12,10 +12,6 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-<<<<<<< HEAD
-=======
-        #db = "nt", #specify in environment.yaml
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
         query = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db_dir = config["blast_db"],

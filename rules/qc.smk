@@ -57,10 +57,7 @@ rule keep_fwd_unpaired:  # needs work
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq.gz"
     output:
 <<<<<<< HEAD
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
-=======
         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     shell:
         "cat {input.out_unpaired1} {input.merged} > {output}"
 
@@ -72,15 +69,9 @@ rule fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-<<<<<<< HEAD
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
-    output:
-        "results/02_trimmed/{library}/{sample}_merged.fasta",
-=======
         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
     output:
-        "results/02_trimmed/{library}/{sample}_catted.fasta",
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
+        "results/02_trimmed/{library}/{sample}_catted.fasta"
     shell:
         "vsearch \
         --fastq_filter {input} \
@@ -96,11 +87,7 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-<<<<<<< HEAD
-        "results/02_trimmed/{library}/{sample}_merged.fastq.gz"
-=======
         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -122,11 +109,7 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-<<<<<<< HEAD
-        "results/02_trimmed/{library}/{sample}_merged.fasta"
-=======
         "results/02_trimmed/{library}/{sample}_catted.fasta"
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     output:
         "results/02_trimmed/{library}/{sample}_derep.fasta"
     shell:

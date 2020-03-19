@@ -35,11 +35,8 @@ rule kraken2:
 #Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
 
-<<<<<<< HEAD
-rule kraken_to_krona: # see here: https://github.com/marbl/Krona/issues/117
-=======
 rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
+
     conda:
         "../envs/environment.yaml"
     input:

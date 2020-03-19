@@ -39,43 +39,21 @@ rule mlca:
 # Mlca to tsv
 #---------------------------------------------------------
 
-<<<<<<< HEAD
-# rule mlca2tsv_transform:
-#     input:
-#         expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
-#     output:
-#         directory("reports/mlca/mlcatmp/")
-#     params:
-#         "reports/mlca/mlcatmp/"
-#     shell:
-#         "rm -rf {params} \
-#         && mkdir {params} \
-#         && cp {input} {params}"
-
-rule mlca2tsv:
-    # input:
-    #     "results/mlca/{library}/{sample}_lca.tsv"
 =======
 rule mlca_to_tsv:
     conda:
         "../envs/environment.yaml"
     input:
         expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
     output:
         "reports/mlca/mlca2tsv/{my_experiment}.tsv"
     params:
         outdir = "reports/mlca/mlca2tsv/{my_experiment}",
         indir = "reports/mlca/",
-<<<<<<< HEAD
-        rerep = "results/rereplicated/"
-    shell:
-        "python scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {params.outdir}"
-=======
         rerep = "results/rereplicated/" # syntax
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -o {output} -r {params.rerep}"
->>>>>>> f7332e27cf01cdd54302a7b421eabb5acd8014ca
+
 
 
 
