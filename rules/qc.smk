@@ -84,7 +84,7 @@ rule seqkit fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "4_merged_fastq/${library}/${sample}_catted.fastq"
+        "results/02_trimmed/{library}/{sample}_catted.fastq"
     output:
         "results/02_trimmed/{library}/{sample}_catted.fasta"
     shell:
@@ -97,7 +97,7 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
+        "results/02_trimmed/{library}/{sample}_catted.fastq"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
