@@ -43,7 +43,7 @@ rule all:
         expand("reports/krona/mlca/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
-        expand("reports/mlca/mlca2tsv/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
+        expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
 # for testing
         #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
         #expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),

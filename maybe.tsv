@@ -1,0 +1,18 @@
+#OTU_ID	BLEL01	taxonomy
+Anas_carolinensis	116	k__Eukaryota; p__Chordata; c__Aves; o__Anseriformes; f__Anatidae; g__Anas; s__carolinensis
+Anguilla_anguilla	221	k__Eukaryota; p__Chordata; c__Actinopteri; o__Anguilliformes; f__Anguillidae; g__Anguilla; s__anguilla
+Apodemus_spp.	242	k__Eukaryota; p__Chordata; c__Mammalia; o__Rodentia; f__Muridae; g__Apodemus; s__
+Bos_taurus	5360	k__Eukaryota; p__Chordata; c__Mammalia; o__Artiodactyla; f__Bovidae; g__Bos; s__taurus
+Cervus_elaphus	2679	k__Eukaryota; p__Chordata; c__Mammalia; o__Artiodactyla; f__Cervidae; g__Cervus; s__elaphus
+Esox_lucius	23281	k__Eukaryota; p__Chordata; c__Actinopteri; o__Esociformes; f__Esocidae; g__Esox; s__lucius
+Gasterosteus_aculeatus	28046	k__Eukaryota; p__Chordata; c__Actinopteri; o__Perciformes; f__Gasterosteidae; g__Gasterosteus; s__aculeatus
+Homo_sapiens	2092	k__Eukaryota; p__Chordata; c__Mammalia; o__Primates; f__Hominidae; g__Homo; s__sapiens
+Lissotriton_helveticus	95	k__Eukaryota; p__Chordata; c__Amphibia; o__Caudata; f__Salamandridae; g__Lissotriton; s__helveticus
+Ovis_aries	4467	k__Eukaryota; p__Chordata; c__Mammalia; o__Artiodactyla; f__Bovidae; g__Ovis; s__aries
+Phasianus_colchicus	1932	k__Eukaryota; p__Chordata; c__Aves; o__Galliformes; f__Phasianidae; g__Phasianus; s__colchicus
+Phoxinus_phoxinus	344	k__Eukaryota; p__Chordata; c__Actinopteri; o__Cypriniformes; f__Cyprinidae; g__Phoxinus; s__phoxinus
+Pica_pica	46204	k__Eukaryota; p__Chordata; c__Aves; o__Passeriformes; f__Corvidae; g__Pica; s__pica
+Rana_temporaria	1312	k__Eukaryota; p__Chordata; c__Amphibia; o__Anura; f__Ranidae; g__Rana; s__temporaria
+Turdus_spp.	689	k__Eukaryota; p__Chordata; c__Aves; o__Passeriformes; f__Turdidae; g__Turdus; s__
+Vulpes_vulpes	158	k__Eukaryota; p__Chordata; c__Mammalia; o__Carnivora; f__Canidae; g__Vulpes; s__vulpes
+unassigned	6707	u__unassigned

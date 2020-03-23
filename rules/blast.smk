@@ -12,13 +12,12 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-        #db = "nt", #specify in environment.yaml
         query = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
-        db_dir = directory(config["blast_db"]), # database directory
+        db_dir = config["blast_db"],
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     output:
-        "results/blast/{library}/{sample}_blast.out"
+        "results/blast/{library}/{sample}_blast.tsv"
     threads:
         6
     shell:
@@ -42,9 +41,12 @@ rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:
-        blast_out = "results/blast/{library}/{sample}_blast.out",
+        blast_out = "results/blast/{library}/{sample}_blast.tsv",
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
-        blast_taxonomy = "results/blast/{library}/{sample}_tax.tsv"
+        "results/blasttax/{library}/{sample}_tax.tsv",
+    # params:
+    #     indir = "results/blast",
+    #     outdir = "results/blasttax"
     shell:
-        "python scripts/tax_to_blast.py -i {input.blast_out} -o {output.blast_taxonomy} -lin {input.ranked_lineage}"
+        "python scripts/tax_to_blast.py -i results/blast -o results/blasttax -lin {input.ranked_lineage}"

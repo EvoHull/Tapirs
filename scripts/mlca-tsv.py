@@ -1,3 +1,4 @@
+import os
 import argparse
 import pandas as pd
 import numpy as np
@@ -5,7 +6,7 @@ import glob
 
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('-i', '--indir', metavar='mlca output', dest='indir', type=str,
-            help='directory containing mlca outputs to be combined', default='', required=True)
+            help='directory containing mlca outputs', default='', required=True)
 parser.add_argument('-r', '--rerep',metavar='rerep output', dest='rerep', type=str,
             help='directory containing vsearch rereplicated outputs', required=True)
 parser.add_argument('-o', '--outfile',metavar='output file', dest='outfile', type=str,
@@ -18,17 +19,17 @@ pd.set_option('max_colwidth',400)
 
 libraries=sorted(glob.glob(args.indir+'/*'))
 for library in libraries:
-    files=sorted(glob.glob(library+'/*_lca.tsv'))
+    library=library.split('/')[-1]
+    files=sorted(glob.glob(args.indir+'/'+library+'/*_lca.tsv'))
     for file in files:
-        file_name=file.split('/',1)[1].split('_')[0]
-        sample=file_name.split('/',1)[1]
+        sample=file.split('/')[-1].split('_')[0]
         with open(file,'r') as file:
             count=0
             for line in file.readlines():
                 count+=1
                 if count > 1:
                     df=pd.read_csv(file.name, sep='\t', header=None,skiprows=1)
-                    df[0]=pd.to_numeric(df[0].str.split(r"size=", expand=True)[1])
+                    df[0]=pd.to_numeric(df[0].str.split(r";size=", expand=True)[1])
                 else:
                     df=pd.DataFrame([([0])+(['unidentified']*10)])
 
@@ -48,7 +49,7 @@ for library in libraries:
 
         assigned_reads=dfob[sample].sum()
 
-        total_reads=len([1 for line in open(args.rerep+'/'+file_name+'_rerep.fasta') \
+        total_reads=len([1 for line in open(args.rerep+'/'+library+'/'+sample+'_rerep.fasta') \
                          if line.startswith('>')])
 
         unassigned_reads=total_reads-assigned_reads
@@ -60,7 +61,7 @@ for library in libraries:
 
 tfob=pd.DataFrame(columns=['taxonomy'],index=final_out.index)
 for otu in final_out.index:
-    if otu != 'unassigned':
+    if otu !='unassigned':
         ranks=taxonomy[taxonomy.index==otu].to_string(index=False,header=False).split('  ')
         tax_add=('; '.join(['k__'+ranks[0].replace(' ',''), \
                             'p__'+ranks[1], \

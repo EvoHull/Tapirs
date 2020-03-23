@@ -12,10 +12,11 @@ rule mlca:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/blast/{library}/{sample}_tax.tsv"
+        "results/blasttax/{library}/{sample}_tax.tsv"
     output:
         "results/mlca/{library}/{sample}_lca.tsv"
     params:
+        out = "results/mlca/{library}/{sample}_lca.tsv",
         bitscore = "10", # -b blast hit bitscore upper threshold
         identity = "100", # -id percent identity
         coverage = "60", # -cov percentage coverage
@@ -44,13 +45,13 @@ rule mlca_to_tsv:
     input:
         expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples())
     output:
-        "reports/mlca/mlca2tsv/{my_experiment}.tsv"
+        "reports/{my_experiment}.tsv"
     params:
-        outdir = "reports/mlca/mlca2tsv/{my_experiment}",
         indir = "reports/mlca/",
-        rerep = "results/rereplicated/" # syntax of directory()?
-    shell:
-        "python scripts/mlca-tsv.py -i {params.indir} -o {output} -r {params.rerep}"
+        rerep = "results/rereplicated/" # syntax
+    script:
+        "scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {output}"
+
 
 
 

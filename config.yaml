@@ -70,7 +70,8 @@ FASTP_overlap_len: "90" # length of overlap required for MERGING
 VSEARCH_minuniqsize: "3"
 # denoising
 VSEARCH_minsize: "1"
-VSEARCH_unoise_alpha: "0.5"
+VSEARCH_unoise_alpha: "2.0"
+VSEARCH_id: "0.99"
 # dechimerisation
 VSEARCH_mindiffs: "1"
 VSEARCH_mindiv: "0.8"
@@ -81,8 +82,8 @@ VSEARCH_mindiv: "0.8"
 BLAST_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
 BLAST_max_trim2: "106"
 BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
-BLAST_max_target_seqs: "50" # Number of descriptions
-BLAST_min_perc_ident: "100"
+BLAST_max_target_seqs: "20" # Number of descriptions
+BLAST_min_perc_ident: "98"
 BLAST_min_evalue: "1e-20"
 
 # ------------------------------------------------
