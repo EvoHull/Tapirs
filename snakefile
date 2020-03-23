@@ -3,7 +3,7 @@
 # A reproducible metabarcoding workflow using snakemake
 # ==============================================================================
 # Setup
-#test
+
 # Config file
 configfile: "config.yaml"
 
