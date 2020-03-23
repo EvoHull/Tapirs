@@ -1,4 +1,4 @@
-![tapirs_logo](documentation/docs/images/tapirs_seq.png)
+![tapirs_logo](docs/images/tapirs_seq.png)
 # Tapirs
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
@@ -13,7 +13,7 @@ Instructions for installation, setup, and modification are contained within the 
 
 ## DAG overview of a workflow
 
-![workflow graph](documentation/docs/images/dag.svg)
+![workflow graph](docs/images/dag.svg)
 
 ## Quickstart
 Detailed instructions are given in the documentation.
