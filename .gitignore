@@ -15,3 +15,6 @@ data/databases/krona
 libraries.tsv
 samples.tsv
 test
+cyprus*
+data/01_de*
+data/data*

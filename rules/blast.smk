@@ -32,7 +32,6 @@ rule blastn:
         -out {output} \
         "
 
-
 # -----------------------------------------------------
 # tax_to_blast, adds taxonomy column to blast output
 # -----------------------------------------------------
