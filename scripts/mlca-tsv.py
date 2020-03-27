@@ -1,7 +1,7 @@
-import os
+# import os
 import argparse
 import pandas as pd
-import numpy as np
+# import numpy as np
 import glob
 
 parser = argparse.ArgumentParser(description='')
@@ -77,4 +77,4 @@ for otu in final_out.index:
 final_out=(pd.concat([final_out, tfob], axis=1, sort=False)).fillna(0).sort_index()
 final_out.index.name='#OTU_ID'
 final_out=final_out.drop('unassigned', axis=0).append(final_out.loc[['unassigned'],:])
-final_out.to_csv(args.outfile, sep='\t',index=True, header=True)
+final_out.to_csv(args.outfile, sep='\t', index=True, header=True)

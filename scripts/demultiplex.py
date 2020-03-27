@@ -1,18 +1,20 @@
 
-## THe script searches for barcodes in forward and reverse reads
-## that are not at the start of the read, but instead it looks for the bcs
-## in the first 30 bases (this can be changed by changing the variable 'search_until'.
+# The script searches for barcodes in forward and reverse reads
+# that are not at the start of the read, but instead it looks for the bcs
+# in the first 30 bases (this can be changed by changing the variable
+# 'search_until'.
 
 import sys
 import gzip
 # from Bio import SeqIO
 import time
 
+
 def find_bcs(readpair, sample_data, search_until):
 
 #    print("checking: \n%s\n%s" %(readpair[1],readpair[5]))
 
-    #Try forward orientation, i.e. foward barcode in forwared read and reverse barcode in reverse read
+    # Try forward orientation, i.e. foward barcode in forwared read and reverse barcode in reverse read
     for sample in sample_data:
 
         startindex = -1;
@@ -42,7 +44,7 @@ def find_bcs(readpair, sample_data, search_until):
 
     else:
 
-    #Try reverse orientation, i.e. foward barcode in reverse read and reverse barcode in forward read
+    # Try reverse orientation, i.e. foward barcode in reverse read and reverse barcode in forward read
     #	print "try reverse\n%s\n%s" %(readpair[1],readpair[5])
         for sample in sample_data:
                 startindex = -1;
@@ -81,19 +83,20 @@ def find_bcs(readpair, sample_data, search_until):
 def touch_files():
 
     for sample in sample_data:
-        fh1 = open(target+'/'+sample+'.R1.fastq','w')
-        fh2 = open(target+'/'+sample+'.R2.fastq','w')
-    fh1 = open(target+'/invalid.R1.fastq','w')
-    fh2 = open(target+'/invalid.R2.fastq','w')
+        fh1 = open(target+'/'+sample+'.R1.fastq', 'w')
+        fh2 = open(target+'/'+sample+'.R2.fastq', 'w')
+    fh1 = open(target+'/invalid.R1.fastq', 'w')
+    fh2 = open(target+'/invalid.R2.fastq', 'w')
+
 
 def write_out(reads=0):
 
     for sample in sorted(sample_data):
         if len(sample_data[sample]['seqs']['R1']) > 0:
             #fh1 = open(target+'/'+sample+'.R1.fastq','a')
-            fh1 = gzip.open(target+'/'+sample+'.R1.fastq.gz','a')
+            fh1 = gzip.open(target+'/'+sample+'.R1.fastq.gz', 'a')
             #fh2 = open(target+'/'+sample+'.R2.fastq','a')
-            fh1 = gzip.open(target+'/'+sample+'.R1.fastq.gz','a')
+            fh1 = gzip.open(target+'/'+sample+'.R1.fastq.gz', 'a')
     #	    for seq in sample_data[sample]['seqs']:
     #	    	    fh.write(seq+'\n')
             for i in range(len(sample_data[sample]['seqs']['R1'])):
@@ -108,7 +111,6 @@ def write_out(reads=0):
                 print("%s\t%i read pairs (%.2f %%)" %(sample, sample_data[sample]['count']/4, (float(sample_data[sample]['count'])/4)/reads*100))
 #            else:
         #	    print "no valid reads found for sample '%s'" %sample
-
 
     if len(invalid_recs['R1']) > 0:
         fh1 = open(target+'/invalid.R1.fastq','a')
