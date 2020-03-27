@@ -68,6 +68,7 @@ with open(infile,'r') as file:
             for seq_id in seq_ids:
                 lca=[]
                 seq=df[df[0] == seq_id]
+        # already defined prop above?
                 prop=1-(bit_threshold/100)
                 seq=seq[seq[7]>=max(seq[7])*prop]
                 taxon=seq[8].str.split("/", expand = True)
@@ -75,7 +76,7 @@ with open(infile,'r') as file:
                     taxa=np.unique(taxon[col],return_counts=True)
                     if max(taxa[1])/len(taxon[col]) >= majority/100:
                         lca.append(taxa[0][taxa[1]==max(taxa[1])])
-
+                # denote as 'unidentified'
                 lca_tax=[]
                 if len(lca)==0:
                     lca.append('unidentified')
