@@ -9,7 +9,7 @@
 # WILDCARD VARIABLES: Set experiment-specific info
 # --------------------------------------------------
 
-my_experiment: "cyprus" # insert experiment name, no_spaces
+my_experiment: "testing_tapirs" # insert experiment name, no_spaces
 
 libraries: "libraries.tsv" # this file is generated from commands in README.md
                             # leave this unedited
