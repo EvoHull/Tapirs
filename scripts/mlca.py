@@ -1,7 +1,14 @@
+# Majority Lowest Common Ancestor (mlca)
+# --------------------------------------
+# caluclation of mlca from blast output
+# part of Tapirs metabarcoding workflow
+
+# import libraries
 import argparse
 import pandas as pd
 import numpy as np
 
+# argument parser for variables
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('-i', '--infile', metavar='blast output', dest='infile', type=str,
             help='input data in blast format', default='', required=True)
@@ -10,16 +17,18 @@ parser.add_argument('-o', '--outfile',metavar='output file', dest='outfile', typ
 parser.add_argument('-b', '--bitscore', metavar='bitscore percentage threshold', dest='bit_threshold', type=str,
             help='top precentage threshold for hit bitscore', required=True)
 parser.add_argument('-id', metavar='identity', dest='identity', type=str,
-            help='identity treshold', required=True)
+            help='identity threshold', required=True)
 parser.add_argument('-cov', metavar='coverage', dest='coverage', type=str,
-            help='coverage treshold', required=True)
+            help='coverage threshold', required=True)
 parser.add_argument('-hits', metavar='minimum hits', dest='min_hits', type=str,
             help='minimum hits required for a query to be processed, set to 1 will do stuff', default='2', required=False)
 parser.add_argument('-m', metavar='majority', dest='majority', type=str,
             help='majority percentage hits to be identical at taxonomic rank for assignment', required=True)
 args = parser.parse_args()
 
+# input data in blast format
 infile=args.infile
+# results file, tabular format
 outfile=args.outfile
 
 identity=float(args.identity)
@@ -71,7 +80,7 @@ with open(infile,'r') as file:
                 else:
                     lca_tax=lca_tax
                 lca_tax=('\t'.join([str(x) for x in lca_tax]))
-                
+
                 if len(lca)==7:
                     otu_id=('_'.join([str(lca[5][0]),str(lca[6][0])]))
                 elif len(lca)==6:

@@ -1,11 +1,12 @@
 # ==================================================
 # QUALITY CONTROL SNAKEFILE
 # ==================================================
+
+configfile: "config.yaml"
+
 # --------------------------------------------------
 # fastp, control for sequence quality and pair reads
 # --------------------------------------------------
-
-configfile: "config.yaml"
 
 # ruleorder: vsearch_dereplication > empty_fasta_workaround > vsearch_rereplication
 
