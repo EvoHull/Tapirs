@@ -1,4 +1,4 @@
-![tapirs_logo](./images/tapirs_seq.png)
+![tapirs_logo](./images/tapir_line.png)
 
 # Overview of Tapirs
 
