@@ -16,7 +16,7 @@ Instructions for installation, setup, and modification are contained within the 
 ![workflow graph](docs/images/dag.svg)
 
 ## Quickstart
-Detailed instructions are given in the documentation.
+Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
