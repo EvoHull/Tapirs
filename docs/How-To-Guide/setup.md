@@ -61,7 +61,7 @@ the `--no-masking` flag improved accuracy for short reads
 `kraken2-build --build --minimizer-spaces 1 --kmer-len 31 --db fish_kraken --threads 6`
 it is important to have some minimizer-spaces in lmers, having 1 makes for more accurate taxonomic assignment. Having kmer same length as lmer for shorter reads makes for more accurate taxonomic assignment
 
-`fish_kraken` and `12s_verts.fasta` our our experiment-specific names for our data, you will choose different names.
+`fish_kraken` and `12s_verts.fasta` are our experiment-specific names for our data, you will choose different names.
 
 See the [Kraken Tutorial](../Tutorials/kraken_tutorial.md) and the [Kraken2 manual](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) for information on building Kraken databases.
 
@@ -111,7 +111,10 @@ If you wish to run Tapirs without invoking one of analysis programs (eg SINTAX o
 
 `include: "rules/sintax.smk"`
 
-comment this line out by prefixing with a hash # then save and rerun snakemake.
+to remove sintax comment this line out by prefixing with a hash # then save and rerun snakemake.
+
+# REMOVING FILES FROM PREVIOUS RUNS
+Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output` and add `--dry-run` the first time to check what will be removed before you do it.
 
 <hr>
 **REFERENCES**
