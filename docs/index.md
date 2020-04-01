@@ -8,7 +8,7 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
 2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, SINTAX kmer analysis, and Kraken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
-3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package is used to calculate diversity statistics and plots.
+3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package can be used to calculate diversity statistics and plots.
 
 # Quickstart
 
