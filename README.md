@@ -9,7 +9,7 @@ Each rule is assigned to a Conda environment containing the appropriate packages
 
 Tapirs was created by the EvoHull group, the University of Hull, UK
 
-Instructions for installation, setup, and modification are contained within the [Tapirs documentation](tapirs.readthedocs.io)
+Instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
 ## DAG overview of a workflow
 
