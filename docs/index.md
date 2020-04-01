@@ -4,6 +4,8 @@
 
 Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to reproducibly process metabarcode DNA sequences and assign taxonomy. We have designed it to be experimental and extensible. This means that you can evaluate the experimental evidence for taxonomic assignment, modifying parameters, and also incorporate new software packages yourself.
 
+Tapirs is CC0 public domain software hosted at https://github.com/EvoHull/Tapirs
+
 The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences. There are three key sections to its workflow:
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
