@@ -1,9 +1,10 @@
 .snakemake
 .DS_Store
 .ipynb_checkpoints
-data/01_demultiplexed/E*
 data/01_demultiplexed/N*
 data/01_demultiplexed/P*
+data/01_demultiplexed/L*
+data/databases/blast*
 data/databases/new_taxdump
 .git/
 reports/*
@@ -16,5 +17,3 @@ libraries.tsv
 samples.tsv
 test
 cyprus*
-data/01_de*
-data/data*
