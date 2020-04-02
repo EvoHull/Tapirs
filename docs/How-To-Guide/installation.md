@@ -17,8 +17,13 @@ You could alternatively download the repository from the [Tapirs github reposito
 
 Another way would to be to download the GitHub Desktop application and proceed from there.
 
-# Install Snakemake in your base conda environment
-Once conda is installed you will see "(base)" at the start of your command prompt. If this is not the case run `conda activate base`. With (base) activated, install Snakemake:
+# Create a working environment called 'tapirs'
+It is best practice to install the software you require for a specific software project (eg Tapirs) in a dedicated 'environment'. Conda is the tool for creating and using software environments.
+```
+conda create --name tapirs
+conda activate tapirs
+```
+You are now in an environment (called tapirs) but need to next install the software that will be used by Tapirs workflows. Snakemake can do this for you once it is installed. Install Snakemake in your conda environment:
 
 ```
 conda install -c bioconda -c conda-forge snakemake
