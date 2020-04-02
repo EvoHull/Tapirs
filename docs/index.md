@@ -1,20 +1,22 @@
-![tapirs_logo](./images/tapirs_seq.png)
+![tapirs_logo](./images/tapir_line.png)
 
 # Overview of Tapirs
 
 Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to reproducibly process metabarcode DNA sequences and assign taxonomy. We have designed it to be experimental and extensible. This means that you can evaluate the experimental evidence for taxonomic assignment, modifying parameters, and also incorporate new software packages yourself.
 
+Tapirs is CC0 public domain software hosted at https://github.com/EvoHull/Tapirs
+
 The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences. There are three key sections to its workflow:
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
 2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, SINTAX kmer analysis, and Kraken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
-3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package is used to calculate diversity statistics and plots.
+3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. Krona is used to create interactive html graphical displays of the data. The Vegan R package can be used to calculate diversity statistics and plots.
 
 # Quickstart
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
-    - `git clone https://github.com/davelunt/Tapirs`
+    - `git clone https://github.com/EvoHull/Tapirs`
 3. install snakemake in your base conda environment
     - `conda activate base`
     - `conda install -c bioconda -c conda-forge snakemake`

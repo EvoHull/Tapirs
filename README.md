@@ -9,14 +9,14 @@ Each rule is assigned to a Conda environment containing the appropriate packages
 
 Tapirs was created by the EvoHull group, the University of Hull, UK
 
-Instructions for installation, setup, and modification are contained within the [Tapirs documentation](documentation/site/index.html)
+Instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
 ## DAG overview of a workflow
 
 ![workflow graph](docs/images/dag.svg)
 
 ## Quickstart
-Detailed instructions are given in the documentation.
+Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
