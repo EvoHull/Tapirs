@@ -25,7 +25,7 @@ sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.leve
 rule all:
     input:
 # krona taxonomy database
-        #"data/databases/krona/taxonomy.tab",
+        "data/databases/krona/taxonomy.tab",
 # results ----------------------------------------------------------------------
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv", sample=sample.reset_index().itertuples()),
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
@@ -65,16 +65,16 @@ include: "rules/reports.smk"
 
 # ------------------------------------------------------------------------------
 
-# rule kt_taxonomy:
-#     conda:
-#         "envs/environment.yaml"
-#     output:
-#         "data/databases/krona/taxonomy.tab"
-#     params:
-#         "data/databases/krona/"
-#     priority:
-#         50
-#     shell:
-#         "rm -rf {params} \
-#         && mkdir {params} \
-#         && ktUpdateTaxonomy.sh {params}"
+rule kt_taxonomy:
+    conda:
+        "envs/environment.yaml"
+    output:
+        "data/databases/krona/taxonomy.tab"
+    params:
+        "data/databases/krona/"
+    priority:
+        50
+    shell:
+        "rm -rf {params} \
+        && mkdir {params} \
+        && ktUpdateTaxonomy.sh {params}"

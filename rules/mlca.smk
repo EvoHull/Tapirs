@@ -22,8 +22,8 @@ rule mlca:
         coverage = "60",   # -cov percentage coverage
         majority = "100",  # -m majority percent, 100 is all hits share taxonomy
         hits = "1"  # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
-    script:
-        "../scripts/mlca.py \
+    shell:
+        "python scripts/mlca.py \
         -i {input} \
         -o {output} \
         -b {params.bitscore} \
