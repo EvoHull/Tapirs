@@ -1,7 +1,7 @@
-name: tapirs
+name: tapirs99
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
 
 dependencies:
   - snakemake
