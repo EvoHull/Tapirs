@@ -1,4 +1,4 @@
-name: /home/531734/mike/Tapirs/.snakemake/conda/cae75991
+name: tapirs
 channels:
   - bioconda
   - conda-forge
@@ -269,4 +269,4 @@ dependencies:
   - pip:
     - pyqt5-sip==4.19.18
     - pyqtwebengine==5.12.1
-prefix: /home/531734/mike/Tapirs/.snakemake/conda/cae75991
+
