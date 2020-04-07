@@ -90,6 +90,9 @@ Several programs require the NCBI taxonomy database in order to carry out taxono
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
 `unzip new_taxdump`
 
+!!! note
+    Mac OSX terminal shell may not include `wget`, it can be installed with `conda install -c conda-forge wget`. This will install it for the environment in which you are working, most likely the _tapirs_ environment.
+
 ### SINTAX
 SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifies and gives confidence estimates on the classification. It requires a database (fasta, fastq, or udb database format) in the data/databsaes/sintax directory.
 
