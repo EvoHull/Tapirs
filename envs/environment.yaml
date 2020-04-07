@@ -7,7 +7,8 @@ channels:
 dependencies:
   - snakemake
   - python>=3.7
-  - wget
+  - wget # required for MacOS terminal
+  - sed # required for MacOS terminal
   - matplotlib
   - graphviz
   - biopython

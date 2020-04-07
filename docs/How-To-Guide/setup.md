@@ -45,7 +45,7 @@ Tapirs contains a custom bash script to create two text files `libraries.tsv` an
 !!! warning "wildcarding.sh"
     Unfortunately there is a conflict between the version of `sed` used by OSX and these scripts. We are working to fix this ASAP. Currently the `wildcarding.sh` shell script works fine in Linux terminals but not in Mac terminal.
 
-You should make sure that the `config.yaml` correctly points at these files. These will need removing and regenerating if libraries or samples change input.
+You should make sure that the `config.yaml` correctly points at these two .tsv files. These will need removing and regenerating of course if libraries or samples change input.
 
 ## Databases
 ### Kraken2
@@ -92,9 +92,6 @@ It is essential for reproducibility that you publicly archive your database at t
 Several programs require the NCBI taxonomy database in order to carry out taxonomic assignment. This is typically contained in a `new_taxdump` directory that is fetched directly from the NCBI using the commands:
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
 `unzip new_taxdump`
-
-!!! note
-    Mac OSX terminal shell may not include `wget`, it can be installed with `conda install -c conda-forge wget`. This will install it for the environment in which you are working, most likely the _tapirs_ environment.
 
 ### SINTAX
 SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifies and gives confidence estimates on the classification. It requires a database (fasta, fastq, or udb database format) in the data/databsaes/sintax directory.
