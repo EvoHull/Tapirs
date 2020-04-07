@@ -62,6 +62,7 @@ rule keep_fwd_unpaired:  # needs work
         && cat {input.R1} >> {output} \
         && cat {input.out_unpaired1} >> {output}"
 
+
 # -----------------------------------------------------
 # convert files from fastq to fasta
 # -----------------------------------------------------
@@ -88,6 +89,8 @@ rule seqkit fastq_to_fasta:
         "results/02_trimmed/{library}/{sample}_catted.fasta"
     shell:
         "seqkit fq2fa {input} -o {output}"
+
+
 # -----------------------------------------------------
 # vsearch, fastq report
 # -----------------------------------------------------

@@ -10,7 +10,7 @@ The `config.yaml` file contains settings for the workflow's operation. In an ide
 3. check the locations of your reference sequence databases are correct and amend if they are elsewhere. Defaults are:
     - `data/databases/blast`
     - `data/databases/kraken2`
-    - `data/databases/taxonomy`
+    - `data/databases/new_taxdump`
     - `data/databases/sintax`
 
 In addition you may wish to fine-tune the analysis parameters of the programs. These parameters have reasonable defaults and changing them is not compulsory (unlike the options above, where you _must_ identify your data).
@@ -86,7 +86,9 @@ See the [Blast Tutorial](../Tutorials/blast_tutorial.md) for more detailed help
 It is essential for reproducibility that you publicly archive your database at the end of the experiment. [Zenodo.org](https://zenodo.org) is a suitable location.
 
 ### taxonomy database
-Several programs require the NCBI taxonomy database in order to carry out taxonomic assignment.
+Several programs require the NCBI taxonomy database in order to carry out taxonomic assignment. This is typically contained in a `new_taxdump` directory that is fetched directly from the NCBI using the commands:
+`wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
+`unzip new_taxdump`
 
 ### SINTAX
 SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifies and gives confidence estimates on the classification. It requires a database (fasta, fastq, or udb database format) in the data/databsaes/sintax directory.
