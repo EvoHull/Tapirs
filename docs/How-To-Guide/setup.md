@@ -42,9 +42,6 @@ Rather than implement a complex set of wildcards the recommended approach for sn
 Tapirs contains a custom bash script to create two text files `libraries.tsv` and `samples.tsv` each containing a list of all library and sample names respectively, performed with:
 `bash scripts/wildcarding.sh`
 
-!!! warning "wildcarding.sh"
-    Unfortunately there is a conflict between the version of `sed` used by OSX and these scripts. We are working to fix this ASAP. Currently the `wildcarding.sh` shell script works fine in Linux terminals but not in Mac terminal.
-
 You should make sure that the `config.yaml` correctly points at these two .tsv files. These will need removing and regenerating of course if libraries or samples change input.
 
 ## Databases
