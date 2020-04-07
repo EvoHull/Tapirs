@@ -11,8 +11,6 @@ configfile: "config.yaml"
 # ruleorder: vsearch_dereplication > empty_fasta_workaround > vsearch_rereplication
 
 rule fastp_trim_and_merge:
-    message:
-        "Beginning fastp quality control of raw data"
     conda:
         "../envs/environment.yaml"
     input:
