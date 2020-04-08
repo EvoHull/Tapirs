@@ -108,6 +108,9 @@ Run Tapirs with either the `snakemake --use-conda` or `snakemake -s snakefile --
 
 Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, writing reports, and creating html displays of the taxonomic composition of each sample using krona.
 
+When it finishes you should also ask it to write a report with the command
+`snakemake --report reports/snakemake_report.html`
+
 # EXCLUDE ANALYSES
 If you wish to run Tapirs without invoking one of analysis programs (eg SINTAX or Kraken2 or blast) then you can comment out the line that calls them in the snakefile. Towards the bottom of the snakefile in the top level directory you will see a line such as:
 
