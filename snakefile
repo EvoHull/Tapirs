@@ -44,6 +44,8 @@ rule all:
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
         expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
+        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"]),
+
 # for testing
         #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
         #expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),
@@ -65,7 +67,7 @@ include: "rules/reports.smk"
 
 # ------------------------------------------------------------------------------
 
-rule kt_taxonomy:
+rule krona_taxonomy:
     conda:
         "envs/environment.yaml"
     output:
