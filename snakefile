@@ -26,6 +26,7 @@ rule all:
     input:
 # krona taxonomy database
         "data/databases/krona/taxonomy.tab",
+#        "data/databases/new_taxdump/rankedlineage.dmp",
 # results ----------------------------------------------------------------------
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv", sample=sample.reset_index().itertuples()),
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),

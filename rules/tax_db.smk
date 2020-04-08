@@ -19,6 +19,8 @@ rule get_new_taxdump:
     input:
         FTP.remote("ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip")
     output:
-        directory("data/databases/new_taxdump")
+        "data/databases/new_taxdump/rankedlineage.dmp"
+    params:
+        "data/databases/new_taxdump"
     shell:
-        "unzip {input} -d {output}"
+        "unzip {input} -d {params}"
