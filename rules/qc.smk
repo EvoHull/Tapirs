@@ -80,7 +80,7 @@ rule keep_fwd_unpaired:  # needs work
 #         --fastaout {output} \
 #         "
 
-rule seqkit fastq_to_fasta:
+rule seqkit_fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
