@@ -90,6 +90,9 @@ Several programs require the NCBI taxonomy database in order to carry out taxono
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
 `unzip new_taxdump`
 
+Alternatively there is a snakemake rule specifically to set this up. You can run this with the command:
+`snakemake -s rules/tax_db.smk`
+
 ### SINTAX
 SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifies and gives confidence estimates on the classification. It requires a database (fasta, fastq, or udb database format) in the data/databsaes/sintax directory.
 
