@@ -27,7 +27,7 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 5. dry run `snakemake -s snakefile --use-conda --printshellcmds -n` to identify any issues
 6. run `snakemake -s snakefile --use-conda --printshellcmds`
 
-See the [installation](How-To-Guide/installation.md) and [setup](How-To-Guide/setup.md) pages for more detailed help
+See the [installation](Setting-up-Tapirs/installation.md) and [setup](Setting-up-Tapirs/setup.md) pages for more detailed help
 
 # Licence and citation
 
