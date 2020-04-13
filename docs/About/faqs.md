@@ -9,16 +9,16 @@ Tapirs is not an acronym, we just called it Tapirs because an easy name helps ev
 Nothing met our needs, see the [background](background.md) page for discussion. We wanted an extensible workflow, built by a specialist workflow manager, that would allow real reproducibility.
 
 # Can you add in my favourite software for me?
-No, sorry. We really hope however that choosing a workflow manager (Snakemake) means that this is much easier than for any other metabarcoding package. Look at the [extending Tapirs How-To guide](../How-To-Guide/extending.md).
+No, sorry. We really hope however that choosing a workflow manager (Snakemake) means that this is much easier than for any other metabarcoding package. Look at the [extending Tapirs How-To guide](../Running-Tapirs/extending.md).
 
 # I've added some tools, do you want my changes?
 Yes please. Do this via a pull request on github.
 
 # There is an error/hole in the documentation
-You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help. If you think that parts of the documentation are lacking, and you would like to significantly extend them, we also welcome that. If you prefer to discuss it before you start then please do get in touch.
+You should just be able to edit and fix it on Github. Open the page and click the pencil icon, top right, to edit. Thanks for your help. If you think that parts of the documentation are lacking, and you would like to significantly extend them, we also welcome that. If you prefer to discuss it before you start then please do get in touch. We build the documentation with [mkdocs](https://www.mkdocs.org/), and you might find it useful to install this program.
 
 # It works on one machine but not on another
-Run-anywhere portability is a real challenge in bioinformatics, not just for Tapirs. Tapirs has been tested succesfully on Windows, OSX, and Linux, but problems may still arise. Conda environments have proved really useful for us, but they aren't perfect. As a start just check that both machines are running the most recent version of Conda and you have the most recent version of Tapirs. Make sure Conda is activated to the base environment, has snakemake installed (check with `conda list`), and you are using the `--use-conda` flag in your initial snakemake command. You could also take the very detailed exported environment (reports/archived_envs) from the successful machine and use it to create a new environment on the not-running machine (`conda env create --file environment.yaml`). Activate this environment and do not use the `--use-conda` flag when running the initial snakemake command. Both machines should then have exactly the same software installed. 
+Run-anywhere portability is a real challenge in bioinformatics, not just for Tapirs. Tapirs has been tested successfully on Windows, OSX, and Linux, but problems may still arise. Conda environments have proved really useful for us, but they aren't perfect. As a start just check that both machines are running the most recent version of Conda and you have the most recent version of Tapirs. Make sure Conda is activated to the base environment, has snakemake installed (check with `conda list`), and you are using the `--use-conda` flag in your initial snakemake command. You could also take the very detailed exported environment (reports/archived_envs) from the successful machine and use it to create a new environment on the not-running machine (`conda env create --file environment.yaml`). Activate this environment and do not use the `--use-conda` flag when running the initial snakemake command. Both machines should then have exactly the same software installed.
 
 # Who do I contact about the software?
 The best way is to flag this on GitHub. If you need to get in touch personally then contact Dave Lunt on Gmail.
@@ -31,7 +31,7 @@ We greatly appreciate you citing us wherever you are able. A suitable citation m
 ```
 Title: Tapirs, an extensible workflow for reproducible metabarcoding
 Authors:
-URL: https://github.com/davelunt/Tapirs
+URL: https://github.com/EvoHull/Tapirs
 ```
 
 An appropriate way to do this would be to include references to the original analysis software: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], SINTAX [4] and Krona [5]."
