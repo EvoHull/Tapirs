@@ -26,7 +26,7 @@ The best way is to flag this on GitHub. If you need to get in touch personally t
 # Is it licensed?
 No, all parts that we have written are free under CC0 public domain and you may do as you wish. Yes, you may include whatever you wish into your own software, we encourage this. All software components that we have included (rather than written, see environment.yaml) have been chosen because they have permissive open source licences, but you may wish to check the details for yourself.
 
-# Is there a citation
+# Is there a citation?
 We greatly appreciate you citing us wherever you are able. A suitable citation might be:
 ```
 Title: Tapirs, an extensible workflow for reproducible metabarcoding

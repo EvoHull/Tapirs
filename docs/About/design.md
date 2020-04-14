@@ -16,7 +16,7 @@ We treat the data directory as read-only during operation of the workflow. It is
 ### demultiplexed
 We assume your raw data has already been demultiplexed and exists as .fastq.gz format files in a directory specified in the `config.yaml` file. Since de-multiplexing is different in different laboratories we treat this as a separate workflow.
 ### databases
-The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called taxdump).
+The databases required will depend on the type of analyses to be carried out. At present we recommend DNA databases for blast, kraken and sintax. You will also need taxonomy information (often called new_taxdump) which is downloaded from the NCBI.
 ## documentation
 /docs contains the documentation for Tapirs, built with [mkdocs](https://www.mkdocs.org/).
 ## rules
@@ -27,7 +27,7 @@ This contains snakemake workflow description rules for separate tasks. We may ha
 - qc.smk
 - report.smk
 
-Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify.
+Each of these snakemake rules is run by the main snakefile at the appropriate time. Having separate rules for different sections of the workflow (eg quality control, qc.smk) allows better organisation and simplification of each component within the workflow. In our experience this makes the workflow much more understandable and easier to modify. You can usually deactivate a rule by commenting out its `include rules/name.smk` line in the top level snakefile. You may also have to comment out its outputs from rule All.
 ## reports
 Reports are written by some of the programs. Snakemake will also write an overall report.
 ## scripts
@@ -58,13 +58,10 @@ The sequences written by vsearch are the query sequences for taxonomic identific
 blastn is used to search a pre-prepared database for sequence matches. The hits for each query sequence are written including a taxonomic identifier.
 
 ### MLCA
-MLCA (Majority Lowest Common Ancestor) will determine the LCA of the blast hits for each query sequence. It has several options for customising your blast analysis. Majority means that it differs from other LCA scripts in that it can determine LCA from the majority rather than all the hits. Imagine a situation in which 9/10 high quality blast hits for a sequence are to the brine shrimp _Artemia franciscana_ and one is to the Zebra fish _Danio rerio_ (commonly fed on Artemia in the lab). If the LCA looks for the taxonomy shared by **ALL** the top 10 hits (including the likely misclassified Danio record) the LCA is Bilateria and almost all information is lost. If however we decide to set the majority parameter -m to 0.8 then the LCA will determine the taxonomy shared by 80% of the top hits, which will be Artemia franciscana. If you set -m to 1.0 then it will require 100% agreement, as other LCAs do. We find this flexibility useful.
+MLCA (Majority Lowest Common Ancestor) will determine the LCA of the blast hits for each query sequence. It has several options for customising your blast analysis. Majority means that it differs from other LCA scripts in that it can determine LCA from the majority rather than all the hits. Imagine a situation in which 9/10 high quality blast hits for a sequence are to the brine shrimp _Artemia franciscana_ and one is to the Zebra fish _Danio rerio_ (commonly fed on Artemia in the lab). If the LCA looks for the taxonomy shared by **ALL** the top 10 hits (including the likely misclassified Danio record) the LCA is Bilateria and almost all information is lost. If however we decide to set the majority parameter -m to 0.8 then the LCA will determine the taxonomy shared by 80% of the top hits, which will be _Artemia franciscana_. If you set -m to 1.0 then it will require 100% agreement, as other LCAs do. We find this flexibility useful.
 
 ## Kraken2
 Kraken2 is an alternative to blast and LCA. It uses a k-mer approach to determine taxonomy of query sequences by comparing to a databases built from reference sequences and taxonomic information. Databases are large, and require significant RAM and time to produce and their construction is not part of this workflow. Kraken2 searches themselves however are very fast and efficient.
 
 ## sintax
 Sintax assigns taxonomy to query sequences by kmer similarity.
-
-## graphical display of results
-Krona is used to make an interactive html page to display taxonomic summaries
