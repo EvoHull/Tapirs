@@ -35,7 +35,7 @@ dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
 # KRAKEN
 kraken_db: "data/databases/verts_kraken2_db/"
 # KRONA
-krona_taxdb: "data/databases/krona/" # leave this unedited
+# krona_taxdb: "data/databases/krona/" # leave this unedited
 # SINTAX
 sintax_db: "data/databases/sintax/verts_sintax_db.txt"
 

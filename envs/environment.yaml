@@ -28,4 +28,4 @@ dependencies:
   # - multiqc # creates a report of qc reports
   - seqkit # format conversion and stats reporting
   - csvtk # csv file toolkit, used in seqkit stats
-  - krona # html visualisation of taxonomy
+  # - krona # html visualisation of taxonomy

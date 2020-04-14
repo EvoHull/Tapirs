@@ -34,18 +34,18 @@ rule kraken2:
 #-----------------------------------------------------
 #Krona, interactive html graphics of taxonomic diversity
 #-----------------------------------------------------
-
-rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
-    conda:
-        "../envs/environment.yaml"
-    input:
-        tsv = "results/kraken/outputs/{library}/{sample}.tsv"
-    output:
-        "reports/krona/kraken/{library}/{sample}.html"
-    params:
-        db = "data/databases/krona/"
-    shell:
-        "ktImportTaxonomy -q 2 -t 3 {input.tsv} -o {output} -tax {params.db}"
+#
+# rule kraken_krona_plot: # see here: https://github.com/marbl/Krona/issues/117
+#     conda:
+#         "../envs/environment.yaml"
+#     input:
+#         tsv = "results/kraken/outputs/{library}/{sample}.tsv"
+#     output:
+#         "reports/krona/kraken/{library}/{sample}.html"
+#     params:
+#         db = "data/databases/krona/"
+#     shell:
+#         "ktImportTaxonomy -q 2 -t 3 {input.tsv} -o {output} -tax {params.db}"
 
 #
 #-----------------------------------------------------

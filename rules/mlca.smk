@@ -54,24 +54,24 @@ rule mlca_to_tsv:
 # ------------------------------------------------------
 # Converting mlca tsv to krona friendly input
 # -------------------------------------------------------
-rule mlca_krona_transformation:
-    input:
-        "results/mlca/{library}/{sample}_lca.tsv"
-    output:
-        "results/mlca/krona_input/{library}/{sample}_lca.kronatext.tsv"
-    shell:
-        "sed -r 's/=/\t/g' {input} | tail -n +2 | cut -f 2,5-10 > {output}"
+# rule mlca_krona_transformation:
+#     input:
+#         "results/mlca/{library}/{sample}_lca.tsv"
+#     output:
+#         "results/mlca/krona_input/{library}/{sample}_lca.kronatext.tsv"
+#     shell:
+#         "sed -r 's/=/\t/g' {input} | tail -n +2 | cut -f 2,5-10 > {output}"
 
 
 # -----------------------------------------------------
 # Krona, interactive html graphics of taxonomic diversity
 # -----------------------------------------------------
-rule mlca_krona_plot:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        "results/mlca/krona_input/{library}/{sample}_lca.kronatext.tsv"
-    output:
-        "reports/krona/mlca/{library}/{sample}.html"
-    shell:
-        "ktImportText {input} -o {output}"
+# rule mlca_krona_plot:
+#     conda:
+#         "../envs/environment.yaml"
+#     input:
+#         "results/mlca/krona_input/{library}/{sample}_lca.kronatext.tsv"
+#     output:
+#         "reports/krona/mlca/{library}/{sample}.html"
+#     shell:
+#         "ktImportText {input} -o {output}"

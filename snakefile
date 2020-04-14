@@ -25,7 +25,7 @@ sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.leve
 rule all:
     input:
 # krona taxonomy database
-        "data/databases/krona/taxonomy.tab",
+        # "data/databases/krona/taxonomy.tab",
 #        "data/databases/new_taxdump/rankedlineage.dmp",
 # results ----------------------------------------------------------------------
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv", sample=sample.reset_index().itertuples()),
@@ -40,10 +40,10 @@ rule all:
         expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
         #expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
-        expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
-        expand("reports/krona/mlca/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
+        # expand("reports/krona/kraken/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
+        # expand("reports/krona/mlca/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
-        expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
+        # expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
         expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
 #        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"]),
 
@@ -68,16 +68,16 @@ include: "rules/reports.smk"
 
 # ------------------------------------------------------------------------------
 
-rule krona_taxonomy:
-    conda:
-        "envs/environment.yaml"
-    output:
-        "data/databases/krona/taxonomy.tab"
-    params:
-        "data/databases/krona/"
-    priority:
-        50
-    shell:
-        "rm -rf {params} \
-        && mkdir {params} \
-        && ktUpdateTaxonomy.sh {params}"
+# rule krona_taxonomy:
+#     conda:
+#         "envs/environment.yaml"
+#     output:
+#         "data/databases/krona/taxonomy.tab"
+#     params:
+#         "data/databases/krona/"
+#     priority:
+#         50
+#     shell:
+#         "rm -rf {params} \
+        # && mkdir {params} \
+        # && ktUpdateTaxonomy.sh {params}"
