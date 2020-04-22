@@ -9,5 +9,5 @@ with os.scandir(basepath) as entries:
         for entry in entries:
             if entry.is_dir():  # find directories
                 dirnames = [entry.name]  # list
-                s1='\n'.join(dirnames)  # string
-                outfile.write(s1+'\n')  # write to file with newlines
+                # write directory names, as strings, to file
+                outfile.write(str("".join(dirnames)) + '\n')

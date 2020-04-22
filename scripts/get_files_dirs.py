@@ -10,7 +10,7 @@ with open('file_tab_py.tsv', 'w') as outfile:
                 head_tail = os.path.split(path)  # split into path & file
                 # remove startdir from path leaving directory name 'dirs'
                 dirs = head_tail[0].replace(startdir, '')
-                dflist = [dirs, file] # make list for csv.writer
-                sep = '\t'  # use tab as seperator
-                dfstr = sep.join(dflist) # convert to sting with tabs
+                filetail = head_tail[1] # get tail, ie file
+                dflist = [dirs, filetail] # make list of directories and files
+                dfstr = '\t'.join(dflist) # convert to string with tabs
                 outfile.write(dfstr + '\n')  # write newline after dir tab file
