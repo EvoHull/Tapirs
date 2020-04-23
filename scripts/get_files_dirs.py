@@ -1,10 +1,11 @@
-# script to print file and dir names to tsv file
+# script to print dir and file names to tsv file
 import os
 
 startdir = "data/01_demultiplexed/"
-with open('file_tab_py.tsv', 'w') as outfile:
-    for root, dirs, files in os.walk(startdir):
-        for file in files: # iterate across files from startdir down
+with open('samples.tsv', 'w') as outfile:
+    outfile.write('Library' + '\t' + 'Sample' + '\n') # add column headers
+    for root, dirs, files in os.walk(startdir):  # iterate across files from startdir down
+        for file in files:
             if file.endswith(('fastq.gz', 'fq.gz')): # specify file endings
                 path= os.path.join(root, file)
                 head_tail = os.path.split(path)  # split into path & file
