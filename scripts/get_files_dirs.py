@@ -2,6 +2,7 @@
 import os
 
 startdir = "data/01_demultiplexed/"
+
 with open('samples.tsv', 'w') as outfile:
     outfile.write('Library' + '\t' + 'Sample' + '\n')  # add column headers
     # iterate across files from startdir down
