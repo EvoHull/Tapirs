@@ -1,6 +1,7 @@
 .snakemake
 .DS_Store
 .ipynb_checkpoints
+.vscode
 data/01_demultiplexed/N*
 data/01_demultiplexed/P*
 data/01_demultiplexed/L*

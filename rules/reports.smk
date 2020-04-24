@@ -46,15 +46,25 @@ rule conda_env:
 #---------------------------------------------------
 # MultiQC
 #-----------------------------------------------------
-# rule multiqc:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         "reports/fastp/{library}/"
-#     output:
-#         "reports/multiqc/{library}.multiqc.html"
-#     params:
-#         out = "reports/multiqc/",
-#         n = "{library}.multiqc.html"
-#     shell:
-#         "multiqc {input} -n {params.n} -o {params.out}"
+rule multiqc:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        "reports/fastp/{library}/"
+    output:
+        "reports/multiqc/{library}.multiqc.html"
+    params:
+        outdir = directory("reports/multiqc/"),  # location for report
+        filename = "{library}.multiqc.html",  # report filename
+        overwrite = "-f",  # overwrite previous multiqc output
+        zip = "-z",  # --zip-data-dir
+        quiet = "-q", # only log errors
+        dirnames = "-dd 1",  # Prepend [INTEGER] directories to sample names
+    shell:
+        "multiqc {input} \
+        -n {params.filename} \
+        {params.overwrite} \
+        {params.dirnames} \
+        {params.zip} \
+        {params.quiet} \
+        -o {params.outdir}"

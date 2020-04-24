@@ -23,8 +23,8 @@ rule fastp_trim_and_merge:
         out_unpaired2 = "results/02_trimmed/{library}/{sample}.unpaired.R2.fastq",
         out_failed = "results/02_trimmed/{library}/{sample}.failed.fastq",
         merged = "results/02_trimmed/{library}/{sample}_merged.fastq",
-        json = "reports/fastp/{library}/{sample}.json",
-        html = "reports/fastp/{library}/{sample}.html"
+        json = "reports/fastp/{library}/{sample}_fastp.json",
+        html = "reports/fastp/{library}/{sample}_fastp.html"
     shell:
         "fastp \
         -i {input.read1} \
