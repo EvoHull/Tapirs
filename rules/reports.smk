@@ -17,6 +17,7 @@ rule seqkit_stats:
         shell:
             "seqkit stats {input} | csvtk csv2md -t -o {output}"
 
+
 # --------------------------------------------------
 # Vegan
 # --------------------------------------------------
@@ -29,6 +30,7 @@ rule snakemake_report:
         expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"])
     shell:
         "snakemake --report {output}"
+
 
 # --------------------------------------------------
 # Archive conda environment
@@ -44,7 +46,7 @@ rule conda_env:
 
 
 #---------------------------------------------------
-# MultiQC
+# MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------
 rule multiqc:
     conda:
@@ -57,9 +59,9 @@ rule multiqc:
         outdir = directory("reports/multiqc/"),  # location for report
         filename = "{library}.multiqc.html",  # report filename
         overwrite = "-f",  # overwrite previous multiqc output
-        zip = "-z",  # --zip-data-dir
+        zip = "-z",  # compress the multiqc data dir
         quiet = "-q", # only log errors
-        dirnames = "-dd 1",  # Prepend [INTEGER] directories to sample names
+        dirnames = "-dd 1",  # prepend library dir name to sample names
     shell:
         "multiqc {input} \
         -n {params.filename} \

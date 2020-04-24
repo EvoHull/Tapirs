@@ -25,7 +25,7 @@ dependencies:
 
   # reports and outputs
   - biom-format # converts tsv to BIOM1 or BIOM2
-  # - multiqc # creates a report of qc reports
+  - multiqc # creates a report of qc reports
   - seqkit # format conversion and stats reporting
   - csvtk # csv file toolkit, used in seqkit stats
   - krona # html visualisation of taxonomy
