@@ -45,6 +45,7 @@ rule all:
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/krona/sintax/{sample.library}/{sample.sample}.sintax.html", sample=sample.reset_index().itertuples()),
         expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
+        expand("reports/multiqc/{sample.library}.multiqc.html", sample=sample.reset_index().itertuples()),
 #        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"]),
 
 # for testing
@@ -55,7 +56,7 @@ rule all:
         #expand("results/02_trimmed/{sample.library}/{sample.sample}.merged.fastq.gz", sample=sample.reset_index().itertuples()),
         #expand("results/03_denoised/{sample.library}/{sample.sample}.fasta", sample=sample.reset_index().itertuples(), R=config["R"]),
         #expand("results/blast/{sample.library}/{sample.sample}_blast.out", sample=sample.reset_index().itertuples()),
-        #expand("reports/multiqc/{sample.library}.multiqc.html", sample=sample.reset_index().itertuples())
+
 #-----------------------------------------------------
 # Rule files
 #-----------------------------------------------------
