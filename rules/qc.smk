@@ -8,8 +8,6 @@ configfile: "config.yaml"
 # fastp, control for sequence quality and pair reads
 # --------------------------------------------------
 
-# ruleorder: vsearch_dereplication > empty_fasta_workaround > vsearch_rereplication
-
 rule fastp_trim_and_merge:
     conda:
         "../envs/environment.yaml"
