@@ -10,7 +10,7 @@ If all has gone well Snakemake will report the jobs it needs to perform without 
 # RUN TAPIRS
 Run Tapirs with either the `snakemake --use-conda` or `snakemake -s snakefile --use-conda --printshellcmds` command
 
-Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, writing reports, and creating html displays of the taxonomic composition of each sample using krona.
+Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, and writing reports.
 
 When it finishes you should also ask it to write a report with the command
 `snakemake --report reports/snakemake_report.html`

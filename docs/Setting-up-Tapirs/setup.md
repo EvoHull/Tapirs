@@ -98,13 +98,6 @@ SINTAX (Edgar 2016) is a kmer similarity approach to taxonomic ID that classifie
 
 A sintax database is created using specific taxonomic information in the header line of the fasta file. We hope soon to provide a script to help with this formatting.
 
-### krona
-Krona should self-install it's taxonomy database from the snakemake rule supplied.
-
-There are some issues with the way Krona self-installs on MacOS, we are currently (April 2020) trying to find a simple solution to this. One ugly solution is to comment out the lines in `rule all:` (in snakefile) that mention krona (lines 28, 43, 44, 46) in order to deactivate Krona. Also comment out `rule krona_taxonomy` found at the end of snakefile. The only downside is that you won't get the visual representations of the data, your analysis will be unchanged.
-
-
-
 # DRY RUN TAPIRS
 Make sure you are in the directory containing the snakefile then type `snakefile --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n -k` to dry-run the workflow.
 
@@ -113,7 +106,7 @@ If all has gone well Snakemake will report the jobs it needs to perform without 
 # RUN TAPIRS
 Run Tapirs with either the `snakemake --use-conda` or `snakemake -s snakefile --use-conda --printshellcmds` command
 
-Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, writing reports, and creating html displays of the taxonomic composition of each sample using krona.
+Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, and writing reports.
 
 When it finishes you should also ask it to write a report with the command
 `snakemake --report reports/snakemake_report.html`

@@ -34,4 +34,4 @@ Authors:
 URL: https://github.com/EvoHull/Tapirs
 ```
 
-An appropriate way to do this would be to include references to the original analysis software: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], SINTAX [4] and Krona [5]."
+An appropriate way to do this would be to include references to the original analysis software: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], and SINTAX [4]."
