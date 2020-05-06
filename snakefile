@@ -30,8 +30,8 @@ rule all:
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
 
 # reports ----------------------------------------------------------------------
-        expand("reports/fastp/{sample.library}/{sample.sample}.json", sample=sample.reset_index().itertuples()),
-        expand("reports/fastp/{sample.library}/{sample.sample}.html", sample=sample.reset_index().itertuples()),
+        expand("reports/fastp/{sample.library}/{sample.sample}_fastp.json", sample=sample.reset_index().itertuples()),
+        expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html", sample=sample.reset_index().itertuples()),
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_readstats", sample=sample.reset_index().itertuples()),

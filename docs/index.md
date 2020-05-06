@@ -17,13 +17,14 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
     - `git clone https://github.com/EvoHull/Tapirs`
+    - `cd Tapirs`
 3. install snakemake in your base conda environment
     - `conda activate base`
     - `conda install -c bioconda -c conda-forge snakemake`
 4. Place all library directories within the "data/01_demultiplexed/" directory ensuring they follow the format:
 `data/01_demultiplexed/<library>/<sample>.<read>.fastq.gz`
-5. Run the script to create the library and sample lists from your data.
-`bash scripts/wildcarding.sh`
+5. Run the scripts to create the library and sample lists from your data.
+`python scripts/get_dirs.py` and `python scripts/get_files_dirs.py`
 5. dry run `snakemake -s snakefile --use-conda --printshellcmds -n` to identify any issues
 6. run `snakemake -s snakefile --use-conda --printshellcmds`
 
