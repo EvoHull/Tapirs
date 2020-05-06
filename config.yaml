@@ -19,7 +19,7 @@ samples: "samples.tsv" # this file is generated from commands in README.md
 
 R: ["R1","R2"] # leave this unedited
 
-conda_envs: "environment.yaml" # leave this unedited
+conda_envs: "envs/environment.yaml" # leave this unedited
 
 ## Customise the next two sections to identify your data and database locations.
 
@@ -28,14 +28,14 @@ conda_envs: "environment.yaml" # leave this unedited
 #---------------------------------------------------
 # Place your reference databses in these locations
 # or edit to specify the location
+
 # BLAST
 blast_db: "data/databases/verts_blast_db/12s_full"
-# VSEARCH vsearch_dechimerisation             # point this at the fasta within the blast database
+# VSEARCH vsearch_dechimerisation
+# point this at the fasta within the blast database
 dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
 # KRAKEN
 kraken_db: "data/databases/verts_kraken2_db/"
-# KRONA
-# krona_taxdb: "data/databases/krona/" # leave this unedited
 # SINTAX
 sintax_db: "data/databases/sintax/verts_sintax_db.txt"
 
@@ -79,7 +79,7 @@ VSEARCH_mindiv: "0.8"
 # -----------------------------------------------
 # BLAST VARIABLES
 # -----------------------------------------------
-BLAST_max_trim1: "106" #is this needed in general of is it always 106? not enough metabarcoding knowledge
+BLAST_max_trim1: "106" 
 BLAST_max_trim2: "106"
 BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
 BLAST_max_target_seqs: "20" # Number of descriptions
