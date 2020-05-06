@@ -14,7 +14,7 @@ rule biom:
     input:
         "results/kraken.reports/{library}/{sample}.txt"
     output:
-    
+
     threads:
         6
     shell:
