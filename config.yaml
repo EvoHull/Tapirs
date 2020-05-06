@@ -19,7 +19,7 @@ samples: "samples.tsv" # this file is generated from commands in README.md
 
 R: ["R1","R2"] # leave this unedited
 
-conda_envs: "envs/environment.yaml" # leave this unedited
+conda_envs: "environment.yaml" # leave this unedited
 
 ## Customise the next two sections to identify your data and database locations.
 
@@ -79,7 +79,7 @@ VSEARCH_mindiv: "0.8"
 # -----------------------------------------------
 # BLAST VARIABLES
 # -----------------------------------------------
-BLAST_max_trim1: "106" 
+BLAST_max_trim1: "106"
 BLAST_max_trim2: "106"
 BLAST_overlap_len: "<interger>" # length of overlap required for MERGING
 BLAST_max_target_seqs: "20" # Number of descriptions
