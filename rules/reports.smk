@@ -9,8 +9,9 @@ report: "../reports/tapirs.rst"
 
 
 # --------------------------------------------------
-# Snakemake report
+# Snakemake, report
 # --------------------------------------------------
+
 rule snakemake_report:
     output:
         "reports/snakemake-report.html"
@@ -19,7 +20,7 @@ rule snakemake_report:
 
 
 # --------------------------------------------------
-# Plot DAG figure of Snakemake workflow
+# Snakemake, lot DAG figure of workflow
 # --------------------------------------------------
 
 rule plot_workflow_DAG:
@@ -34,7 +35,7 @@ rule plot_workflow_DAG:
 
 
 # --------------------------------------------------
-# Archive conda environment
+# Conda, archive environment
 # --------------------------------------------------
 
 rule conda_env:
@@ -47,8 +48,9 @@ rule conda_env:
 
 
 # --------------------------------------------------
-# seqkit, write simple report on fasta files
+# Seqkit, write simple report on fasta files
 # --------------------------------------------------
+
 rule seqkit_stats:
         input:
             "results/02_trimmed/{library}/{sample}.merged.fasta"
@@ -61,6 +63,7 @@ rule seqkit_stats:
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------
+
 rule multiqc:
     conda:
         "../envs/environment.yaml"
@@ -88,4 +91,4 @@ rule multiqc:
 # --------------------------------------------------
 # Vegan
 # --------------------------------------------------
-# add vegan graphical outputs
+# add vegan graphical and statistical outputs

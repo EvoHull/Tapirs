@@ -2,11 +2,10 @@
 # TAPIRS
 # A reproducible metabarcoding workflow using snakemake
 # ==============================================================================
-# Setup
 
 # Config file
 configfile: "config.yaml"
-# test
+
 # Reporting
 report: "reports/tapirs.rst" # Flag "$ snakemake" with "--report" to use
 
@@ -44,16 +43,8 @@ rule all:
         #expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
+# ????
         expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
-
-# for testing
-        #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
-        #expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),
-        #expand("results/02_trimmed/{sample.library}/{sample.sample}.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
-        #expand("results/02_trimmed/{sample.library}/{sample.sample}.unpaired.{R}.fastq.gz", sample=sample.reset_index().itertuples(), R=config["R"]),
-        #expand("results/02_trimmed/{sample.library}/{sample.sample}.merged.fastq.gz", sample=sample.reset_index().itertuples()),
-        #expand("results/03_denoised/{sample.library}/{sample.sample}.fasta", sample=sample.reset_index().itertuples(), R=config["R"]),
-        #expand("results/blast/{sample.library}/{sample.sample}_blast.out", sample=sample.reset_index().itertuples()),
 
 #-----------------------------------------------------
 # Rule files
@@ -64,5 +55,3 @@ include: "rules/kraken.smk"
 include: "rules/mlca.smk"
 include: "rules/sintax.smk"
 include: "rules/reports.smk"
-
-# ------------------------------------------------------------------------------

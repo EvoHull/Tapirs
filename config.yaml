@@ -24,7 +24,7 @@ conda_envs: "environment.yaml"  # leave this unedited
 #---------------------------------------------------
 # DATABASE LOCATIONS
 #---------------------------------------------------
-# Place your reference databses in these locations
+# Place your reference databases in these locations
 # or edit to specify the location
 
 # BLAST
