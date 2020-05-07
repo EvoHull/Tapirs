@@ -25,7 +25,7 @@ sample.index = sample.index.set_levels(
 # ---------------------------------------------------
 rule all:
     input:
-        # results
+# results
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv",
                sample=sample.reset_index().itertuples()),
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt",
@@ -36,13 +36,12 @@ rule all:
         "reports/snakemake-report.html",
         expand("reports/archived_envs/{conda_envs}",
                conda_envs=config["conda_envs"]),
-        expand("reports/multiqc/{sample.library}.multiqc.html",
-               sample=sample.reset_index().itertuples()),
-# fastp reports
+# fastp and multiqc reports
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.json",
                sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html",
                sample=sample.reset_index().itertuples()),
+        expand("reports/multiqc/{library}.multiqc.html"),
 # vsearch reports
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats",
