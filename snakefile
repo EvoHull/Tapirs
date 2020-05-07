@@ -24,27 +24,27 @@ sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.leve
 # ------------------------------------------------------------------------------
 rule all:
     input:
-
-# results ----------------------------------------------------------------------
+# results
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv", sample=sample.reset_index().itertuples()),
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
-
-# reports ----------------------------------------------------------------------
+# snakemake reports
         "reports/rulegraph_dag.svg",
         "reports/rulegraph_dag.png",
         "reports/snakemake-report.html",
+        expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
+        expand("reports/multiqc/{sample.library}.multiqc.html", sample=sample.reset_index().itertuples()),
+# fastp reports
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.json", sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html", sample=sample.reset_index().itertuples()),
+# vsearch reports
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_readstats", sample=sample.reset_index().itertuples()),
-        expand("reports/archived_envs/{conda_envs}", conda_envs=config["conda_envs"]),
+# kraken and sintax reports
         #expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
         expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax", sample=sample.reset_index().itertuples()),
         expand("reports/{my_experiment}.tsv", my_experiment=config["my_experiment"]),
-        expand("reports/multiqc/{sample.library}.multiqc.html", sample=sample.reset_index().itertuples()),
-#        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"]),
 
 # for testing
         #expand("results/blast/{sample.library}/{sample.sample}_blast.taxed.out", sample=sample.reset_index().itertuples()),
