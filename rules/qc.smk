@@ -199,20 +199,26 @@ rule vsearch_denoising:
 # chimera removal
 # -----------------------------------------------------
 
-rule vsearch_dechimerisation: # output needs fixing
+rule vsearch_dechimerisation:
     conda:
         "../envs/environment.yaml"
     input:
         "results/03_denoised/{library}/{sample}_denoise.fasta"
-    output: # fix
-        text = "results/03_denoised/{library}/{sample}_chimera.fasta",
-        fasta = "results/03_denoised/{library}/{sample}_nc.fasta"
+    output:
+        chimeras = "results/03_denoised/{library}/{sample}_chimera.fasta",
+        borderline = "results/03_denoised/{library}/{sample}_borderline-chimera.fasta",
+        nonchimeras = "results/03_denoised/{library}/{sample}_nc.fasta"
     params:
         db = config["dechim_blast_db"]
     shell:
-        """
-        vsearch --uchime_ref {input} --db {params.db} --mindiffs {config[VSEARCH_mindiffs]} --mindiv {config[VSEARCH_mindiv]} --chimeras {output.text} --borderline {output.text} --nonchimeras {output.fasta}
-        """
+        "vsearch --uchime_ref {input} \
+        --db {params.db} \
+        --mindiffs {config[VSEARCH_mindiffs]} \
+        --mindiv {config[VSEARCH_mindiv]} \
+        --chimeras {output.chimeras} \
+        --borderline {output.borderline} \
+        --nonchimeras {output.nonchimeras} \
+        "
 
 
 # ------------------------------------------------------

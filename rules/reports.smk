@@ -27,9 +27,24 @@ rule seqkit_stats:
 # --------------------------------------------------
 rule snakemake_report:
     output:
-        expand("reports/{my_experiment}_smk-report.html", my_experiment=config["my_experiment"])
+        "reports/snakemake-report.html"
     shell:
         "snakemake --report {output}"
+
+
+# --------------------------------------------------
+# Plot DAG figure of Snakemake workflow
+# --------------------------------------------------
+
+rule plot_workflow_DAG:
+    output:
+        svg = "reports/rulegraph_dag.svg",
+        png = "reports/rulegraph_dag.png"
+    shell:
+        "snakemake --rulegraph | \
+        dot -Tsvg > {output.svg} | \
+        dot -Tpng > {output.png}
+        "
 
 
 # --------------------------------------------------

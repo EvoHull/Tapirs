@@ -30,6 +30,9 @@ rule all:
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples()),
 
 # reports ----------------------------------------------------------------------
+        "reports/rulegraph_dag.svg",
+        "reports/rulegraph_dag.png",
+        "reports/snakemake-report.html",
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.json", sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html", sample=sample.reset_index().itertuples()),
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
