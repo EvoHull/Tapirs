@@ -2,25 +2,11 @@
 # TAPIRS REPORT GENERATION
 # ==================================================
 # A workflow reporting on QC and taxonomic assignment
+# Some fastp reports are written from the qc.smk rule
 
 configfile: "config.yaml"
 report: "../reports/tapirs.rst"
 
-# --------------------------------------------------
-# seqkit, write simple report on fasta files
-# --------------------------------------------------
-rule seqkit_stats:
-        input:
-            "results/02_trimmed/{library}/{sample}.merged.fasta"
-        output:
-            "reports/seqkit/{library}/{sample}.fastastats.md"
-        shell:
-            "seqkit stats {input} | csvtk csv2md -t -o {output}"
-
-
-# --------------------------------------------------
-# Vegan
-# --------------------------------------------------
 
 # --------------------------------------------------
 # Snakemake report
@@ -60,6 +46,18 @@ rule conda_env:
         "conda env export --file {output}"
 
 
+# --------------------------------------------------
+# seqkit, write simple report on fasta files
+# --------------------------------------------------
+rule seqkit_stats:
+        input:
+            "results/02_trimmed/{library}/{sample}.merged.fasta"
+        output:
+            "reports/seqkit/{library}/{sample}.fastastats.md"
+        shell:
+            "seqkit stats {input} | csvtk csv2md -t -o {output}"
+
+
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------
@@ -85,3 +83,9 @@ rule multiqc:
         {params.zip} \
         {params.quiet} \
         -o {params.outdir}"
+
+
+# --------------------------------------------------
+# Vegan
+# --------------------------------------------------
+# add vegan graphical outputs
