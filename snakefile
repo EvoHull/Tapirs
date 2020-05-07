@@ -10,9 +10,13 @@ configfile: "config.yaml"
 # Wildcarding library and sample
 # --------------------------------------------------
 
-library = pd.read_table(config["libraries"], index_col="library")
-sample = pd.read_table(config["samples"], index_col=[
-                       "library", "sample"], dtype=str)
+library = pd.read_csv(config["libraries"], sep='\t',
+                      header=0, index_col="Library")
+# library = pd.read_table(config["libraries"], index_col="library")
+sample = pd.read_csv(config["samples"], sep='\t',
+                     header=0, index_col=0, dtype=str)
+# sample = pd.read_table(config["samples"], index_col=[
+#                        "Library", "Sample"], dtype=str)
 sample.index = sample.index.set_levels(
     [i.astype(str) for i in sample.index.levels])
 
@@ -21,7 +25,7 @@ sample.index = sample.index.set_levels(
 # ---------------------------------------------------
 rule all:
     input:
-# results
+        # results
         expand("results/kraken/outputs/{sample.library}/{sample.sample}.tsv",
                sample=sample.reset_index().itertuples()),
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt",
