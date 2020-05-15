@@ -9,16 +9,27 @@ configfile: "config.yaml"
 # --------------------------------------------------
 # Wildcarding library and sample
 # --------------------------------------------------
+# original code
+library = pd.read_table(config["libraries"], index_col="library")
+sample = pd.read_table(config["samples"], index_col=["library", "sample"], dtype=str)
+sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.levels])
 
-library = pd.read_csv(config["libraries"], sep='\t',
-                      header=0, index_col="Library")
-# library = pd.read_table(config["libraries"], index_col="library")
-sample = pd.read_csv(config["samples"], sep='\t',
-                     header=0, index_col=0, dtype=str)
-# sample = pd.read_table(config["samples"], index_col=[
-#                        "Library", "Sample"], dtype=str)
-sample.index = sample.index.set_levels(
-    [i.astype(str) for i in sample.index.levels])
+
+# library = pd.read_csv(config["libraries"], sep='\t',
+#                       header=0, index_col="Library")
+# # library = pd.read_table(config["libraries"], index_col="library")
+# sample = pd.read_csv(config["samples"], sep='\t',
+#                      header=0, index_col=["Library", "Sample"],dtype=str)
+# # sample = pd.read_table(config["samples"], index_col=[
+# #                        "Library", "Sample"], dtype=str)
+# sample.MultiIndex = sample.MultiIndex.set_levels(
+#     [sample.i.astype(str) for i in sample.MultiIndex.levels])
+
+# sample.index = sample.index.set_levels(
+#     [i.astype(str) for i in sample.index.levels])
+# df.index = df.index.set_levels(df.index.levels[2].astype(int), level=2)
+#  so `i.astype(str)` should be `sample.i.astype(str)`
+
 
 # ---------------------------------------------------
 # Target rules
@@ -41,7 +52,7 @@ rule all:
                sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html",
                sample=sample.reset_index().itertuples()),
-        expand("reports/multiqc/{library}.multiqc.html"),
+        # expand("reports/multiqc/{library}.multiqc.html"),
 # vsearch reports
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats",

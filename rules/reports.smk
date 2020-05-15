@@ -20,18 +20,14 @@ rule snakemake_report:
 
 
 # --------------------------------------------------
-# Snakemake, lot DAG figure of workflow
+# Snakemake, plot DAG figure of workflow
 # --------------------------------------------------
 
 rule plot_workflow_DAG:
     output:
-        svg = "reports/rulegraph_dag.svg",
-        png = "reports/rulegraph_dag.png"
+        "reports/rulegraph_dag.png"
     shell:
-        "snakemake --rulegraph | \
-        dot -Tsvg > {output.svg} | \
-        dot -Tpng > {output.png}
-        "
+        "snakemake --rulegraph | dot -Tpng > {output}"
 
 
 # --------------------------------------------------
@@ -85,7 +81,8 @@ rule multiqc:
         {params.dirnames} \
         {params.zip} \
         {params.quiet} \
-        -o {params.outdir}"
+        -o {params.outdir}
+        "
 
 
 # --------------------------------------------------
