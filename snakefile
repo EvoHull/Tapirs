@@ -52,7 +52,8 @@ rule all:
                sample=sample.reset_index().itertuples()),
         expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html",
                sample=sample.reset_index().itertuples()),
-        # expand("reports/multiqc/{library}.multiqc.html"),
+        expand("reports/multiqc/{sample.library}.multiqc.html"),
+               sample=sample.reset_index().itertuples()),
 # vsearch reports
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats",
