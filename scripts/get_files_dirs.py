@@ -14,6 +14,7 @@ with open('samples.tsv', 'w') as outfile:
                 # remove startdir from path leaving directory name 'dirs'
                 dirs = head_tail[0].replace(startdir, '')
                 filetail = head_tail[1]  # get tail, ie file
-                dflist = [dirs, filetail]  # make list of directories and files
+                sample_name = filetail.rsplit('.', -1)[0]  # split filename on . as list, get first item
+                dflist = [dirs, sample_name]  # make list of directories and sample names
                 dfstr = '\t'.join(dflist)  # convert to string with tabs
-                outfile.write(dfstr + '\n')  # write newline after dir tab file
+                outfile.write(dfstr + '\n')  # write newline after dir tab sample

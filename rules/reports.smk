@@ -75,14 +75,7 @@ rule multiqc:
         quiet = "-q", # only log errors
         dirnames = "-dd 1",  # prepend library dir name to sample names
     shell:
-        "multiqc {input} \
-        -n {params.filename} \
-        {params.overwrite} \
-        {params.dirnames} \
-        {params.zip} \
-        {params.quiet} \
-        -o {params.outdir}
-        "
+        "multiqc {input} -n {params.filename} {params.overwrite} {params.dirnames} {params.zip} {params.quiet} -o {params.outdir}"
 
 
 # --------------------------------------------------
