@@ -1,4 +1,6 @@
-# save all directory names to a file
+# save all directory names to libraries.tsv
+# -----------------------------------------
+# these dirs correspond to sequencing library names
 
 import os
 
