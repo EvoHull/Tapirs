@@ -9,7 +9,7 @@ import os
 startdir = "data/01_demultiplexed/"  # location of the data directories
 
 with open('samples.tsv', 'w') as outfile:  # create output file samples.tsv
-    outfile.write('Library' + '\t' + 'Sample' + '\n')  # add column headers
+    outfile.write('library' + '\t' + 'sample' + '\n')  # add column headers
     # iterate across files from startdir down
     for root, dirs, files in os.walk(startdir):
         for file in files:
