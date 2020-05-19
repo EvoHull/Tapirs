@@ -62,7 +62,7 @@ rule seqkit_stats:
 
 rule multiqc:
     conda:
-        "../envs/environment.yaml"
+        "envs/environment.yaml"
     input:
         "reports/fastp/{library}/"
     output:
