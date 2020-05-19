@@ -42,7 +42,6 @@ rule all:
         expand("results/kraken/reports/{sample.library}/{sample.sample}.txt",
                sample=sample.reset_index().itertuples()),
 # snakemake reports
-        "reports/rulegraph_dag.svg",
         "reports/rulegraph_dag.png",
         "reports/snakemake-report.html",
         expand("reports/archived_envs/{conda_envs}",
