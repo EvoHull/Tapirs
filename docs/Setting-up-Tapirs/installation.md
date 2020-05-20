@@ -13,7 +13,7 @@ Follow the [installation instructions](https://docs.conda.io/projects/conda/en/l
 - If unsure on OSX choose "Miniconda3 MacOSX 64-bit pkg" (or similar name ending in pkg) as this gives a typical Apple install gui.
 
 # git clone tapirs
-Apple OSX and Linux should both come with git already installed. At the command line type `git --version` and you should see the version number. If instead it reports `command not found: git` or similar then it is not installed. You can go to the [git site](https://git-scm.com/) to get installation advice or slightly easier might be to try `conda install git` at the command line.
+Apple OSX and Linux should both come with git already installed. At the command line type `git --version` and you should see the version number. If instead it reports `command not found: git` or similar then it is not installed. You can go to the [git website](https://git-scm.com/) to get installation advice or slightly easier might be to try `conda install git` at the command line.
 
 If you have git installed then clone the repository to your local machine with `git clone https://github.com/EvoHull/Tapirs.git`
 
@@ -25,20 +25,49 @@ It is best practice to install the software you require for a specific software 
 conda create --name tapirs
 conda activate tapirs
 ```
-# Install Snakemake
-You are now in an environment (called tapirs) but need to next install the software that will be used by Tapirs workflows. Snakemake can do this for you once it is installed. Install Snakemake in your conda environment:
+
+When snakemake runs it can be told to create separate environments to optimally run each rule (a "sequence-quality-control" environment, a `blast` environment, a `kraken2` environment). Currently however the software requirements for Tapirs are relatively straightforward and we have everything in a single 'tapirs' environment. The software required in this environment is specified in the `envs/environment.yaml` file. 
+
+The first time you run Tapirs it can take a while (>10 minutes) to download software and create the environment, subsequent runs will not require this step. We recommend that you create and populate this environment before you start running Tapirs.
+
+## Install all software from the environment.yaml list
+Although you can install software packages one at a time it is not very efficient. Instead we have created a list of the required software in a text file in the `envs/` directory. Conda can be told to update your environment by reading all the software packages this file.
+
+If you have not yet told conda to create a 'tapirs' environment then you can do so now, and install all required software:
+
+`conda env create --file envs/environment.yaml`
+
+If you have, above, created a 'tapirs' environment you can update it to include all the required software with:
+
+`conda env update -f environment.yaml`
+
+Accept the defaults (Yes) of any install questions you afre asked.
+
+You will need to make sure that the 'tapirs' environment is active, or else the required software will not be available to be run by snakemake.
+
+`conda activate tapirs`
+
+If you are unsure what environments you have, and which is active, you can run:
+
+`conda info --envs`
+
+If you get errors when running Tapirs suggesting that some software-name is unknown it is most likely an issue with environments, start by checking that the 'tapirs' environment is active.
+
+The Snakemake workflow manager software was listed in the `environment.yaml` file and has already been installed if you have carried out the instructions above. You could test this with a `snakemake -help` command. If you get an error such as `command not found: snakemake` its likely that the tapirs environment is not active, try: `conda activate tapirs`
+
+## Optional: install Snakemake if you wish snakemake to handle your envs
+
+If you have decided to let snakemake itself handle all software environments as it runs, and have not installed the 'tapirs' environment above from the `environment.yaml` file, you will need to install snakemake now.
 
 ```
 conda install -c conda-forge snakemake
 ```
-test your install with `snakemake --help`
+test your install with `snakemake -help`
 
-# Install all software from the environment.yaml list
-Although you can install software packages one at a time, as you just did for snakemake, it is not very efficient. Instead we have created a list of the required software in a text file in the `envs/` directory. Conda can be told to update your environment by reading all the software packages this file.
-```
-conda env update -f envs/environment.yaml
-```
-Accept defaults by answering Yes to any questions. This installation might take a few mins to complete (unless conda or the internet is very slow that day).
+This approach will work well, and in some instances will be preferable, but:
+1. You must remember to specify conda when running snakemake, e.g.
+`snakemake --use-conda --cores 8`
+2. You will need to be patient the *first time* you run a command to use snakemake as it must create the environments and downlaod their software before beginning the analysis workflow.
 
 # Databases and data
 You should now have installed all the software required for your analysis. You will also require some data and databases however.

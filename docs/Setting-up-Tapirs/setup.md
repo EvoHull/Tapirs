@@ -21,10 +21,14 @@ In addition you may wish to fine-tune the analysis parameters of the programs. T
 
 # DATA
 
-The `data/` directory must contain 2 subdirectories `01_demultiplexed/` `databases/`
+The `data/` directory must contain 2 subdirectories: 
+
+a) `01_demultiplexed/` 
+
+b) `databases/`
 
 ## 01_demultiplexed
-The start point of this workflows is demultiplexed fastq.gz sequence files in the data/01_demultiplexed directory. There are many ways to produce these files, and your sequencing machine or sequencing centre will most likely return this as the default data.
+The start point of this workflows is demultiplexed fastq.gz sequence files in the `data/01_demultiplexed` directory. There are many ways to produce these files, and your sequencing machine or sequencing centre will most likely return this as the default data.
 
 It is essential for reproducibility that this starting data is kept together with the experiment. If size prohibits its inclusion then archive it publicly and include the doi into the experimental record.
 
@@ -77,9 +81,11 @@ You will require:
 
 !!! note "create a blast database"
     If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database, then you could create a blast database with the command:
-
-    `makeblastdb -in blast_db/allseqs.fasta -input_type fasta -dbtype nucl \
-    -parse_seqids -taxid_map blast_db/tax_map.txt -out blast_db/allseqs`
+    
+    ```
+    makeblastdb -in blast_db/allseqs.fasta -input_type fasta -dbtype nucl \
+    -parse_seqids -taxid_map blast_db/tax_map.txt -out blast_db/allseqs
+    ```
 
 See the [Blast Tutorial](../Tutorials/blast_tutorial.md) for more detailed help
 
@@ -122,6 +128,7 @@ to remove sintax comment this line out by prefixing with a hash # then save and 
 Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output` and add `--dry-run` the first time to check what will be removed before you do it.
 
 <hr>
+
 **REFERENCES**
 
 

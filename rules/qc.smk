@@ -56,27 +56,12 @@ rule keep_fwd_unpaired:  # needs work
     output:
         "results/02_trimmed/{library}/{sample}_catted.fastq"
     shell:
-        "cat {input.merged} >> {output} \
-        && cat {input.R1} >> {output} \
-        && cat {input.out_unpaired1} >> {output}"
+        "cat {input.merged} >> {output} && cat {input.R1} >> {output} && cat {input.out_unpaired1} >> {output}"
 
 
 # -----------------------------------------------------
 # convert files from fastq to fasta
 # -----------------------------------------------------
-
-# rule fastq_to_fasta:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         "results/02_trimmed/{library}/{sample}_catted.fastq.gz"
-#     output:
-#         "results/02_trimmed/{library}/{sample}_catted.fasta"
-#     shell:
-#         "vsearch \
-#         --fastq_filter {input} \
-#         --fastaout {output} \
-#         "
 
 rule seqkit_fastq_to_fasta:
     conda:

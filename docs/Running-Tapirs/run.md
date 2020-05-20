@@ -3,7 +3,7 @@
     These instructions are to run Tapirs after [installation](../Setting-up-Tapirs/installation.md) and [set up](../Setting-up-Tapirs/setup.md) have been carried out.
 
 # DRY RUN TAPIRS
-Make sure you are in the top-level directory containing the snakefile then type `snakefile --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n -k` to dry-run the workflow.
+Make sure you are in the top-level directory containing the snakefile then type `snakemake --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n -k` to dry-run the workflow.
 
 If all has gone well Snakemake will report the jobs it needs to perform without any complaint. If not (as is common in most experiments) you will need to diagnose and fix any minor issues. Reading the [problem-solving](../Setting-up-Tapirs/problem-solving.md) documentation might help. Some errors are only detected in the real run, not the dry run, and they often concern the format of data files, as these have not been checked by a dry run.
 
@@ -16,17 +16,20 @@ When it finishes you should also ask it to write a report with the command
 `snakemake --report reports/snakemake_report.html`
 
 # EXCLUDE ANALYSES
-If you wish to run Tapirs without invoking one of analysis programs (eg SINTAX or Kraken2 or blast) then you can comment out the line that calls them in the snakefile. Towards the bottom of the snakefile in the top level directory you will see a line such as:
+If you wish to run Tapirs without invoking one of analysis programs (eg SINTAX or Kraken2 or blast) then you can comment out the lines that refers to that method in  `rule All:` in the snakefile. Any rules that create outputs that are not required will be ignored. 
+
+Additionally you may wish to deactivate the snakefile for that methods; towards the bottom of the snakefile in the top level directory you will see a line such as:
 
 `include: "rules/sintax.smk"`
 
-to remove sintax comment this line out by prefixing with a hash # then save and rerun snakemake.
+to remove SINTAX comment this line out by prefixing with a hash # then save and rerun snakemake.
 
 # REMOVING FILES FROM PREVIOUS RUNS
-Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output` and add `--dry-run` the first time to check what will be removed before you do it.
+Snakemake can clean away the files it has previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake --delete-all-output` and add `--dry-run` the first time to check what will be removed before you do it.
 
 <hr>
-**REFERENCES**
+
+**REFERENCES** 
 
 
 
