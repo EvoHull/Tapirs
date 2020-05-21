@@ -9,7 +9,7 @@ configfile: "config.yaml"
 # --------------------------------------------------
 # Wildcarding library and sample
 # --------------------------------------------------
-# original code
+
 library = pd.read_table(config["libraries"], index_col="library")
 sample = pd.read_table(config["samples"], index_col=["library", "sample"], dtype=str)
 sample.index = sample.index.set_levels([i.astype(str) for i in sample.index.levels])

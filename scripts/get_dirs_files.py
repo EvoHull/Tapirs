@@ -5,11 +5,12 @@
 # they should be ammended below
 
 import os
+import pandas as pd
 
 startdir = "data/01_demultiplexed/"  # location of the data directories
 
-with open('samples.tsv', 'w') as outfile:  # create output file samples.tsv
-    outfile.write('library' + '\t' + 'sample' + '\n')  # add column headers
+with open('samples_with_duplicates.tsv', 'w') as outfile:  # create output file samples.tsv
+    # outfile.write('library' + '\t' + 'sample' + '\n')  # add column headers
     # iterate across files from startdir down
     for root, dirs, files in os.walk(startdir):
         for file in files:
@@ -24,3 +25,16 @@ with open('samples.tsv', 'w') as outfile:  # create output file samples.tsv
                 dflist = [dirs, sample_name]  # make list of directories and sample names
                 dfstr = '\t'.join(dflist)  # convert to string with tabs
                 outfile.write(dfstr + '\n')  # write to output file with newline after dir tab sample
+
+# specify input and output files
+dupfile = "samples_with_duplicates.tsv"
+samples_output = "samples.tsv"
+
+# read in the tsv file containing duplicate names from F and R files
+df = pd.read_csv(dupfile, sep="\t")
+# remove duplicate rows
+df.drop_duplicates(subset=None, inplace=True)
+# add column names
+df.columns = ['library', 'sample']
+# Write the results to a new tsv, no (index) row names
+df.to_csv(samples_output, sep="\t", index=False)

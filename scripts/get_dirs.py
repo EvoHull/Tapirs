@@ -14,3 +14,5 @@ with os.scandir(basepath) as entries:
                 dirnames = [entry.name]  # list
                 # write directory names, as strings, to file
                 outfile.write(str("".join(dirnames)) + '\n')
+
+# insert check for duplicate library names

@@ -43,10 +43,14 @@ Rather than implement a complex set of wildcards the recommended approach for sn
 !!! Note "samples, libraries, and units .tsv"
     The naming of the files differs between biological disciplines. In our work a library often represents a physical location ("Lake Windermere") and a sample represents a physical unit taken for DNA extraction ("water-sample-12"). In other disciplines the meaning of "sample" may differ slightly.
 
-Tapirs contains a custom bash script to create two text files `libraries.tsv` and `samples.tsv` each containing a list of all library and sample names respectively, performed with:
-`bash scripts/wildcarding.sh`
+Tapirs contains two python scripts (`scripts/get_dirs.py` and `scripts/get_dirs_files.py`) to create two text files `libraries.tsv` and `samples.tsv`. The first containz a list of all libraries (from directory names) and the second all the sample names (from the file names) within each library. Run the two commands below:
 
-You should make sure that the `config.yaml` correctly points at these two .tsv files. These will need removing and regenerating of course if libraries or samples change input.
+```
+python scripts/get_dirs.py
+python scripts/get_dirs_files.py
+```
+You will now have generated these two key files `libraries.tsv` and `samples.tsv`
+You should make sure that if you alter the names or locations that the `config.yaml` still correctly points at these files. These will need removing and regenerating of course if libraries or samples change input.
 
 ## Databases
 ### Kraken2
