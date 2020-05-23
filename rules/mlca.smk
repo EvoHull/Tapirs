@@ -32,7 +32,7 @@ rule mlca:
         -m {params.majority} \
         -hits {params.hits} \
         "
-# GS - The mlca script needs changing because o fan error. The final species name is output seperated by a tab and not an undderscore or space; is this something you can fix?
+# GS - The mlca script needs changing because of an error. The final species name is output seperated by a tab and not an undderscore or space; is this something you can fix?
 
 # -------------------------------------------------------
 # mlca to tsv

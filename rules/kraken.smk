@@ -12,7 +12,7 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/rereplicated/{library}/{sample}_rerep.fasta"
+        "results/07_rereplicated/{library}/{sample}_rerep.fasta"
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports = "results/kraken/reports/{library}/{sample}.txt"

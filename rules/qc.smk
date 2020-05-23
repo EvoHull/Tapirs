@@ -48,13 +48,13 @@ rule fastp_trim_and_merge:
         -w 6"
 
 
-rule keep_fwd_unpaired:  # needs work
+rule keep_fwd_unpaired:
     input:
         merged = "results/02_trimmed/{library}/{sample}_merged.fastq",
         out_unpaired1 = "results/02_trimmed/{library}/{sample}.unpaired.R1.fastq",
         R1 = "results/02_trimmed/{library}/{sample}.R1.fastq"
     output:
-        "results/02_trimmed/{library}/{sample}_catted.fastq"
+        "results/03_merged/{library}/{sample}_catted.fastq"
     shell:
         "cat {input.merged} >> {output} && cat {input.R1} >> {output} && cat {input.out_unpaired1} >> {output}"
 
@@ -67,9 +67,9 @@ rule seqkit_fastq_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_catted.fastq"
+        "results/03_merged/{library}/{sample}_catted.fastq"
     output:
-        "results/02_trimmed/{library}/{sample}_catted.fasta"
+        "results/03_merged/{library}/{sample}_catted.fasta"
     shell:
         "seqkit fq2fa {input} -o {output}"
 
@@ -82,7 +82,7 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_catted.fastq"
+        "results/03_merged/{library}/{sample}_catted.fastq"
     output:
         fqreport = "reports/vsearch/{library}/{sample}_fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}_fq_readstats"
@@ -104,9 +104,9 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_catted.fasta"
+        "results/03_merged/{library}/{sample}_catted.fasta"
     output:
-        "results/02_trimmed/{library}/{sample}_derep.fasta"
+        "results/04_dereplicated/{library}/{sample}_derep.fasta"
     shell:
         "vsearch \
         --derep_fulllength {input} \
@@ -150,10 +150,10 @@ rule vsearch_denoising:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/02_trimmed/{library}/{sample}_derep.fasta"
+        "results/04_dereplicated/{library}/{sample}_derep.fasta"
     output:
-        centroids = "results/03_denoised/{library}/{sample}_denoise.fasta",
-        uc = "results/03_denoised/clusters/{library}/{sample}_denoise.txt"
+        centroids = "results/05_denoised/{library}/{sample}_denoise.fasta",
+        uc = "results/05_denoised/clusters/{library}/{sample}_denoise.txt"
     #params:
     #    log="reports/denoise/{library}/vsearch.log"
     shell:
@@ -188,11 +188,11 @@ rule vsearch_dechimerisation:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_denoised/{library}/{sample}_denoise.fasta"
+        "results/05_denoised/{library}/{sample}_denoise.fasta"
     output:
-        chimeras = "results/03_denoised/{library}/{sample}_chimera.fasta",
-        borderline = "results/03_denoised/{library}/{sample}_borderline-chimera.fasta",
-        nonchimeras = "results/03_denoised/{library}/{sample}_nc.fasta"
+        chimeras = "results/06_dechimera/{library}/{sample}_chimera.fasta",
+        borderline = "results/06_dechimera/{library}/{sample}_borderline-chimera.fasta",
+        nonchimeras = "results/06_dechimera/{library}/{sample}_nc.fasta"
     params:
         db = config["dechim_blast_db"]
     shell:
@@ -214,10 +214,10 @@ rule vsearch_rereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_denoised/{library}/{sample}_nc.fasta",
+        "results/06_dechimera/{library}/{sample}_nc.fasta",
         # rule("empty_fasta_workaround")
     output:
-        "results/rereplicated/{library}/{sample}_rerep.fasta"
+        "results/07_rereplicated/{library}/{sample}_rerep.fasta"
     threads:
         6
     shell:

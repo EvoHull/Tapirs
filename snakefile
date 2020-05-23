@@ -40,7 +40,7 @@ rule all:
 # snakemake reports and envs
        #  "report.html",
         "reports/rulegraph_dag.png",
-        "snakemake-report.html",
+       #  "snakemake-report.html",
         expand("reports/archived_envs/{conda_envs}",
                conda_envs=config["conda_envs"]),
 # fastp, multiQC, and seqkit reports
