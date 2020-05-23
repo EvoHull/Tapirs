@@ -50,7 +50,7 @@ python scripts/get_dirs.py
 python scripts/get_dirs_files.py
 ```
 You will now have generated these two key files `libraries.tsv` and `samples.tsv`
-You should make sure that if you alter the names or locations that the `config.yaml` still correctly points at these files. These will need removing and regenerating of course if libraries or samples change input.
+You should make sure that if you alter the names or locations that the `config.yaml` still correctly points at these two files. These will need removing and regenerating of course if libraries or samples change input.
 
 ## Databases
 ### Kraken2
