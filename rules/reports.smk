@@ -5,7 +5,7 @@
 # Some fastp reports are written from the qc.smk rule
 
 configfile: "config.yaml"
-report: "reports/snakemake-report.html"
+# report: "reports/snakemake-report.html"
 # --------------------------------------------------
 # Snakemake, report
 # --------------------------------------------------
@@ -65,14 +65,14 @@ rule seqkit_stats_allfiles:
         output:
             tsv = "reports/seqkit/{library}_seqkit-stats.tsv",
             md = "reports/seqkit/{library}_seqkit-stats.md",
-            histogram = report("reports/seqkit/{library}_av-length.jpg", category="QC")
+            # histogram = report("reports/seqkit/{library}_av-length-histogram", category="QC")
             # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
         shell:
             """
             seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
             csvtk csv2md {output.tsv} -t -o {output.md} ;
-            csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
             """ 
+#             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------

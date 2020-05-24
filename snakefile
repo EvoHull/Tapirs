@@ -54,8 +54,8 @@ rule all:
                sample=sample.reset_index().itertuples()),
         expand("reports/seqkit/{sample.library}_seqkit-stats.md",
                sample=sample.reset_index().itertuples()),
-        expand("reports/seqkit/{sample.library}_av-length.jpg",
-               sample=sample.reset_index().itertuples()),       
+       #  expand("reports/seqkit/{sample.library}_av-length-histogram",
+       #         sample=sample.reset_index().itertuples()),       
 # vsearch reports
         #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
         expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats",

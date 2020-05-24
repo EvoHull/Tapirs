@@ -58,7 +58,6 @@ rule keep_fwd_unpaired:
     shell:
         "cat {input.merged} >> {output} && cat {input.R1} >> {output} && cat {input.out_unpaired1} >> {output}"
 
-
 # -----------------------------------------------------
 # convert files from fastq to fasta
 # -----------------------------------------------------
@@ -72,7 +71,6 @@ rule seqkit_fastq_to_fasta:
         "results/03_merged/{library}/{sample}_catted.fasta"
     shell:
         "seqkit fq2fa {input} -o {output}"
-
 
 # -----------------------------------------------------
 # vsearch, fastq report
@@ -95,7 +93,6 @@ rule vsearch_fastq_report:
         --log {output.fqreadstats} \
         "
 
-
 # -----------------------------------------------------
 # dereplication
 # -----------------------------------------------------
@@ -114,7 +111,6 @@ rule vsearch_dereplication:
         --minuniquesize {config[VSEARCH_minuniqsize]} \
         --output {output} \
         "
-
 
 # rule empty_fasta_workaround:
 #     input:
@@ -141,7 +137,6 @@ rule vsearch_dereplication:
 #         else:
 #             df=pd.DataFrame([([0])+(['unidentified']*10)])
 
-
 # -----------------------------------------------------
 # denoise
 # -----------------------------------------------------
@@ -154,8 +149,6 @@ rule vsearch_denoising:
     output:
         centroids = "results/05_denoised/{library}/{sample}_denoise.fasta",
         uc = "results/05_denoised/clusters/{library}/{sample}_denoise.txt"
-    #params:
-    #    log="reports/denoise/{library}/vsearch.log"
     shell:
         "vsearch \
         --cluster_unoise {input} \
@@ -178,7 +171,6 @@ rule vsearch_denoising:
         #     exit 0
         # fi
         # """
-
 
 # -----------------------------------------------------
 # chimera removal
@@ -204,7 +196,6 @@ rule vsearch_dechimerisation:
         --borderline {output.borderline} \
         --nonchimeras {output.nonchimeras} \
         "
-
 
 # ------------------------------------------------------
 # re-replication
