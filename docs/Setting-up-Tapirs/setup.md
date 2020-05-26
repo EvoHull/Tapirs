@@ -2,6 +2,14 @@
 !!! warning "install first then setup"
     These instructions are to set up Tapirs for your experiment after [installation](installation.md) has been carried out.
 
+# SETUP OVERVIEW
+It is vital to carry out all the set up instructions. This can be slow, and require some thought, but it only has to be done once.
+
+1. edit the `config.yaml` file for this experiment, it controls the workflow
+2. make sure your data is in the right location and format
+3. create the databases against which your query sequences will be compared.
+
+
 # CONFIG FILES
 The `config.yaml` file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in `config.yaml` have reasonable default values, but some may require your input. Open `config.yaml` in a text editor.
 

@@ -12,9 +12,9 @@ rule sintax:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/07_rereplicated/{library}/{sample}_rerep.fasta"
+        query = "results/07_rereplicated/{library}/{sample}.rerep.fasta"
     output:
-        "results/sintax/{library}/{sample}_reads.sintax"
+        "results/sintax/{library}/{sample}.reads.sintax"
     params:
         database = config["sintax_db"]
     shell:

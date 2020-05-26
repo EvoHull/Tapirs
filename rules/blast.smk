@@ -12,12 +12,12 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/06_dechimera/{library}/{sample}_nc.fasta"
+        query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta"
     params:
         db_dir = config["blast_db"],
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     output:
-        "results/blast/{library}/{sample}_blast.tsv"
+        "results/blast/{library}/{sample}.blast.tsv"
     threads:
         6
     shell:
@@ -40,10 +40,10 @@ rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:
-        blast_out = "results/blast/{library}/{sample}_blast.tsv",
+        blast_out = "results/blast/{library}/{sample}.blast.tsv",
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
-        "results/blasttax/{library}/{sample}_tax.tsv",
+        "results/blasttax/{library}/{sample}.tax.tsv",
     params:
     #     taxdump = "data/databases/new_taxdump/rankedlineage.dmp"
     #     indir = "results/blast",

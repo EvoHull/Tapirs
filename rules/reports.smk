@@ -2,10 +2,11 @@
 # TAPIRS REPORT GENERATION
 # ==================================================
 # A workflow reporting on QC and taxonomic assignment
-# Some fastp reports are written from the qc.smk rule
+# fastp reports are written from the qc.smk rule
 
 configfile: "config.yaml"
 # report: "reports/snakemake-report.html"
+
 # --------------------------------------------------
 # Snakemake, report
 # --------------------------------------------------
@@ -19,6 +20,7 @@ rule snakemake_report:
 # --------------------------------------------------
 # Snakemake, report from docs
 # --------------------------------------------------
+
 rule report:
     input:
         "reports/rulegraph_dag.png"
@@ -58,21 +60,38 @@ rule conda_env:
 # --------------------------------------------------
 
 rule seqkit_stats_allfiles:
-        input:
-            "results/02_trimmed/{library}"
-        threads:
-            12
-        output:
-            tsv = "reports/seqkit/{library}_seqkit-stats.tsv",
-            md = "reports/seqkit/{library}_seqkit-stats.md",
-            # histogram = report("reports/seqkit/{library}_av-length-histogram", category="QC")
-            # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
-        shell:
-            """
-            seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
-            csvtk csv2md {output.tsv} -t -o {output.md} ;
-            """ 
+    input:
+        "results/02_trimmed/{library}"
+    threads:
+        12
+    output:
+        tsv = "reports/seqkit/{library}.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}.seqkit-stats.md",
+        # histogram = report("reports/seqkit/{library}.av-length-histogram", category="QC")
+        # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
+    shell:
+        """
+        seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
+        csvtk csv2md {output.tsv} -t -o {output.md} ;
+        """ 
 #             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
+
+# -----------------------------------------------------
+# vsearch, fastq report after read merging
+# -----------------------------------------------------
+
+rule vsearch_fastq_report:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        "results/03_merged/{library}/{sample}.concat.fasta"
+    output:
+        fqreport = "reports/vsearch/{library}/{sample}.fq_eestats",
+        fqreadstats = "reports/vsearch/{library}/{sample}.fq_readstats"
+    shell:
+        "vsearch --fastq_eestats {input} --output {output.fqreport}"
+        "vsearch --fastq_stats {input} --log {output.fqreadstats}"
+
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------
@@ -83,18 +102,19 @@ rule seqkit_stats_allfiles:
 #     input:
 #         "reports/fastp/{library}/"
 #     output:
-#         "reports/multiqc/{library}.multiqc.html"
-#     params:
-#         outdir = directory("reports/multiqc/"),  # location for report
 #         filename = "{library}.multiqc.html",  # report filename
+#         outdir = directory("reports/multiqc/")
+#     params:
 #         overwrite = "-f",  # overwrite previous multiqc output
 #         zip = "-z",  # compress the multiqc data dir
 #         quiet = "-q", # only log errors
 #         dirnames = "-dd 1",  # prepend library dir name to sample names
 #     shell:
-#         "multiqc {input} -n {params.filename} {params.overwrite} {params.dirnames} {params.zip} {params.quiet} -o {params.outdir}"
-
-# --------------------------------------------------
-# Vegan
-# --------------------------------------------------
-# add vegan graphical and statistical outputs
+#         "multiqc {input} \
+#           -n {output.filename} \
+#           -o {output.outdir} \
+#           {params.dirnames} \
+#           {params.overwrite} \
+#           {params.zip} \
+#           {params.quiet} \
+#           "

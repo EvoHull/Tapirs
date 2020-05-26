@@ -12,11 +12,11 @@ rule mlca:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/blasttax/{library}/{sample}_tax.tsv"
+        "results/blasttax/{library}/{sample}.tax.tsv"
     output:
-        "results/mlca/{library}/{sample}_lca.tsv"
+        "results/mlca/{library}/{sample}.lca.tsv"
     params:
-        # out = "results/mlca/{library}/{sample}_lca.tsv", # redundant
+        # out = "results/mlca/{library}/{sample}.lca.tsv", # redundant
         bitscore = "10",   # -b blast hit bitscore upper threshold
         identity = "100",  # -id percent identity
         coverage = "60",   # -cov percentage coverage
@@ -42,7 +42,7 @@ rule mlca_to_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv", sample=sample.reset_index().itertuples()),
+        expand("results/mlca/{sample.library}/{sample.sample}.lca.tsv", sample=sample.reset_index().itertuples()),
     output:
         "reports/{config[my_experiment]}.tsv"
     params:

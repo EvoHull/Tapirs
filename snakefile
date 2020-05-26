@@ -44,31 +44,33 @@ rule all:
         expand("reports/archived_envs/{conda_envs}",
                conda_envs=config["conda_envs"]),
 # fastp, multiQC, and seqkit reports
-        expand("reports/fastp/{sample.library}/{sample.sample}_fastp.json",
+        expand("reports/fastp/{sample.library}/{sample.sample}.fastp.json",
                sample=sample.reset_index().itertuples()),
-        expand("reports/fastp/{sample.library}/{sample.sample}_fastp.html",
+        expand("reports/fastp/{sample.library}/{sample.sample}.fastp.html",
                sample=sample.reset_index().itertuples()),
         # expand("reports/multiqc/{library}.multiqc.html", 
         #        library=library.reset_index().itertuples()),
-        expand("reports/seqkit/{sample.library}_seqkit-stats.tsv",
+        expand("reports/seqkit/{sample.library}.seqkit-stats.tsv",
                sample=sample.reset_index().itertuples()),
-        expand("reports/seqkit/{sample.library}_seqkit-stats.md",
-               sample=sample.reset_index().itertuples()),
-       #  expand("reports/seqkit/{sample.library}_av-length-histogram",
-       #         sample=sample.reset_index().itertuples()),       
+        expand("reports/seqkit/{sample.library}.seqkit-stats.md",
+               sample=sample.reset_index().itertuples()),  
+       # test for seqkit
+        expand("results/03_merged/{sample.library}/{sample}.concat.fasta",
+               sample=sample.reset_index().itertuples()),     
 # vsearch reports
-        #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", sample=sample.reset_index().itertuples()),
-        expand("reports/vsearch/{sample.library}/{sample.sample}_fq_eestats",
+        #expand("reports/vsearch/{sample.library}/{sample.sample}.denoise.biom", 
+       #       sample=sample.reset_index().itertuples()),
+        expand("reports/vsearch/{sample.library}/{sample.sample}.fq_eestats",
                sample=sample.reset_index().itertuples()),
-        expand("reports/vsearch/{sample.library}/{sample.sample}_fq_readstats",
+        expand("reports/vsearch/{sample.library}/{sample.sample}.fq_readstats",
                sample=sample.reset_index().itertuples()),
 # sintax
-        expand("results/sintax/{sample.library}/{sample.sample}_reads.sintax",
+        expand("results/sintax/{sample.library}/{sample.sample}.reads.sintax",
                sample=sample.reset_index().itertuples()),
 # blast mlca
-        expand("results/blast/{sample.library}/{sample.sample}_blast.tsv",
+        expand("results/blast/{sample.library}/{sample.sample}.blast.tsv",
                sample=sample.reset_index().itertuples()),  # optional
-        expand("results/mlca/{sample.library}/{sample.sample}_lca.tsv",
+        expand("results/mlca/{sample.library}/{sample.sample}.lca.tsv",
                sample=sample.reset_index().itertuples()),
 # mlca-tsv.py
        #  expand("reports/{my_experiment}.tsv",
@@ -80,7 +82,8 @@ rule all:
                sample=sample.reset_index().itertuples()),
         expand("results/kraken/{my_experiment}.tsv",
               my_experiment=config["my_experiment"]),
-        #expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"]),
+       #  expand("results/kraken/{my_experiment}.biom", 
+       #        my_experiment=config["my_experiment"]),
 
 # -----------------------------------------------------
 # Rule files
