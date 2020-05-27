@@ -56,17 +56,19 @@ rule conda_env:
         "conda env export --file {output}"
 
 # --------------------------------------------------
-# Seqkit, write simple report on 02_trimmed files
+# Seqkit, write report on 02_trimmed files
+# for each library make a report on all files 
 # --------------------------------------------------
 
-rule seqkit_stats_allfiles:
+rule seqkit_stats_trimmedfiles:
     input:
-        "results/02_trimmed/{library}"
+        expand("results/02_trimmed/{sample.library}/",
+            sample=sample.reset_index().itertuples()),
     threads:
         12
     output:
-        tsv = "reports/seqkit/{library}.seqkit-stats.tsv",
-        md = "reports/seqkit/{library}.seqkit-stats.md",
+        tsv = "reports/seqkit/{library}.trimmed.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}.trimmed.seqkit-stats.md",
         # histogram = report("reports/seqkit/{library}.av-length-histogram", category="QC")
         # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
     shell:
@@ -77,20 +79,41 @@ rule seqkit_stats_allfiles:
 #             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
 
 # -----------------------------------------------------
-# vsearch, fastq report after read merging
+# vsearch, report on 03_merged concatenated fastq
 # -----------------------------------------------------
 
 rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_merged/{library}/{sample}.concat.fasta"
+        # "results/03_merged/{library}/{sample}.concat.fastq"
+        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fastq", 
+            sample=sample.reset_index().itertuples()),
     output:
-        fqreport = "reports/vsearch/{library}/{sample}.fq_eestats",
-        fqreadstats = "reports/vsearch/{library}/{sample}.fq_readstats"
+        fqreport = "reports/vsearch/{library}/{sample}.concat.fq_eestats",
+        fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
     shell:
         "vsearch --fastq_eestats {input} --output {output.fqreport}"
         "vsearch --fastq_stats {input} --log {output.fqreadstats}"
+
+#---------------------------------------------------
+# Seqkit, report on 03_merged concatenated fasta
+#---------------------------------------------------
+
+rule seqkit_stats_mergedfiles:
+    input:
+        # "results/03_merged/{library}/{sample}.concat.fasta"
+        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fasta", sample=sample.reset_index().itertuples()),
+    threads:
+        12
+    output:
+        tsv = "reports/seqkit/{library}.concat.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}.concat.seqkit-stats.md",
+    shell:
+        """
+        seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
+        csvtk csv2md {output.tsv} -t -o {output.md} ;
+        """ 
 
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report

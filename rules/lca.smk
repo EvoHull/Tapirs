@@ -1,5 +1,5 @@
 # ==================================================
-# LCA: LOWEST COMMON ANCESTOR ANALYSIS
+# LCA: LOWEST COMMON ANCESTOR ANALYSES
 # ==================================================
 
 configfile: "config.yaml"
@@ -50,3 +50,23 @@ rule mlca_to_tsv:
         rerep = "results/rereplicated"  # syntax
     shell:
         "python scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {output}"
+
+# -------------------------------------------------------
+# blca, Bayesian lowest common ancestor
+# -------------------------------------------------------
+
+rule blca:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta",
+        database = config["blast_db"]
+    output:
+        "results/blca/{library}/{sample}.blca.out"
+    script:
+        "scripts/2.blca_main.py \
+        -i {input.query} \
+        --db {input.database} \
+        -o {output} \
+        "
+

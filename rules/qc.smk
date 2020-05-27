@@ -12,10 +12,10 @@ rule fastp_trim:
     conda:
         "../envs/environment.yaml"
     input:
-        read1 = "data/01_demultiplexed/test1/1EB.R1.fastq.gz",
-        read2 = "data/01_demultiplexed/test1/1EB.R2.fastq.gz"
-        # read1 = "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz",
-        # read2 = "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz"
+        # read1 = "data/01_demultiplexed/test1/1EB.R1.fastq.gz",
+        # read2 = "data/01_demultiplexed/test1/1EB.R2.fastq.gz",
+        read1 = expand("data/01_demultiplexed/{sample.library}/{sample.sample}.R1.fastq.gz", sample=sample.reset_index().itertuples()),
+        read2 = expand("data/01_demultiplexed/{sample.library}/{sample.sample}.R2.fastq.gz", sample=sample.reset_index().itertuples()),
     output:
         R1trimmed = "results/02_trimmed/{library}/{sample}.R1.trimmed.fastq",
         R2trimmed = "results/02_trimmed/{library}/{sample}.R2.trimmed.fastq",
@@ -53,10 +53,10 @@ rule fastp_merge:
     conda:
         "../envs/environment.yaml"
     input:
-        trimmedread1 = "results/02_trimmed/{library}/{sample}.R1.trimmed.fastq",
-        trimmedread2 = "results/02_trimmed/{library}/{sample}.R2.trimmed.fastq",
-        unpairedR1 = "results/02_trimmed/{library}/{sample}.R1.unpaired.fastq",
-        unpairedR2 = "results/02_trimmed/{library}/{sample}.R2.unpaired.fastq",
+        trimmedread1 = expand("results/02_trimmed/{sample.library}/{sample.sample}.R1.trimmed.fastq", sample=sample.reset_index().itertuples()),
+        trimmedread2 = expand("results/02_trimmed/{sample.library}/{sample.sample}.R2.trimmed.fastq", sample=sample.reset_index().itertuples()),
+        unpairedR1 = expand("results/02_trimmed/{sample.library}/{sample.sample}.R1.unpaired.fastq", sample=sample.reset_index().itertuples()),
+        unpairedR2 = expand("results/02_trimmed/{sample.library}/{sample.sample}.R2.unpaired.fastq", sample=sample.reset_index().itertuples()),
     output:
         merged = "results/03_merged/{library}/{sample}.concat.fastq",
         # unmerged1 = "results/03_merged/{library}/{sample}.unmerged1.fastq",
@@ -104,7 +104,8 @@ rule seqkit_convert_to_fasta:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_merged/{library}/{sample}.concat.fastq"
+        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fastq", 
+            sample=sample.reset_index().itertuples()),
     output:
         "results/03_merged/{library}/{sample}.concat.fasta"
     shell:
@@ -118,7 +119,8 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/03_merged/{library}/{sample}.concat.fasta"
+        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fasta", 
+            sample=sample.reset_index().itertuples()),
     output:
         "results/04_dereplicated/{library}/{sample}.derep.fasta"
     shell:
@@ -137,7 +139,8 @@ rule vsearch_denoising:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/04_dereplicated/{library}/{sample}.derep.fasta"
+        expand("results/04_dereplicated/{sample.library}/{sample.sample}.derep.fasta", 
+            sample=sample.reset_index().itertuples()),
     output:
         centroids = "results/05_denoised/{library}/{sample}.denoise.fasta",
         cluster_results = "reports/vsearch/{library}/{sample}.denoise-report.txt"
@@ -160,7 +163,8 @@ rule vsearch_dechimerisation:
     conda:
         "../envs/environment.yaml"
     input:
-        seqs = "results/05_denoised/{library}/{sample}.denoise.fasta",
+        seqs = expand("results/05_denoised/{sample.library}/{sample.sample}.denoise.fasta",
+            sample=sample.reset_index().itertuples()),
         blast_db = config["dechim_blast_db"]
     output:
         chimeras = "results/06_dechimera/{library}/{sample}.chimera.fasta.gz",
@@ -184,7 +188,8 @@ rule vsearch_rereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/06_dechimera/{library}/{sample}.nonchimera.fasta",
+        expand("results/06_dechimera/{sample.library}/{sample.sample}.nonchimera.fasta",
+            sample=sample.reset_index().itertuples()),
         # rule("empty_fasta_workaround")
     output:
         "results/07_rereplicated/{library}/{sample}.rerep.fasta"

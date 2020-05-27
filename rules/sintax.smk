@@ -12,16 +12,15 @@ rule sintax:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/07_rereplicated/{library}/{sample}.rerep.fasta"
+        query = "results/07_rereplicated/{library}/{sample}.rerep.fasta",
+        database = {config[sintax_db]}
     output:
-        "results/sintax/{library}/{sample}.reads.sintax"
-    params:
-        database = config["sintax_db"]
+        tsv = "results/sintax/{library}/{sample}.sintax.tsv",
     shell:
-        "vsearch -sintax \
+        "vsearch --sintax \
         {input.query} \
-        -db {params.database} \
-        -tabbedout {output} \
-        -strand both \
-        -sintax_cutoff {config[SINTAX_cutoff]} \
+        --db {input.database} \
+        --tabbedout {output.tsv} \
+        --strand both \
+        --sintax_cutoff {config[SINTAX_cutoff]} \
         "

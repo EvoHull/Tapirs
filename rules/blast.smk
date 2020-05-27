@@ -12,9 +12,9 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta"
+        query = expand("results/06_dechimera/{sample.library}/{sample.sample}.nonchimera.fasta",
+            sample=sample.reset_index().itertuples()),
     params:
-        db_dir = config["blast_db"],
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     output:
         "results/blast/{library}/{sample}.blast.tsv"
@@ -22,25 +22,27 @@ rule blastn:
         6
     shell:
         "blastn \
-        -db {params.db_dir} \
+        -db {config[blast_db]} \
+        -query {input.query} \
         -num_threads {threads} \
         -outfmt {params.outformat} \
         -perc_identity {config[BLAST_min_perc_ident]} \
         -evalue {config[BLAST_min_evalue]} \
         -max_target_seqs {config[BLAST_max_target_seqs]} \
-        -query {input.query} \
         -out {output} \
         "
 
 # -----------------------------------------------------
 # tax_to_blast, adds taxonomy column to blast output
+# snakemakification still in progress
 # -----------------------------------------------------
 
 rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:
-        blast_out = "results/blast/{library}/{sample}.blast.tsv",
+        blast_out = expand("results/blast/{sample.library}/{sample.sample}.blast.tsv",
+            sample=sample.reset_index().itertuples()),
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
         "results/blasttax/{library}/{sample}.tax.tsv",
@@ -48,5 +50,5 @@ rule add_taxonomy_to_blast:
     #     taxdump = "data/databases/new_taxdump/rankedlineage.dmp"
     #     indir = "results/blast",
     #     outdir = "results/blasttax"
-    shell:
-        "python scripts/tax_to_blast.py -i results/blast -o results/blasttax -lin {input.ranked_lineage}"
+    script:
+        "scripts/tax_to_blast.py -i results/blast -o results/blasttax -lin {input.ranked_lineage}"
