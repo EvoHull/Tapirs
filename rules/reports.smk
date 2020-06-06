@@ -62,8 +62,7 @@ rule conda_env:
 
 rule seqkit_stats_trimmedfiles:
     input:
-        expand("results/02_trimmed/{sample.library}/",
-            sample=sample.reset_index().itertuples()),
+        expand("results/02_trimmed/{library}/"),
     threads:
         12
     output:
@@ -86,9 +85,8 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        # "results/03_merged/{library}/{sample}.concat.fastq"
-        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fastq", 
-            sample=sample.reset_index().itertuples()),
+        # "results/03_merged/{library}/{sample}.concat.fastq",
+        expand("results/03_merged/{library}/{sample}.concat.fastq")
     output:
         fqreport = "reports/vsearch/{library}/{sample}.concat.fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
@@ -103,7 +101,7 @@ rule vsearch_fastq_report:
 rule seqkit_stats_mergedfiles:
     input:
         # "results/03_merged/{library}/{sample}.concat.fasta"
-        expand("results/03_merged/{sample.library}/{sample.sample}.concat.fasta", sample=sample.reset_index().itertuples()),
+        expand("results/03_merged/{library}/{sample}.concat.fasta")
     threads:
         12
     output:

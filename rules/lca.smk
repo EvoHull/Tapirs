@@ -42,7 +42,7 @@ rule mlca_to_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/mlca/{sample.library}/{sample.sample}.lca.tsv", sample=sample.reset_index().itertuples()),
+        expand("results/mlca/{library}/{sample}.lca.tsv")
     output:
         "reports/{config[my_experiment]}.tsv"
     params:
@@ -69,4 +69,3 @@ rule blca:
         --db {input.database} \
         -o {output} \
         "
-

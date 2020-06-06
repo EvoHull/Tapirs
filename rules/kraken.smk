@@ -31,53 +31,35 @@ rule kraken2:
         --report {output.kraken_reports} \
         "
 
-
 #-----------------------------------------------------
 # Kraken output to BIOM format
 #-----------------------------------------------------
 
-rule kraken_to_biom:
+rule kraken_biom_and_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/kraken/reports/{sample.library}/{sample.sample}.txt", sample=sample.reset_index().itertuples())
+        expand("results/kraken/reports/{library}/{sample}.txt")
     output:
         "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
     params:
         "results/kraken/reports/*/*.txt"
     shell:
-        "kraken-biom \
-        --max F \
-        -o {output} \
-        {params} \
-        "
+        "kraken-biom --max F -o {output} --fmt hdf5 {params}"
+        "kraken-biom --max F -o {output} --fmt tsv {params}"
 
+# #---------------------------------------------------
+# # Biom convert, BIOM to tsv
+# #---------------------------------------------------
 
-#---------------------------------------------------
-# Biom convert, BIOM to tsv
-#---------------------------------------------------
-
-rule biom_convert:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"])
-    output:
-        expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"])
-    threads:
-        6
-    shell:
-        "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
-
-
-#-------------------------------------------------
-# biom taxonomy transformation
-#-------------------------------------------------
-
-# rule transform_biomtsv:
+# rule kraken_biom_to_tsv:
+#     conda:
+#         "../envs/environment.yaml"
 #     input:
-#         "results/kraken/{my_experiment}.tsv"
+#         expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"])
 #     output:
-#         "results/kraken/{my_experiment}.trans.tsv"
-#     run:
-#         "
+#         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"])
+#     threads:
+#         6
+#     shell:
+#         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
