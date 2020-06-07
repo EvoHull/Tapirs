@@ -12,7 +12,7 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-        query = expand("results/06_dechimera/{library}/{sample}.nonchimera.fasta"),
+        query = expand("results/06_dechimera/{library}/{sample}.nonchimera.fasta", sample=SAMPLES, library=LIBRARIES),
     params:
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     output:
@@ -40,7 +40,7 @@ rule add_taxonomy_to_blast:
     conda:
         "../envs/environment.yaml"
     input:
-        blast_out = expand("results/blast/{library}/{sample}.blast.tsv"),
+        blast_out = expand("results/blast/{library}/{sample}.blast.tsv", sample=SAMPLES, library=LIBRARIES),
         ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
     output:
         "results/blasttax/{library}/{sample}.tax.tsv",

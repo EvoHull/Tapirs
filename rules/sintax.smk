@@ -13,7 +13,7 @@ rule sintax:
         "../envs/environment.yaml"
     input:
         query = "results/07_rereplicated/{library}/{sample}.rerep.fasta",
-        database = {config[sintax_db]}
+        database = config["sintax_db"]
     output:
         tsv = "results/sintax/{library}/{sample}.sintax.tsv",
     shell:

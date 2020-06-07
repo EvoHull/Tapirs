@@ -62,17 +62,17 @@ rule conda_env:
 
 rule seqkit_stats_trimmedfiles:
     input:
-        expand("results/02_trimmed/{library}/"),
+        expand("results/02_trimmed/{library}/{sample}", sample=SAMPLES, library=LIBRARIES)
     threads:
         12
     output:
-        tsv = "reports/seqkit/{library}.trimmed.seqkit-stats.tsv",
-        md = "reports/seqkit/{library}.trimmed.seqkit-stats.md",
+        tsv = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.md",
         # histogram = report("reports/seqkit/{library}.av-length-histogram", category="QC")
         # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
     shell:
         """
-        seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
+        seqkit stats {input}*.fastq -b -e -T -j {threads} -o {output.tsv} ;
         csvtk csv2md {output.tsv} -t -o {output.md} ;
         """ 
 #             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
@@ -85,14 +85,15 @@ rule vsearch_fastq_report:
     conda:
         "../envs/environment.yaml"
     input:
-        # "results/03_merged/{library}/{sample}.concat.fastq",
-        expand("results/03_merged/{library}/{sample}.concat.fastq")
+        expand("results/03_merged/{library}/{sample}.concat.fastq", sample=SAMPLES, library=LIBRARIES)
     output:
         fqreport = "reports/vsearch/{library}/{sample}.concat.fq_eestats",
         fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
     shell:
-        "vsearch --fastq_eestats {input} --output {output.fqreport}"
-        "vsearch --fastq_stats {input} --log {output.fqreadstats}"
+        """
+        vsearch --fastq_eestats {input} --output {output.fqreport}; 
+        vsearch --fastq_stats {input} --log {output.fqreadstats}
+        """
 
 #---------------------------------------------------
 # Seqkit, report on 03_merged concatenated fasta
@@ -101,7 +102,7 @@ rule vsearch_fastq_report:
 rule seqkit_stats_mergedfiles:
     input:
         # "results/03_merged/{library}/{sample}.concat.fasta"
-        expand("results/03_merged/{library}/{sample}.concat.fasta")
+        expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
     threads:
         12
     output:
@@ -109,7 +110,7 @@ rule seqkit_stats_mergedfiles:
         md = "reports/seqkit/{library}.concat.seqkit-stats.md",
     shell:
         """
-        seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
+        seqkit stats {input} -b -e -T -j {threads} -o {output.tsv} ;
         csvtk csv2md {output.tsv} -t -o {output.md} ;
         """ 
 

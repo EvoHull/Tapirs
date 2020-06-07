@@ -12,7 +12,7 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/07_rereplicated/{library}/{sample}.rerep.fasta"
+        expand("results/07_rereplicated/{library}/{sample}.rerep.fasta", sample=SAMPLES, library=LIBRARIES)
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
@@ -39,9 +39,9 @@ rule kraken_biom_and_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/kraken/reports/{library}/{sample}.txt")
+        expand("results/kraken/reports/{library}/{sample}.txt", sample=SAMPLES, library=LIBRARIES)
     output:
-        "results/kraken/{my_experiment}.biom" #my_experiment=config["my_experiment"])
+        "results/kraken/{my_experiment}.biom"
     params:
         "results/kraken/reports/*/*.txt"
     shell:

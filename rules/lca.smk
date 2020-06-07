@@ -42,7 +42,7 @@ rule mlca_to_tsv:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/mlca/{library}/{sample}.lca.tsv")
+        expand("results/mlca/{library}/{sample}.lca.tsv", sample=SAMPLES, library=LIBRARIES)
     output:
         "reports/{config[my_experiment]}.tsv"
     params:
@@ -55,17 +55,17 @@ rule mlca_to_tsv:
 # blca, Bayesian lowest common ancestor
 # -------------------------------------------------------
 
-rule blca:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta",
-        database = config["blast_db"]
-    output:
-        "results/blca/{library}/{sample}.blca.out"
-    script:
-        "scripts/2.blca_main.py \
-        -i {input.query} \
-        --db {input.database} \
-        -o {output} \
-        "
+# rule blca:
+#     conda:
+#         "../envs/environment.yaml"
+#     input:
+#         query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta",
+#         database = config["blast_db"]
+#     output:
+#         "results/blca/{library}/{sample}.blca.out"
+#     script:
+#         "scripts/2.blca_main.py \
+#         -i {input.query} \
+#         --db {input.database} \
+#         -o {output} \
+#         "
