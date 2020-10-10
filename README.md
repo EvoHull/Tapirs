@@ -16,6 +16,8 @@ Instructions for installation, setup, and modification are contained within the 
 ![workflow graph](docs/images/dag.svg)
 
 ## Quickstart
+Tapirs is curently in alpha/beta-release, not all features are present and not all bugs have been caught
+
 Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
