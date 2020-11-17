@@ -64,7 +64,7 @@ rule seqkit_stats_trimmedfiles:
     input:
         expand("results/02_trimmed/{library}/{sample}", sample=SAMPLES, library=LIBRARIES)
     threads:
-        12
+        4  # -j
     output:
         tsv = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.tsv",
         md = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.md",
@@ -72,27 +72,41 @@ rule seqkit_stats_trimmedfiles:
         # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
     shell:
         """
-        seqkit stats {input}*.fastq -b -e -T -j {threads} -o {output.tsv} ;
-        csvtk csv2md {output.tsv} -t -o {output.md} ;
+        seqkit stats {input}*.fastq -b -e -T -j 4 -o {output.tsv} ;
+        csvtk csv2md {output.tsv} -t -o {output.md}
         """ 
 #             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
 
 # -----------------------------------------------------
-# vsearch, report on 03_merged concatenated fastq
+# vsearch, readstats report on 03_merged concatenated fastq
 # -----------------------------------------------------
 
-rule vsearch_fastq_report:
+rule vsearch_fastq_readstats:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        expand("results/03_merged/{library}/{sample}.concat.fastq", sample=SAMPLES, library=LIBRARIES)
+    output:
+        fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
+    shell:
+        """
+        vsearch --fastq_stats {input} --log {output.fqreadstats}
+        """
+
+# -----------------------------------------------------
+# vsearch, eestats report on 03_merged concatenated fastq
+# -----------------------------------------------------
+
+rule vsearch_fastq_eestats:
     conda:
         "../envs/environment.yaml"
     input:
         expand("results/03_merged/{library}/{sample}.concat.fastq", sample=SAMPLES, library=LIBRARIES)
     output:
         fqreport = "reports/vsearch/{library}/{sample}.concat.fq_eestats",
-        fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
     shell:
         """
         vsearch --fastq_eestats {input} --output {output.fqreport}; 
-        vsearch --fastq_stats {input} --log {output.fqreadstats}
         """
 
 #---------------------------------------------------
