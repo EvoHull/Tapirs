@@ -1,3 +1,5 @@
+# script in progress, not done
+
 # script to remove empty fasta files
 # -------------------------------------------------------------
 # this will not work on compressed .gz files
