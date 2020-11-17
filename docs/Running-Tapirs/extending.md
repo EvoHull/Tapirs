@@ -17,7 +17,7 @@ Teaching and trouble-shooting Snakemake and bioinformatics are beyond the scope 
 
 1, Most problems are because you have a typo
 
-2, If you have multiple lines of input or output each line except the last must finish in a comma. Look at the line that begins "file1"
+2, If you have multiple lines of input or output each line except the last must finish in a comma.
 
 3, Take note of the tabbed indentation structure as this can cause problems when incorrect.
 
@@ -41,15 +41,11 @@ rule test:
 ```
 
 ## The graph can help you understand
-You should make a DAG to view the flow of information through your workflow. It is often possible to spot problems this way when you have added rules. It can also help in planning to add a rule, making you clearer on where the data comes from and where it goes.
+You should make a DAG diagram to view the flow of information through your workflow. It is often possible to spot problems this way when you have added rules. It can also help in planning to add a rule, making you clearer on where the data comes from and where it goes.
 
 ![DAG](../images/dag.png)
 
-To create a DAG (requires graphviz installed) use:
-`snakemake --rulegraph | dot -Tsvg > dag.svg`
-
-To create a DAG also showing individual samples use:
-`snakemake --dag | dot -Tsvg > dag.svg`
+A DAG should be created in `reports/rulegraph_dag.png` when snakemake is run.
 
 ## Contributing your improvements to Tapirs
 We would love to hear from you about the improvements you've made. A pull-request for your git branch would probably be best.

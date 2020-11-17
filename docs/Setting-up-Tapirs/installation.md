@@ -39,7 +39,7 @@ If you have not yet told conda to create a 'tapirs' environment then you can do 
 
 If you have, above, created a 'tapirs' environment you can update it to include all the required software with:
 
-`conda env update -f environment.yaml`
+`conda env update -f envs/environment.yaml`
 
 Accept the defaults (Yes) of any install questions you afre asked.
 

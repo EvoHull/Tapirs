@@ -8,11 +8,3 @@ Please check that you are in the correct conda environment. `conda activate tapi
 
 ## error involving cores
 Some hosts require you to specify the number of cores on which to run your job. You can just modify your snakemake command to include `--use-cores 8` although you can vary this number.
-
-## wildcarding.sh fails on MacOS
-Some users will run `scripts/wildcarding.sh` to create their library.tsv and samples.tsv. This is an old script that has been replaced by the python scripts `get_dirs.py` and `get_files_dirs.py` which are system agnostic. If you get the error `"sed: illegal option -- r"` or similar with wildcarding.sh it is likely because the version of `sed` is not up to date by default on MacOS. You can have a modern version of `sed` installed by conda. Try one of these:
-
-* `conda install sed`
-* `conda update sed`
-
-and then repeat the `sh scripts/wildcarding.sh` command. 

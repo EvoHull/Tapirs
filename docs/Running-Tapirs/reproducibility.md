@@ -21,7 +21,7 @@ Other reports are written in subdirectories in `reports/` by program
 
 # Software list and versions
 
-The full list of software, their dependencies and version numbers called `environment.yaml` is written to envs/archived_envs directory at the end of the run. This file can be used to reproduce the experimental software conditions.
+The full list of software, their dependencies and version numbers is written to envs/archived_envs/environment.yaml at the end of the run. This file can be used to reproduce the experimental software conditions.
 
 # Archiving
 Snakemake can be asked to [make an archive](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#sustainable-and-reproducible-archiving) of code, config, and input files:
