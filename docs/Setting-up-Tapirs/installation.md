@@ -37,9 +37,9 @@ If you have not yet told conda to create a 'tapirs' environment then you can do 
 
 `conda env create --file envs/environment.yaml`
 
-If you have, above, created a 'tapirs' environment you can update it to include all the required software with:
+If you havepreviously, in the section above, created a 'tapirs' environment you can update it to include all the required software with:
 
-`conda env update -f environment.yaml`
+`conda env update -f envs/environment.yaml`
 
 Accept the defaults (Yes) of any install questions you afre asked.
 
@@ -67,7 +67,7 @@ test your install with `snakemake -help`
 This approach will work well, and in some instances will be preferable, but:
 1. You must remember to specify conda when running snakemake, e.g.
 `snakemake --use-conda --cores 8`
-2. You will need to be patient the *first time* you run a command to use snakemake as it must create the environments and downlaod their software before beginning the analysis workflow.
+2. You will need to be patient the *first time* you run a command to use snakemake as it must create the environments and downlaod their software before beginning the analysis workflow. Some tips to greatly speed it up are found in the [Problem Solving](problem-solving.md) page.
 
 # Databases and data
 You should now have installed all the software required for your analysis. You will also require some data and databases however.

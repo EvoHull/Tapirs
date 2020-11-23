@@ -9,10 +9,18 @@ Please check that you are in the correct conda environment. `conda activate tapi
 ## error involving cores
 Some hosts require you to specify the number of cores on which to run your job. You can just modify your snakemake command to include `--use-cores 8` although you can vary this number.
 
-## wildcarding.sh fails on MacOS
-Some users will run `scripts/wildcarding.sh` to create their library.tsv and samples.tsv. This is an old script that has been replaced by the python scripts `get_dirs.py` and `get_files_dirs.py` which are system agnostic. If you get the error `"sed: illegal option -- r"` or similar with wildcarding.sh it is likely because the version of `sed` is not up to date by default on MacOS. You can have a modern version of `sed` installed by conda. Try one of these:
+## I really want to speed up the first run building the environments
+We recommend using [mamba](https://github.com/mamba-org/mamba) not conda to build environments. Snakemake fully supports mamba. It is a LOT faster.
 
-* `conda install sed`
-* `conda update sed`
+### pre-build the environments yourself
+Currently Tapirs uses a single environmnt file but this might change soon. If the environment is specified in a **single file** (eg `envs/environment.yaml`) you can build the environment before first run with the command `mamba env create -f env/environment.yaml`
 
-and then repeat the `sh scripts/wildcarding.sh` command. 
+If the environments are in multiple files (eg `envs/blast.yaml`, `envs/qc.yaml`) then these can al be installed at once from the command line `for f in envs/*.yaml; do mamba env create -f $f; done`
+
+### pre-build the environments in snakemake
+Snakemake can pre-build the environments for you, and can be tod to use mamba as it's default. **These commands should work, but require ful testing**
+
+```
+snakemake -conda-frontend mamba
+snakemake –use-conda -conda-create-envs-only True
+```

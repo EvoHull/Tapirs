@@ -1,13 +1,14 @@
 # script to write directory and sample names to samples.tsv file
 # -------------------------------------------------------------
 # entries should correspond to library and sample names
-# if sequence files do not end in 'fastq.gz' or 'fq.gz
-# they should be ammended below
+# if sequence files do not end in 'fastq.gz' or 'fq.gz'
+# the endings should be ammended below
 
 import os
 import pandas as pd
 
-startdir = "data/01_demultiplexed/"  # location of the data directories
+# location of the data directories, must end in /
+startdir = "data/01_demultiplexed/"
 
 with open('samples_with_duplicates.tsv', 'w') as outfile:  # create output file samples.tsv
     # outfile.write('library' + '\t' + 'sample' + '\n')  # add column headers
@@ -21,10 +22,13 @@ with open('samples_with_duplicates.tsv', 'w') as outfile:  # create output file 
                 dirs = head_tail[0].replace(startdir, '')
                 filetail = head_tail[1]  # get tail, ie filename
                 # get sample name from filename losing '.R1.fastq.gz'
-                sample_name = filetail.rsplit('.', -1)[0]  # split filename on . as list, get first item
-                dflist = [dirs, sample_name]  # make list of directories and sample names
+                # split filename on . as list, get first item
+                sample_name = filetail.rsplit('.', -1)[0]
+                # make list of directories and sample names
+                dflist = [dirs, sample_name]
                 dfstr = '\t'.join(dflist)  # convert to string with tabs
-                outfile.write(dfstr + '\n')  # write to output file with newline after dir tab sample
+                # write to output file with newline after dir tab sample
+                outfile.write(dfstr + '\n')
 
 # specify input and output files
 dupfile = "samples_with_duplicates.tsv"

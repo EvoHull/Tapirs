@@ -2,10 +2,11 @@
 # TAPIRS REPORT GENERATION
 # ==================================================
 # A workflow reporting on QC and taxonomic assignment
-# Some fastp reports are written from the qc.smk rule
+# fastp reports are written from the qc.smk rule
 
 configfile: "config.yaml"
 # report: "reports/snakemake-report.html"
+
 # --------------------------------------------------
 # Snakemake, report
 # --------------------------------------------------
@@ -19,6 +20,7 @@ rule snakemake_report:
 # --------------------------------------------------
 # Snakemake, report from docs
 # --------------------------------------------------
+
 rule report:
     input:
         "reports/rulegraph_dag.png"
@@ -54,25 +56,78 @@ rule conda_env:
         "conda env export --file {output}"
 
 # --------------------------------------------------
-# Seqkit, write simple report on 02_trimmed files
+# Seqkit, write report on 02_trimmed files
+# for each library make a report on all files 
 # --------------------------------------------------
 
-rule seqkit_stats_allfiles:
-        input:
-            "results/02_trimmed/{library}"
-        threads:
-            12
-        output:
-            tsv = "reports/seqkit/{library}_seqkit-stats.tsv",
-            md = "reports/seqkit/{library}_seqkit-stats.md",
-            # histogram = report("reports/seqkit/{library}_av-length-histogram", category="QC")
-            # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
-        shell:
-            """
-            seqkit stats {input}/* -b -e -T -j {threads} -o {output.tsv} ;
-            csvtk csv2md {output.tsv} -t -o {output.md} ;
-            """ 
+rule seqkit_stats_trimmedfiles:
+    input:
+        expand("results/02_trimmed/{library}/{sample}", sample=SAMPLES, library=LIBRARIES)
+    threads:
+        4  # -j
+    output:
+        tsv = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.md",
+        # histogram = report("reports/seqkit/{library}.av-length-histogram", category="QC")
+        # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
+    shell:
+        """
+        seqkit stats {input}*.fastq -b -e -T -j 4 -o {output.tsv} ;
+        csvtk csv2md {output.tsv} -t -o {output.md}
+        """ 
 #             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
+
+# -----------------------------------------------------
+# vsearch, readstats report on 03_merged concatenated fastq
+# -----------------------------------------------------
+
+rule vsearch_fastq_readstats:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        expand("results/03_merged/{library}/{sample}.concat.fastq", sample=SAMPLES, library=LIBRARIES)
+    output:
+        fqreadstats = "reports/vsearch/{library}/{sample}.concat.fq_readstats"
+    shell:
+        """
+        vsearch --fastq_stats {input} --log {output.fqreadstats}
+        """
+
+# -----------------------------------------------------
+# vsearch, eestats report on 03_merged concatenated fastq
+# -----------------------------------------------------
+
+rule vsearch_fastq_eestats:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        expand("results/03_merged/{library}/{sample}.concat.fastq", sample=SAMPLES, library=LIBRARIES)
+    output:
+        fqreport = "reports/vsearch/{library}/{sample}.concat.fq_eestats",
+    shell:
+        """
+        vsearch --fastq_eestats {input} --output {output.fqreport}; 
+        """
+
+#---------------------------------------------------
+# Seqkit, report on 03_merged concatenated fasta
+#---------------------------------------------------
+
+rule seqkit_stats_mergedfiles:
+    input:
+        # "results/03_merged/{library}/{sample}.concat.fasta"
+        expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
+    threads:
+        12
+    output:
+        tsv = "reports/seqkit/{library}.concat.seqkit-stats.tsv",
+        md = "reports/seqkit/{library}.concat.seqkit-stats.md",
+    shell:
+        """
+        seqkit stats {input} -b -e -T -j {threads} -o {output.tsv} ;
+        csvtk csv2md {output.tsv} -t -o {output.md} ;
+        """ 
+
 #---------------------------------------------------
 # MultiQC, aggregate QC reports as html report
 #-----------------------------------------------------
@@ -83,18 +138,19 @@ rule seqkit_stats_allfiles:
 #     input:
 #         "reports/fastp/{library}/"
 #     output:
-#         "reports/multiqc/{library}.multiqc.html"
-#     params:
-#         outdir = directory("reports/multiqc/"),  # location for report
 #         filename = "{library}.multiqc.html",  # report filename
+#         outdir = directory("reports/multiqc/")
+#     params:
 #         overwrite = "-f",  # overwrite previous multiqc output
 #         zip = "-z",  # compress the multiqc data dir
 #         quiet = "-q", # only log errors
 #         dirnames = "-dd 1",  # prepend library dir name to sample names
 #     shell:
-#         "multiqc {input} -n {params.filename} {params.overwrite} {params.dirnames} {params.zip} {params.quiet} -o {params.outdir}"
-
-# --------------------------------------------------
-# Vegan
-# --------------------------------------------------
-# add vegan graphical and statistical outputs
+#         "multiqc {input} \
+#           -n {output.filename} \
+#           -o {output.outdir} \
+#           {params.dirnames} \
+#           {params.overwrite} \
+#           {params.zip} \
+#           {params.quiet} \
+#           "

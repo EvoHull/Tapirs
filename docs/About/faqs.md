@@ -20,6 +20,12 @@ You should just be able to edit and fix it on Github. Open the page and click th
 # It works on one machine but not on another
 Run-anywhere portability is a real challenge in bioinformatics, not just for Tapirs. Tapirs has been tested successfully on Windows, OSX, and Linux, but problems may still arise. Conda environments have proved really useful for us, but they aren't perfect. As a start just check that both machines are running the most recent version of Conda and you have the most recent version of Tapirs. Make sure Conda is activated to the base environment, has snakemake installed (check with `conda list`), and you are using the `--use-conda` flag in your initial snakemake command. You could also take the very detailed exported environment (reports/archived_envs) from the successful machine and use it to create a new environment on the not-running machine (`conda env create --file environment.yaml`). Activate this environment and do not use the `--use-conda` flag when running the initial snakemake command. Both machines should then have exactly the same software installed.
 
+# It is incredibly slow, it's been 10 mins and hasn't started yet
+This is normal the first time that you run the software as it will need to find, download, and install all the software and their dependencies. This will only happen one time however. In order to avoid this frustration you could build a conda environment of all the software before first run as described in the installation instructions.
+
+# Is vsearch creating cluster OTUs?
+The default configuration of Tapirs uses exact sequence variants (ESVs) not OTUs.
+
 # Who do I contact about the software?
 The best way is to flag this on GitHub. If you need to get in touch personally then contact Dave Lunt on Gmail.
 
