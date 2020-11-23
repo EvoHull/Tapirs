@@ -3,7 +3,7 @@
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
 
-Tapirs uses the Snakemake workflow manager and is compartmentalised into several modules, all contained in the rules/ directory. Each module performs a step of the workflow.
+Tapirs uses the Snakemake workflow manager and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis.
 
 Rules make use of Conda environments containing the appropriate packages needed to perform. Using Conda ensures version control and prevents workflow failure through package incompatability.
 
