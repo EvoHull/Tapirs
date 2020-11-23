@@ -23,7 +23,7 @@ Teaching and trouble-shooting Snakemake and bioinformatics are beyond the scope 
 
 4, The output of your rule must be added to the `rule all` in the snakefile.
 
-5, Commands requiring `"` or `{}` must be escaped through duplication.
+5, Shell commands containing `"` or `{}` can cause problems and must be escaped through duplication of the symbol.
   Eg, `ls -l | awk '{if ($3 == "rahmu") print $0;}'`
   becomes
   `ls -l | awk '{{if ($3 == ""rahmu"") print $0;}}'`
@@ -46,6 +46,8 @@ You should make a DAG diagram to view the flow of information through your workf
 ![DAG](../images/dag.png)
 
 A DAG should be created in `reports/rulegraph_dag.png` when snakemake is run.
+
+You can create a rulegraph at anytime using `snakemake --rulegraph | dot -Tpng > rule-graph.png`
 
 ## Contributing your improvements to Tapirs
 We would love to hear from you about the improvements you've made. A pull-request for your git branch would probably be best.

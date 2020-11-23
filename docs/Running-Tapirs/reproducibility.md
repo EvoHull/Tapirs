@@ -17,14 +17,11 @@ When an experiment is finished you should have an 'exit strategy' checklist to m
 You can generate an overall snakemake report on what was run and the provinance of the data for each results with the command:
 `snakemake --report reports/snakemake_report.html`
 
-Other reports are written in subdirectories in `reports/` by program
+Other reports are written in subdirectories in `reports/` by the analysis programs
 
 # Software list and versions
 
-The full list of software, their dependencies and version numbers is written to envs/archived_envs/environment.yaml at the end of the run. This file can be used to reproduce the experimental software conditions.
+The full list of software, their dependencies and version numbers is written to `envs/archived_envs/environment.yaml` at the end of the run. This file can be used to reproduce the experimental software conditions.
 
 # Archiving
-Snakemake can be asked to [make an archive](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#sustainable-and-reproducible-archiving) of code, config, and input files:
-```
-snakemake --archive my-workflow.tar.gz
-```
+Snakemake can be asked to [make an archive](https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html#sustainable-and-reproducible-archiving) of code, config, and input files: `snakemake --archive my-workflow.tar.gz`
