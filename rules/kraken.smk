@@ -66,7 +66,7 @@ rule kraken_biom_and_tsv:
 
 #-----------------------------------------------------
 # Kraken taxonomic output to html
-# produces interactive displays of taxonomic diversity
+# produces interactive html displays of kraken output
 #-----------------------------------------------------
 rule kraken_recentrifuge_fig
     conda:
