@@ -62,3 +62,19 @@ rule kraken_biom_and_tsv:
 #         6
 #     shell:
 #         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
+
+
+#-----------------------------------------------------
+# Kraken taxonomic output to html
+# produces interactive displays of taxonomic diversity
+#-----------------------------------------------------
+rule kraken_recentrifuge_fig
+    conda:
+        "../envs/environment.yaml"
+    input:
+        taxdb = config["taxdump"],
+        krakenout = "results/kraken/outputs/{library}/{sample}.tsv"
+    output:
+        "reports/recentrifuge/{library}/{sample}.tsv.html"
+    shell:
+        "rcf -n {input.taxdb} -k {input.krakenout} -o {output}"

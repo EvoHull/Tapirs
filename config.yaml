@@ -36,7 +36,8 @@ dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
 kraken_db: "data/databases/verts_kraken2_db/"
 # SINTAX
 sintax_db: "data/databases/sintax/verts_sintax_db.txt"
-
+# TAXDUMP
+taxdump: "data/databases/new_taxdump"
 # -----------------------------------------------
 # LOCATION OF DATA FILES
 # -----------------------------------------------
