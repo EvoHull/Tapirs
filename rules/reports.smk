@@ -21,17 +21,17 @@ rule snakemake_report:
 # Snakemake, report from docs
 # --------------------------------------------------
 
-rule report:
-    input:
-        "reports/rulegraph_dag.png"
-    output:
-        "snakemake-report.html"
-    run:
-        from snakemake.utils import report
-        # with open(input[0]) as vcf:
-        #     n_calls = sum(1 for l in vcf if not l.startswith("#"))
+# rule report:
+#     input:
+#         "reports/rulegraph_dag.png"
+#     output:
+#         "snakemake-report.html"
+#     run:
+#         from snakemake.utils import report
+#         # with open(input[0]) as vcf:
+#         #     n_calls = sum(1 for l in vcf if not l.startswith("#"))
 
-        report(output[0])
+#         report(output[0])
 
 # --------------------------------------------------
 # Snakemake, plot DAG figure of workflow

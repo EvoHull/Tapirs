@@ -15,8 +15,8 @@ rule kraken2:
         seqs = expand("results/07_rereplicated/{library}/{sample}.rerep.fasta", sample=SAMPLES, library=LIBRARIES),
         kraken_db = config["kraken_db"] # This is specified but not called in the shell command - Mike
     output:
-        kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
-        kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
+        kraken_output = "results/kraken/outputs/{library}/{sample}.krk",
+        kraken_report = "results/kraken/reports/{library}/{sample}.txt"
     threads:
         6
     params:
@@ -27,8 +27,8 @@ rule kraken2:
         --memory-mapping \
         --threads {threads} \
         --confidence {params.confidence} \
-        --output {output.kraken_outputs} \
-        --report {output.kraken_reports} \
+        --output {output.kraken_output} \
+        --report {output.kraken_report} \
         "
 
 #-----------------------------------------------------
@@ -63,18 +63,20 @@ rule kraken_biom_and_tsv:
 #     shell:
 #         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
 
+#-----------------------------------------------------
+# Recentrifuge produces interactive html displays 
+# of kraken output
+#-----------------------------------------------------
 
-#-----------------------------------------------------
-# Kraken taxonomic output to html
-# produces interactive html displays of kraken output
-#-----------------------------------------------------
 rule kraken_recentrifuge_fig
     conda:
         "../envs/environment.yaml"
     input:
         taxdb = config["taxdump"],
-        krakenout = "results/kraken/outputs/{library}/{sample}.tsv"
+        # makes 1 report per library containing all samples, needs .krk extension
+        kraken_out = expand("results/kraken/outputs/{library}", library=LIBRARIES),
+        # kraken_out_N = expand("results/kraken/outputs/{library}/{sample}.krk", sample=SAMPLES, library=LIBRARIES)
     output:
-        "reports/recentrifuge/{library}/{sample}.tsv.html"
+        "reports/recentrifuge/{library}.html"
     shell:
-        "rcf -n {input.taxdb} -k {input.krakenout} -o {output}"
+        "rcf -n {input.taxdb} -k {input.kraken_out} -o {output}"
