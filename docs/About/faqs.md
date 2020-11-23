@@ -23,8 +23,11 @@ Run-anywhere portability is a real challenge in bioinformatics, not just for Tap
 # It is incredibly slow, it's been 10 mins and hasn't started yet
 This is normal the first time that you run the software as it will need to find, download, and install all the software and their dependencies. This will only happen one time however. In order to avoid this frustration you could build a conda environment of all the software before first run as described in the installation instructions.
 
+# Why can't I point it at data somewhere else than the data dir?
+You can do this with minor modifications to the config.yaml file. We don't generally recommend this approach however as it makes it difficult to keep together the resources for the entire experiment, and to make a suitable archive at the end. 
+
 # Is vsearch creating cluster OTUs?
-The default configuration of Tapirs uses exact sequence variants (ESVs) not OTUs.
+The default configuration of Tapirs uses **exact sequence variants** (ESVs) not OTUs.
 
 # Who do I contact about the software?
 The best way is to flag this on GitHub. If you need to get in touch personally then contact Dave Lunt on Gmail.
@@ -40,4 +43,4 @@ Authors:
 URL: https://github.com/EvoHull/Tapirs
 ```
 
-An appropriate way to do this would be to include references to the original analysis software: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], and SINTAX [4]."
+Please also cite the analysis software that you have used. An appropriate way to do this would be to include references to the original software: "A reproducible metabarcoding workflow was implemented in Tapirs [1] using blast [2], Kraken2 [3], and SINTAX [4]."
