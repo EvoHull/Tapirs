@@ -7,12 +7,10 @@ data/01_demultiplexed/P*
 data/01_demultiplexed/L*
 data/databases/blast*
 data/databases/new_taxdump
+data/databases/new*
 .git/
-reports/*
 results/*
 .Rhistory
-data/databases/new*
-data/databases/krona
 */.Rhistory
 libraries.tsv
 samples.tsv
