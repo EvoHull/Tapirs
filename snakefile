@@ -44,6 +44,7 @@ rule all:
                 sample=SAMPLES, library=LIBRARIES),
         # expand("reports/multiqc/{library}.multiqc.html", 
         #        library=library.reset_index().itertuples()),
+        "reports/empty_files_deleted.txt",
 # vsearch reports
         # expand("reports/vsearch/{library}/{sample}.concat.fq_eestats",
         #         sample=SAMPLES, library=LIBRARIES),
@@ -58,7 +59,7 @@ rule all:
         expand("results/mlca/{library}/{sample}.lca.tsv",
                 sample=SAMPLES, library=LIBRARIES),
 # Kraken
-        expand("results/kraken/outputs/{library}/{sample}.tsv",
+        expand("results/kraken/outputs/{library}/{sample}.krk",
                 sample=SAMPLES, library=LIBRARIES),
         expand("results/kraken/reports/{library}/{sample}.txt",
                 sample=SAMPLES, library=LIBRARIES),
@@ -66,6 +67,8 @@ rule all:
                 # my_experiment=config["my_experiment"]),
         # expand("results/kraken/{my_experiment}.biom", 
         #        my_experiment=config["my_experiment"]),
+# Recentrifuge
+        expand("reports/recentrifuge/{library}/{sample}.html", sample=SAMPLES, library=LIBRARIES)
 
 # -----------------------------------------------------
 # Rule files

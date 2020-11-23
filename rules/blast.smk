@@ -12,7 +12,7 @@ rule blastn:
     conda:
         "../envs/environment.yaml"
     input:
-        query = expand("results/06_dechimera/{library}/{sample}.nonchimera.fasta", sample=SAMPLES, library=LIBRARIES),
+        query = expand("results/06_dechimera/{library}/{sample}_nonchimera.fasta", sample=SAMPLES, library=LIBRARIES),
         blastdb = config["blast_db"]
     params:
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"

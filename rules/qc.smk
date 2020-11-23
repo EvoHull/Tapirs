@@ -67,6 +67,8 @@ rule fastp_merge_reads:
         merged = "results/03_merged/{library}/{sample}.concat.fastq",
         # unmerged1 = "results/03_merged/{library}/{sample}.unmerged1.fastq",
         # unmerged2 = "results/03_merged/{library}/{sample}.unmerged2.fastq",
+    params:
+        overlap = config["FASTP_overlap_len"]
     shell:
         "fastp \
         --in1 {input.trimmedread1} \
@@ -76,10 +78,8 @@ rule fastp_merge_reads:
         --merge \
         --include_unmerged \
         --merged_out {output.merged} \
-        --overlap_len_require {config[FASTP_overlap_len]} \
+        --overlap_len_require {params.overlap} \
         "
-        # --out1 {output.unmerged1} \
-        # --out2 {output.unmerged2} \
 
 # -----------------------------------------------------
 # keep forward unpaired and convert fastq to fasta
@@ -139,12 +139,13 @@ rule vsearch_dereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/03_merged/{library}/{sample}.concat.fasta",
-               sample=SAMPLES, library=LIBRARIES)
+        expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
     output:
         "results/04_dereplicated/{library}/{sample}.derep.fasta"
+    params:
+        minuniqsize = config["VSEARCH_minuniqsize"]
     shell:
-        "vsearch --derep_fulllength {input} --sizeout --minuniquesize {config[VSEARCH_minuniqsize]} --output {output}"
+        "vsearch --derep_fulllength {input} --sizeout --minuniquesize {params.minuniqsize} --output {output}"
 
 # -----------------------------------------------------
 # vsearch denoise
@@ -184,12 +185,16 @@ rule vsearch_dechimerisation:
     output:
         chimeras = "results/06_dechimera/{library}/{sample}.chimera.fasta.gz",
         borderline = "results/06_dechimera/{library}/{sample}.borderline-chimera.fasta.gz",
-        nonchimeras = "results/06_dechimera/{library}/{sample}.nonchimera.fasta"
+        nonchimeras = "results/06_dechimera/{library}/{sample}_nonchimera.fasta"
+    params:
+        mindiffs = config["VSEARCH_mindiffs"],
+        mindiv = config["VSEARCH_mindiv"]
     shell:
-        "vsearch --uchime_ref {input.seqs} \
+        "vsearch \
+        --uchime_ref {input.seqs} \
         --db {input.blast_db} \
-        --mindiffs {config[VSEARCH_mindiffs]} \
-        --mindiv {config[VSEARCH_mindiv]} \
+        --mindiffs {params.mindiffs} \
+        --mindiv {params.mindiv} \
         --chimeras {output.chimeras} \
         --borderline {output.borderline} \
         --nonchimeras {output.nonchimeras} \
@@ -203,9 +208,8 @@ rule vsearch_rereplication:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/06_dechimera/{library}/{sample}.nonchimera.fasta",
+        expand("results/06_dechimera/{library}/{sample}_nonchimera.fasta",
                sample=SAMPLES, library=LIBRARIES)
-        # rule("empty_fasta_workaround")
     output:
         "results/07_rereplicated/{library}/{sample}.rerep.fasta"
     threads:

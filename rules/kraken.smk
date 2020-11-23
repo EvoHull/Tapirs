@@ -41,11 +41,13 @@ rule kraken_biom_and_tsv:
     input:
         expand("results/kraken/reports/{library}/{sample}.txt", sample=SAMPLES, library=LIBRARIES)
     output:
-        biom = "results/kraken/{my_experiment}.biom",
-        txt = "results/kraken/reports/*/*.txt"
+        biom = "results/kraken/{library}/{sample}.biom",
+        text = "results/kraken/reports/{library}/{sample}.txt"
     shell:
-        "kraken-biom --max F -o {output.biom} --fmt hdf5 {output.txt}"
-        "kraken-biom --max F -o {output.biom} --fmt tsv {output.txt}"
+        """
+        kraken-biom --max F --fmt hdf5 -o {output.biom};
+        kraken-biom --max F --fmt tsv -o {output.text}
+        """
 
 # #---------------------------------------------------
 # # Biom convert, BIOM to tsv
@@ -68,15 +70,15 @@ rule kraken_biom_and_tsv:
 # of kraken output
 #-----------------------------------------------------
 
-rule kraken_recentrifuge_fig
+rule kraken_recentrifuge_fig:
     conda:
         "../envs/environment.yaml"
     input:
         taxdb = config["taxdump"],
         # makes 1 report per library containing all samples, needs .krk extension
-        kraken_out = expand("results/kraken/outputs/{library}", library=LIBRARIES),
-        # kraken_out_N = expand("results/kraken/outputs/{library}/{sample}.krk", sample=SAMPLES, library=LIBRARIES)
+        # kraken_out = expand("results/kraken/outputs/{library}", library=LIBRARIES),
+        kraken_out_N = expand("results/kraken/outputs/{library}/{sample}.krk", sample=SAMPLES, library=LIBRARIES)
     output:
-        "reports/recentrifuge/{library}.html"
+        "reports/recentrifuge/{library}/{sample}.html"
     shell:
-        "rcf -n {input.taxdb} -k {input.kraken_out} -o {output}"
+        "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"

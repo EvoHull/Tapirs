@@ -28,7 +28,7 @@ conda_envs: "environment.yaml"  # leave this unedited
 # or edit to specify the location
 
 # BLAST
-blast_db: "data/databases/verts_blast_db/12s_full"
+blast_db: "data/databases/verts_blast_db"
 # VSEARCH vsearch_dechimerisation
 # point this at the fasta within the blast database
 dechim_blast_db: "data/databases/verts_blast_db/12s_full.fasta"
