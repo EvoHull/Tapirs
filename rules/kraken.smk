@@ -12,18 +12,18 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/07_rereplicated/{library}/{sample}.rerep.fasta", sample=SAMPLES, library=LIBRARIES)
+        seqs = expand("results/07_rereplicated/{library}/{sample}.rerep.fasta", sample=SAMPLES, library=LIBRARIES),
+        kraken_db = config["kraken_db"] # This is specified but not called in the shell command - Mike
     output:
         kraken_outputs = "results/kraken/outputs/{library}/{sample}.tsv",
         kraken_reports = "results/kraken/reports/{library}/{sample}.txt"
     threads:
         6
     params:
-        confidence = "0.0",
-        kraken_db = directory(config["kraken_db"]) # This is specified but not called in the shell command - Mike
+        confidence = "0.0"
     shell:
         "kraken2 \
-        --db {params.kraken_db} {input} \
+        --db {input.kraken_db} {input.seqs} \
         --memory-mapping \
         --threads {threads} \
         --confidence {params.confidence} \
@@ -41,12 +41,11 @@ rule kraken_biom_and_tsv:
     input:
         expand("results/kraken/reports/{library}/{sample}.txt", sample=SAMPLES, library=LIBRARIES)
     output:
-        "results/kraken/{my_experiment}.biom"
-    params:
-        "results/kraken/reports/*/*.txt"
+        biom = "results/kraken/{my_experiment}.biom",
+        txt = "results/kraken/reports/*/*.txt"
     shell:
-        "kraken-biom --max F -o {output} --fmt hdf5 {params}"
-        "kraken-biom --max F -o {output} --fmt tsv {params}"
+        "kraken-biom --max F -o {output.biom} --fmt hdf5 {output.txt}"
+        "kraken-biom --max F -o {output.biom} --fmt tsv {output.txt}"
 
 # #---------------------------------------------------
 # # Biom convert, BIOM to tsv
