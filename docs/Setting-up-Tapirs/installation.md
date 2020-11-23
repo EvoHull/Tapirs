@@ -1,6 +1,5 @@
-
 !!! note
-    These documents assume a unix system like OSX or Linux, but should be applicable to all systems
+    These documents assume a unix system like OSX or Linux, on MS Windows it may be best to work in a Linux Virtual Machine
 
 Although you can install and run Tapirs without too many steps you will need some very basic knowledge of the command line. A basic knowledge of Snakemake will help you to modify and configure Tapirs. Snakemake is a relatively easy workflow manager, but we recommend that you familiarise yourself with it, perhaps carry out the [tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html).
 
@@ -19,25 +18,21 @@ If you have git installed then clone the repository to your local machine with `
 
 You could alternatively download the repository from the [Tapirs github repository](https://github.com/EvoHull/Tapirs) using the green "Clone or download" button. Then expand the zip file and navigate into the directory.
 
-# Create a working environment called 'tapirs'
+# Create a working environment
 It is best practice to install the software you require for a specific software project (eg Tapirs) in a dedicated 'environment'. This environment will contain only the software you choose for this project and hopefully avoid software conflicts. Conda is the tool for creating and using software environments.
-```
-conda create --name tapirs
-conda activate tapirs
-```
 
-When snakemake runs it can be told to create separate environments to optimally run each rule (a "sequence-quality-control" environment, a `blast` environment, a `kraken2` environment). Currently however the software requirements for Tapirs are relatively straightforward and we have everything in a single 'tapirs' environment. The software required in this environment is specified in the `envs/environment.yaml` file. 
+When snakemake runs it can be told to create separate environments to optimally run each rule (a "sequence-quality-control" environment, a "blast" environment, a "kraken2" environment). Currently however the software requirements for Tapirs are relatively straightforward and we have everything in a single "tapirs" environment. The software required in this environment is specified in the `envs/environment.yaml` file. Clearly specifying software in this way is an important component of reproducibility.
 
 The first time you run Tapirs it can take a while (>10 minutes) to download software and create the environment, subsequent runs will not require this step. We recommend that you create and populate this environment before you start running Tapirs.
 
 ## Install all software from the environment.yaml list
 Although you can install software packages one at a time it is not very efficient. Instead we have created a list of the required software in a text file in the `envs/` directory. Conda can be told to update your environment by reading all the software packages this file.
 
-If you have not yet told conda to create a 'tapirs' environment then you can do so now, and install all required software:
+Install all required software now:
 
 `conda env create --file envs/environment.yaml`
 
-If you havepreviously, in the section above, created a 'tapirs' environment you can update it to include all the required software with:
+If in future you modify the environment file you can always update it with:
 
 `conda env update -f envs/environment.yaml`
 
@@ -51,7 +46,7 @@ If you are unsure what environments you have, and which is active, you can run:
 
 `conda info --envs`
 
-If you get errors when running Tapirs suggesting that some software-name is unknown it is most likely an issue with environments, start by checking that the 'tapirs' environment is active.
+If you get errors when running Tapirs suggesting that some "software-name" is unknown it is most likely an issue with environments, start by checking that the "tapirs" environment is active.
 
 The Snakemake workflow manager software was listed in the `environment.yaml` file and has already been installed if you have carried out the instructions above. You could test this with a `snakemake -help` command. If you get an error such as `command not found: snakemake` its likely that the tapirs environment is not active, try: `conda activate tapirs`
 
