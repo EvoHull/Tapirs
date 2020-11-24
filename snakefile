@@ -45,11 +45,6 @@ rule all:
         # expand("reports/multiqc/{library}.multiqc.html", 
         #        library=library.reset_index().itertuples()),
         "reports/empty_files_deleted.txt",
-# vsearch reports
-        # expand("reports/vsearch/{library}/{sample}.concat.fq_eestats",
-        #         sample=SAMPLES, library=LIBRARIES),
-        # expand("reports/vsearch/{library}/{sample}.concat.fq_readstats",
-        #         sample=SAMPLES, library=LIBRARIES),
 # sintax
         expand("results/sintax/{library}/{sample}.sintax.tsv",
                 sample=SAMPLES, library=LIBRARIES),

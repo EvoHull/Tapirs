@@ -18,22 +18,6 @@ rule snakemake_report:
         "snakemake --report {output}"
 
 # --------------------------------------------------
-# Snakemake, report from docs
-# --------------------------------------------------
-
-# rule report:
-#     input:
-#         "reports/rulegraph_dag.png"
-#     output:
-#         "snakemake-report.html"
-#     run:
-#         from snakemake.utils import report
-#         # with open(input[0]) as vcf:
-#         #     n_calls = sum(1 for l in vcf if not l.startswith("#"))
-
-#         report(output[0])
-
-# --------------------------------------------------
 # Snakemake, plot DAG figure of workflow
 # --------------------------------------------------
 
@@ -68,14 +52,11 @@ rule seqkit_stats_trimmedfiles:
     output:
         tsv = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.tsv",
         md = "reports/seqkit/{library}/{sample}.trimmed.seqkit-stats.md",
-        # histogram = report("reports/seqkit/{library}.av-length-histogram", category="QC")
-        # report("fig1.svg", caption="report/fig1.rst", category="Step 1")
     shell:
         """
         seqkit stats {input}*.fastq -b -e -T -j 4 -o {output.tsv} ;
         csvtk csv2md {output.tsv} -t -o {output.md}
         """ 
-#             csvtk -t plot hist {output.tsv} -f 6 -o {output.histogram}
 
 # -----------------------------------------------------
 # vsearch, readstats report on 03_merged concatenated fastq
@@ -115,7 +96,6 @@ rule vsearch_fastq_eestats:
 
 rule seqkit_stats_mergedfiles:
     input:
-        # "results/03_merged/{library}/{sample}.concat.fasta"
         expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
     threads:
         12
