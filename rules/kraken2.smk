@@ -14,8 +14,6 @@ rule kraken2:
     output:
         reports = "results/kraken/{SAMPLES}.txt",
         outputs = "results/kraken/{SAMPLES}.tsv"
-    params:
-        db = directory("meloidogyne_tomato_db")
     threads:
         10
     shell:
