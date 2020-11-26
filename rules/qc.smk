@@ -9,31 +9,27 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule fastp_trim_reads:
-    conda:
-        "../envs/environment.yaml"
     input:
-        # read1 = "data/01_demultiplexed/test1/1EB.R1.fastq.gz",
-        # read2 = "data/01_demultiplexed/test1/1EB.R2.fastq.gz",
-        read1 = expand(
-            "data/01_demultiplexed/{library}/{sample}.R1.fastq.gz", sample=SAMPLES, library=LIBRARIES),
-        read2 = expand(
-            "data/01_demultiplexed/{library}/{sample}.R2.fastq.gz", sample=SAMPLES, library=LIBRARIES),
+        read1 = "data/01_demultiplexed/{SAMPLES}.R1.fastq.gz",
+        read2 = "data/01_demultiplexed/{SAMPLES}.R2.fastq.gz"
     output:
-        R1trimmed = "results/02_trimmed/{library}/{sample}.R1.trimmed.fastq",
-        R2trimmed = "results/02_trimmed/{library}/{sample}.R2.trimmed.fastq",
-        unpairedR1 = "results/02_trimmed/{library}/{sample}.R1.unpaired.fastq",
-        unpairedR2 = "results/02_trimmed/{library}/{sample}.R2.unpaired.fastq",
-        failed = "results/02_trimmed/{library}/{sample}.failedfilter.fastq",
-        json = "reports/fastp/{library}/{sample}.fastp.json",  # report
-        html = "reports/fastp/{library}/{sample}.fastp.html",  # report
+        R1trimmed = "results/02_trimmed/{SAMPLES}.R1.trimmed.fastq",
+        R2trimmed = "results/02_trimmed/{SAMPLES}.R2.trimmed.fastq",
+        R1unpaired = "results/02_trimmed/{SAMPLES}.R1.unpaired.fastq",
+        R2unpaired = "results/02_trimmed/{SAMPLES}.R2.unpaired.fastq",
+        failed = "results/02_trimmed/{SAMPLES}.failed.fastq",
+        json = "reports/fastp/{SAMPLES}.fastp.json",
+        html = "reports/fastp/{SAMPLES}.fastp.html"
+    threads:
+        10
     shell:
-        "fastp \
+         "fastp \
         --in1 {input.read1} \
         --in2 {input.read2} \
         --out1 {output.R1trimmed} \
         --out2 {output.R2trimmed} \
-        --unpaired1 {output.unpairedR1} \
-        --unpaired2 {output.unpairedR2} \
+        --unpaired1 {output.R1unpaired} \
+        --unpaired2 {output.R2unpaired} \
         --failed_out {output.failed} \
         -j {output.json} \
         -h {output.html} \
@@ -45,174 +41,64 @@ rule fastp_trim_reads:
         --max_len1 {config[FASTP_max_len1]} \
         --max_len2 {config[FASTP_max_len2]} \
         --correction \
-        -w 6"
+        -w {config[threads]}"
 
-# --------------------------------------------------
-# fastp, merge reads R1 and R2
-# merged.fastq also includes unmerged and unpaired
-# --------------------------------------------------
+# ------------------------------------------------------------------------------
+# FASTP MERGE PAIRED END READS
+
 rule fastp_merge_reads:
-    conda:
-        "../envs/environment.yaml"
     input:
-        trimmedread1 = expand(
-            "results/02_trimmed/{library}/{sample}.R1.trimmed.fastq", sample=SAMPLES, library=LIBRARIES),
-        trimmedread2 = expand(
-            "results/02_trimmed/{library}/{sample}.R2.trimmed.fastq", sample=SAMPLES, library=LIBRARIES),
-        unpairedR1 = expand(
-            "results/02_trimmed/{library}/{sample}.R1.unpaired.fastq", sample=SAMPLES, library=LIBRARIES),
-        unpairedR2 = expand(
-            "results/02_trimmed/{library}/{sample}.R2.unpaired.fastq", sample=SAMPLES, library=LIBRARIES),
+        R1trimmed = "results/02_trimmed/{SAMPLES}.R1.trimmed.fastq",
+        R2trimmed = "results/02_trimmed/{SAMPLES}.R2.trimmed.fastq",
     output:
-        merged = "results/03_merged/{library}/{sample}.concat.fastq",
-        # unmerged1 = "results/03_merged/{library}/{sample}.unmerged1.fastq",
-        # unmerged2 = "results/03_merged/{library}/{sample}.unmerged2.fastq",
-    params:
-        overlap = config["FASTP_overlap_len"]
+        merged = "results/03_merged/{SAMPLES}.merged.fastq",
+        R1unmerged = "results/03_merged/{SAMPLES}.R1.unmerged.fastq",
+        R2unmerged = "results/03_merged/{SAMPLES}.R2.unmerged.fastq",
+        json = "reports/fastp_merged/{SAMPLES}.merged.fastp.json",
+        html = "reports/fastp_merged/{SAMPLES}.merged.fastp.html"
     shell:
         "fastp \
-        --in1 {input.trimmedread1} \
-        --in2 {input.trimmedread2} \
-        --unpaired1 {input.unpairedR1} \
-        --unpaired2 {input.unpairedR2} \
+        --disable_quality_filtering \
+        --disable_adapter_trimming \
+        --in1 {input.R1trimmed} \
+        --in2 {input.R2trimmed} \
+        --out1 {output.R1unmerged} \
+        --out2 {output.R2unmerged} \
         --merge \
-        --include_unmerged \
         --merged_out {output.merged} \
-        --overlap_len_require {params.overlap} \
-        "
+        --overlap_len_require {config[FASTP_overlap_len]} \
+        -w {config[threads]} \
+        -j {output.json} \
+        -h {output.html} "
 
-# -----------------------------------------------------
-# keep forward unpaired and convert fastq to fasta
-#  not needed with fastp --keep-unmerged command?
-# -----------------------------------------------------
+# ------------------------------------------------------------------------------
+# MERGE FORWARD READS
 
-# rule seqkit_merge_in_unpaired_to_fasta:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         merged = "results/03_merged/{library}/{sample}.merged.fastq",
-#         unpairedR1 = "results/03_merged/{library}/{sample}.unpaired.R1.fastq",
-#         R1 = "results/02_trimmed/{library}/{sample}.R1.fastq"
-#     output:
-#         fa = "results/03_merged/{library}/{sample}.concat.fasta",
-#         fq = "results/03_merged/{library}/{sample}.concat.fastq"
-#     shell:
-#         """
-#         seqkit fq2fa \
-#         {input.merged} {input.unpairedR1} {input.R1} \
-#         -o {output.fa} {output.fq}
-#         """
-
-# -----------------------------------------------------
-# find and remove empty merged files
-#  -will work if files in /library directory ie -depth 2
-# -----------------------------------------------------
-
-rule remove_empty_files:
+rule merge_forward_reads:
     input:
-        "results/03_merged/"
+        merged = "results/03_merged/{SAMPLES}.merged.fastq",
+        R1unpaired = "results/02_trimmed/{SAMPLES}.R1.unpaired.fastq",
+        R1unmerged = "results/03_merged/{SAMPLES}.R1.unmerged.fastq"
     output:
-        "reports/empty_files_deleted.txt"
-    shell:
-        "find {input} -depth 2 -type f -empty -print > {output} -delete"
+        fq = "results/04_forward_merged/{SAMPLES}.forward.merged.fastq"
+    run:
+        filenames = [input.merged, input.R1unpaired, input.R1unmerged]
+        with open(str(output.fq), 'w') as outfile:
+            for fname in filenames:
+                with open(str(fname)) as infile:
+                    outfile.write(infile.read())
 
-# -----------------------------------------------------
-# seqkit fastq to fasta
-# -----------------------------------------------------
+# ------------------------------------------------------------------------------
+# FASTQ TO FASTA
 
-rule seqkit_convert_to_fasta:
-    conda:
-        "../envs/environment.yaml"
+rule seqkit_fq2fa:
     input:
-        expand("results/03_merged/{library}/{sample}.concat.fastq",
-               sample=SAMPLES, library=LIBRARIES)
+        fq = "results/04_forward_merged/{SAMPLES}.forward.merged.fastq"
     output:
-        "results/03_merged/{library}/{sample}.concat.fasta",
+        fa = "results/05_forward_merged/{SAMPLES}.fasta"
     shell:
-        "seqkit fq2fa {input} -o {output}"
+        "seqkit fq2fa \
+        {input.fq} \
+        -o {output.fa}"
 
-# -----------------------------------------------------
-# vsearch dereplication
-# -----------------------------------------------------
-
-rule vsearch_dereplication:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
-    output:
-        "results/04_dereplicated/{library}/{sample}.derep.fasta"
-    params:
-        minuniqsize = config["VSEARCH_minuniqsize"]
-    shell:
-        "vsearch --derep_fulllength {input} --sizeout --minuniquesize {params.minuniqsize} --output {output}"
-
-# -----------------------------------------------------
-# vsearch denoise
-# -----------------------------------------------------
-
-rule vsearch_denoising:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        expand(
-            "results/04_dereplicated/{library}/{sample}.derep.fasta", sample=SAMPLES, library=LIBRARIES),
-    output:
-        centroids = "results/05_denoised/{library}/{sample}.denoise.fasta",
-        cluster_results = "reports/vsearch/{library}/{sample}.denoise-report.txt"
-    shell:
-        "vsearch \
-        --cluster_unoise {input} \
-        --sizein \
-        --sizeout \
-        --minsize {config[VSEARCH_minsize]} \
-        --unoise_alpha {config[VSEARCH_unoise_alpha]} \
-        --id {config[VSEARCH_id]} \
-        --centroids {output.centroids} \
-        --uc {output.cluster_results}"
-
-# -----------------------------------------------------
-# vsearch chimera removal
-# -----------------------------------------------------
-
-rule vsearch_dechimerisation:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        seqs = expand(
-            "results/05_denoised/{library}/{sample}.denoise.fasta", sample=SAMPLES, library=LIBRARIES),
-        blast_db = config["dechim_blast_db"]
-    output:
-        chimeras = "results/06_dechimera/{library}/{sample}.chimera.fasta.gz",
-        borderline = "results/06_dechimera/{library}/{sample}.borderline-chimera.fasta.gz",
-        nonchimeras = "results/06_dechimera/{library}/{sample}_nonchimera.fasta"
-    params:
-        mindiffs = config["VSEARCH_mindiffs"],
-        mindiv = config["VSEARCH_mindiv"]
-    shell:
-        "vsearch \
-        --uchime_ref {input.seqs} \
-        --db {input.blast_db} \
-        --mindiffs {params.mindiffs} \
-        --mindiv {params.mindiv} \
-        --chimeras {output.chimeras} \
-        --borderline {output.borderline} \
-        --nonchimeras {output.nonchimeras} \
-        "
-
-# ------------------------------------------------------
-# vsearch re-replication
-# -------------------------------------------------------
-
-rule vsearch_rereplication:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        expand("results/06_dechimera/{library}/{sample}_nonchimera.fasta",
-               sample=SAMPLES, library=LIBRARIES)
-    output:
-        "results/07_rereplicated/{library}/{sample}.rerep.fasta"
-    threads:
-        6
-    shell:
-        "vsearch --rereplicate {input} --output {output}"
+# ------------------------------------------------------------------------------

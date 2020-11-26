@@ -9,63 +9,27 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule mlca:
-    conda:
-        "../envs/environment.yaml"
     input:
-        "results/blasttax/{library}/{sample}.tax.tsv"
+        blast = "results/blast_tax/{SAMPLES}.blast.tax.tsv"
     output:
-        "results/mlca/{library}/{sample}.lca.tsv"
+        lca = "results/mlca/{SAMPLES}.lca.tsv"
     params:
-        # out = "results/mlca/{library}/{sample}.lca.tsv", # redundant
-        bitscore = "10",   # -b blast hit bitscore upper threshold
-        identity = "100",  # -id percent identity
-        coverage = "60",   # -cov percentage coverage
-        majority = "100",  # -m majority percent, 100 is all hits share taxonomy
-        hits = "1"  # -hits minimum number of hits, default = 2, 1 is true LCA just takes top hit
-    shell:
-        "python scripts/mlca.py \
-        -i {input} \
-        -o {output} \
-        -b {params.bitscore} \
-        -id {params.identity} \
-        -cov {params.coverage} \
-        -m {params.majority} \
-        -hits {params.hits} \
-        "
-# GS - The mlca script needs changing because of an error. The final species name is output seperated by a tab and not an undderscore or space; is this something you can fix?
+        bitscore = config['MLCA_bitscore'],
+        identity = config['MLCA_identity'],
+        coverage = config['MCLA_coverage'],
+        majority = config['MLCA_majority'],
+        min_hits = config['MLCA_hits']
+    script:
+        "../scripts/mlca.py"
 
-# -------------------------------------------------------
-# mlca to tsv
-# -------------------------------------------------------
+
+# MLCA TO TSV
 
 rule mlca_to_tsv:
-    conda:
-        "../envs/environment.yaml"
     input:
-        expand("results/mlca/{library}/{sample}.lca.tsv", sample=SAMPLES, library=LIBRARIES)
+        lca = expand("results/mlca/{sample}.lca.tsv", sample = SAMPLES),
+        rerep = expand("results/10_rerep/{sample}.rerep.fasta", sample = SAMPLES)
     output:
-        "reports/{config[my_experiment]}.tsv"
-    params:
-        indir = "results/mlca/",
-        rerep = "results/rereplicated"  # syntax
-    shell:
-        "python scripts/mlca-tsv.py -i {params.indir} -r {params.rerep} -o {output}"
-
-# -------------------------------------------------------
-# blca, Bayesian lowest common ancestor
-# -------------------------------------------------------
-
-# rule blca:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         query = "results/06_dechimera/{library}/{sample}.nonchimera.fasta",
-#         database = config["blast_db"]
-#     output:
-#         "results/blca/{library}/{sample}.blca.out"
-#     script:
-#         "scripts/2.blca_main.py \
-#         -i {input.query} \
-#         --db {input.database} \
-#         -o {output} \
-#         "
+        tsv = "results/" + config['my_experiment'] + "blast" + config['MLCA_identity'] + ".tsv"
+    script:
+        "../scripts/mlca_to_tsv.py"
