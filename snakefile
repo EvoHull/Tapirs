@@ -5,7 +5,7 @@
 
 import pandas as pd
 configfile: "config.yaml"
-
+report: "report/snakemake-report.rst"
 # --------------------------------------------------
 # Load library and sample information
 # --------------------------------------------------
@@ -24,7 +24,12 @@ rule all:
     input:
 # Final csv
         "results/"+config['my_experiment']+"blast"+config['MLCA_identity']+".tsv",
-        expand("results/kraken/{sample}.txt", sample = SAMPLES)
+        expand("results/kraken/{sample}.txt", sample = SAMPLES),
+# Reports
+        "reports/dag_rulegraph.png",
+# Archives
+        "reports/archived_envs/tapirs.yaml",
+
 
 
 # -----------------------------------------------------
@@ -33,8 +38,8 @@ rule all:
 
 include: "rules/qc.smk"
 include: "rules/blast.smk"
-include: "rules/kraken.smk"
+include: "rules/kraken2.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch_cluster.smk"
 # include: "rules/sintax.smk"
-# include: "rules/reports.smk"
+include: "rules/reports.smk"
