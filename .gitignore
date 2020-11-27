@@ -5,7 +5,7 @@
 .git/
 .Rhistory
 */.Rhistory
-data/demultiplexed/*
+data/01_demultiplexed/*
 data/databases/blast*
 data/databases/new_taxdump
 data/databases/new*

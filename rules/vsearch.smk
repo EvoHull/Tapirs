@@ -17,7 +17,7 @@ rule vsearch_dereplicate:
         "vsearch --derep_fulllength {input.fa} \
         --sizeout \
         --minuniquesize {config[VSEARCH_minuniqsize]} \
-        --output {output.derep "
+        --output {output.derep} "
 
 # -----------------------------------------------------
 # VSEARCH DENOISE
@@ -86,4 +86,3 @@ rule vsearch_rereplicate:
     shell:
         "vsearch --rereplicate {input.nonchimeras} \
         --output {output.rerep}"
-
