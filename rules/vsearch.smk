@@ -1,6 +1,6 @@
 # ==================================================
 # VSEARCH
-# dereplicate, cluster, dechimera
+# dereplicate, denoise, dechimera, rereplicate
 # ==================================================
 
 configfile: "config.yaml"
