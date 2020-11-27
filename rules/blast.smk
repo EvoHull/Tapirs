@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule blastn:
     input:
-        query = "results/09_dechimera/{SAMPLES}.nc.fasta",
+        query = "results/08_dechimera/{SAMPLES}.nc.fasta",
     output:
         blast = "results/blast/{SAMPLES}.blast.tsv"
     params:

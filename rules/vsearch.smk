@@ -62,9 +62,9 @@ rule vsearch_denoise:
 # ------------------------------------------------------------------------------
 # CHIMERA DETECTION
 
-rule vsearch_dechimera_clusters:
+rule vsearch_dechimera:
     input:
-        cluster = "results/07_denoised/{SAMPLES}.cluster.fasta"
+        cluster = "results/07_denoised/{SAMPLES}.denoise.fasta"
     output:
         nonchimeras = "results/08_dechimera/{SAMPLES}.nc.fasta",
         chimeras = "results/08_dechimera/{SAMPLES}.chimera.fasta"
