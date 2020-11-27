@@ -61,7 +61,7 @@ for sample in samples:
 
     assigned_reads = dfob[sample_name].sum()
 
-    rerep = 'results/10_rerep/' + name + '.rerep.fasta'
+    rerep = 'results/09_rereplicated/' + name + '.rerep.fasta'
 
     total_reads = len([1 for line in open(rerep)
                        if line.startswith('>')])
