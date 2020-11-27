@@ -29,7 +29,7 @@ rule vsearch_denoise:
         "results/06_dereplicated/{SAMPLES}.derep.fasta",
     output:
         seqs = "results/07_denoised/{SAMPLES}.denoise.fasta",
-        cluster_results = "reports/vsearch/{SAMPLES}.denoise-report.txt"
+        denoise_results = "reports/vsearch/{SAMPLES}.denoise-report.txt"
     shell:
         "vsearch \
         --cluster_unoise {input} \
@@ -39,7 +39,7 @@ rule vsearch_denoise:
         --unoise_alpha {config[VSEARCH_unoise_alpha]} \
         --id {config[VSEARCH_id]} \
         --centroids {output.seqs} \
-        --uc {output.cluster_results}"
+        --uc {output.denoise_results}"
 
 # ------------------------------------------------------------------------------
 # CLUSTER READS
