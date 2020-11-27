@@ -5,7 +5,7 @@
 
 import pandas as pd
 configfile: "config.yaml"
-report: "report/snakemake-report.rst"
+report: "reports/snakemake-report.rst"
 # --------------------------------------------------
 # Load library and sample information
 # --------------------------------------------------

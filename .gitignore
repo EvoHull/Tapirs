@@ -10,6 +10,7 @@ data/databases/new_taxdump
 data/databases/new*
 .git/
 results/*
+reports/*
 .Rhistory
 */.Rhistory
 libraries.tsv
