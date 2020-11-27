@@ -21,33 +21,53 @@ rule vsearch_dereplicate:
         --output {output.derep} \
         --uc {output.cluster_file}"
 
+# -----------------------------------------------------
+# VSEARCH DENOISE
+
+rule vsearch_denoise:
+    input:
+        "results/06_dereplicated/{SAMPLES}.derep.fasta",
+    output:
+        seqs = "results/07_denoised/{SAMPLES}.denoise.fasta",
+        cluster_results = "reports/vsearch/{SAMPLES}.denoise-report.txt"
+    shell:
+        "vsearch \
+        --cluster_unoise {input} \
+        --sizein \
+        --sizeout \
+        --minsize {config[VSEARCH_minsize]} \
+        --unoise_alpha {config[VSEARCH_unoise_alpha]} \
+        --id {config[VSEARCH_id]} \
+        --centroids {output.seqs} \
+        --uc {output.cluster_results}"
+
 # ------------------------------------------------------------------------------
 # CLUSTER READS
 
-rule vsearch_cluster:
-    input:
-        derep = "results/06_dereplicated/{SAMPLES}.derep.fasta"
-    output:
-        cluster = "results/07_clustered/{SAMPLES}.cluster.fasta",
-        cluster_file = "results/08_clusters/{SAMPLES}.cluster.txt"
-    shell:
-        "vsearch --cluster_fast {input.derep} \
-        --sizein --sizeout \
-        --query_cov {config[VSEARCH_query_cov]} \
-        --id {config[VSEARCH_cluster_id]} \
-        --strand both \
-        --centroids {output.cluster} \
-        --uc {output.cluster_file}"
+# rule vsearch_cluster:
+#     input:
+#         derep = "results/06_dereplicated/{SAMPLES}.derep.fasta"
+#     output:
+#         cluster = "results/07_clustered/{SAMPLES}.cluster.fasta",
+#         cluster_file = "results/08_clusters/{SAMPLES}.cluster.txt"
+#     shell:
+#         "vsearch --cluster_fast {input.derep} \
+#         --sizein --sizeout \
+#         --query_cov {config[VSEARCH_query_cov]} \
+#         --id {config[VSEARCH_cluster_id]} \
+#         --strand both \
+#         --centroids {output.cluster} \
+#         --uc {output.cluster_file}"
 
 # ------------------------------------------------------------------------------
 # CHIMERA DETECTION
 
-rule vsearch_dechimera:
+rule vsearch_dechimera_clusters:
     input:
-        cluster = "results/07_clustered/{SAMPLES}.cluster.fasta"
+        cluster = "results/07_denoised/{SAMPLES}.cluster.fasta"
     output:
-        nonchimeras = "results/09_dechimera/{SAMPLES}.nc.fasta",
-        chimeras = "results/09_dechimera/{SAMPLES}.chimera.fasta"
+        nonchimeras = "results/08_dechimera/{SAMPLES}.nc.fasta",
+        chimeras = "results/08_dechimera/{SAMPLES}.chimera.fasta"
     shell:
         "vsearch --uchime_ref {input.cluster} \
         --db {config[dechim_blast_db]} \
@@ -58,13 +78,14 @@ rule vsearch_dechimera:
         --nonchimeras {output.nonchimeras}"
 
 # ------------------------------------------------------------------------------
-# REREPLICATIE READS
+# REREPLICATE READS
 
 rule vsearch_rereplicate:
     input:
-        nonchimeras = "results/09_dechimera/{SAMPLES}.nc.fasta"
+        nonchimeras = "results/08_dechimera/{SAMPLES}.nc.fasta"
     output:
-        rerep = "results/10_rereplicated/{SAMPLES}.rerep.fasta",
+        rerep = "results/09_rereplicated/{SAMPLES}.rerep.fasta",
     shell:
         "vsearch --rereplicate {input.nonchimeras} \
         --output {output.rerep}"
+
