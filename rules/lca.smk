@@ -28,7 +28,7 @@ rule mlca:
 rule mlca_to_tsv:
     input:
         lca = expand("results/mlca/{sample}.lca.tsv", sample = SAMPLES),
-        rerep = expand("results/10_rerep/{sample}.rerep.fasta", sample = SAMPLES)
+        rerep = expand("results/09_rereplicated/{sample}.rerep.fasta", sample = SAMPLES)
     output:
         tsv = "results/" + config['my_experiment'] + "blast" + config['MLCA_identity'] + ".tsv"
     script:

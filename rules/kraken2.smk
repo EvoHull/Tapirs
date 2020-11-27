@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule kraken2:
     input:
-        reads = "results/10_rerep/{SAMPLES}.rerep.fasta"
+        reads = "results/09_rereplicated/{SAMPLES}.rerep.fasta"
     output:
         reports = "results/kraken/{SAMPLES}.txt",
         outputs = "results/kraken/{SAMPLES}.tsv"
