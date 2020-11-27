@@ -1,5 +1,5 @@
 # ==================================================
-# VSEARCH CLUSTERING
+# VSEARCH
 # ==================================================
 
 configfile: "config.yaml"
@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 # DEREPLICATIE READS
 
-rule vsearch_derep:
+rule vsearch_dereplicate:
     input:
         fa = "results/05_forward_merged/{SAMPLES}.fasta"
     output:
@@ -44,7 +44,7 @@ rule vsearch_cluster:
 # ------------------------------------------------------------------------------
 # CHIMERA DETECTION
 
-rule vesearch_uchime:
+rule vsearch_uchime:
     input:
         cluster = "results/07_clustered/{SAMPLES}.cluster.fasta"
     output:
@@ -62,7 +62,7 @@ rule vesearch_uchime:
 # ------------------------------------------------------------------------------
 # REREPLICATIE READS
 
-rule vesearch_rerep:
+rule vsearch_rereplicate:
     input:
         nonchimeras = "results/09_uchime/{SAMPLES}.nc.fasta"
     output:
