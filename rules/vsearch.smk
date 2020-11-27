@@ -37,7 +37,7 @@ rule vsearch_denoise:
         --sizeout \
         --minsize {config[VSEARCH_minsize]} \
         --unoise_alpha {config[VSEARCH_unoise_alpha]} \
-        --id {config[VSEARCH_id]} \
+        --id {config[VSEARCH_unoise_id]} \
         --centroids {output.seqs} \
         --uc {output.denoise_results}"
 
