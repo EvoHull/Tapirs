@@ -10,7 +10,7 @@ data/databases/new_taxdump
 data/databases/new*
 .git/
 results/*
-reports/*
+reports/fastp*
 .Rhistory
 */.Rhistory
 libraries.tsv
