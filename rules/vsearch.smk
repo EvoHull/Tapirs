@@ -1,20 +1,18 @@
 # ==================================================
 # VSEARCH
+# dereplicate, cluster, dechimera
 # ==================================================
 
 configfile: "config.yaml"
 
-# --------------------------------------------------
-#
-# --------------------------------------------------
-
+# ------------------------------------------------------------------------------
 # DEREPLICATIE READS
 
 rule vsearch_dereplicate:
     input:
         fa = "results/05_forward_merged/{SAMPLES}.fasta"
     output:
-        derep = "results/06_derep/{SAMPLES}.derep.fasta",
+        derep = "results/06_dereplicated/{SAMPLES}.derep.fasta",
         cluster_file = "results/08_clusters/{SAMPLES}.derep.txt"
     shell:
         "vsearch --derep_fulllength {input.fa} \
@@ -28,7 +26,7 @@ rule vsearch_dereplicate:
 
 rule vsearch_cluster:
     input:
-        derep = "results/06_derep/{SAMPLES}.derep.fasta"
+        derep = "results/06_dereplicated/{SAMPLES}.derep.fasta"
     output:
         cluster = "results/07_clustered/{SAMPLES}.cluster.fasta",
         cluster_file = "results/08_clusters/{SAMPLES}.cluster.txt"
@@ -44,12 +42,12 @@ rule vsearch_cluster:
 # ------------------------------------------------------------------------------
 # CHIMERA DETECTION
 
-rule vsearch_uchime:
+rule vsearch_dechimera:
     input:
         cluster = "results/07_clustered/{SAMPLES}.cluster.fasta"
     output:
-        nonchimeras = "results/09_uchime/{SAMPLES}.nc.fasta",
-        chimeras = "results/09_uchime/{SAMPLES}.chimera.fasta"
+        nonchimeras = "results/09_dechimera/{SAMPLES}.nc.fasta",
+        chimeras = "results/09_dechimera/{SAMPLES}.chimera.fasta"
     shell:
         "vsearch --uchime_ref {input.cluster} \
         --db {config[dechim_blast_db]} \
@@ -64,9 +62,9 @@ rule vsearch_uchime:
 
 rule vsearch_rereplicate:
     input:
-        nonchimeras = "results/09_uchime/{SAMPLES}.nc.fasta"
+        nonchimeras = "results/09_dechimera/{SAMPLES}.nc.fasta"
     output:
-        rerep = "results/10_rerep/{SAMPLES}.rerep.fasta",
+        rerep = "results/10_rereplicated/{SAMPLES}.rerep.fasta",
     shell:
         "vsearch --rereplicate {input.nonchimeras} \
         --output {output.rerep}"
