@@ -13,13 +13,11 @@ rule vsearch_dereplicate:
         fa = "results/05_forward_merged/{SAMPLES}.fasta"
     output:
         derep = "results/06_dereplicated/{SAMPLES}.derep.fasta",
-        cluster_file = "results/08_clusters/{SAMPLES}.derep.txt"
     shell:
         "vsearch --derep_fulllength {input.fa} \
         --sizeout \
         --minuniquesize {config[VSEARCH_minuniqsize]} \
-        --output {output.derep} \
-        --uc {output.cluster_file}"
+        --output {output.derep "
 
 # -----------------------------------------------------
 # VSEARCH DENOISE
