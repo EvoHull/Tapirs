@@ -10,9 +10,9 @@ configfile: "config.yaml"
 
 rule mlca:
     input:
-        blast = "results/blast_tax/{SAMPLES}.blast.tax.tsv"
+        blast = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     output:
-        lca = "results/mlca/{SAMPLES}.lca.tsv"
+        lca = "results/mlca/{LIBRARIES}/{SAMPLES}.lca.tsv"
     params:
         bitscore = config['MLCA_bitscore'],
         identity = config['MLCA_identity'],
@@ -27,8 +27,8 @@ rule mlca:
 
 rule mlca_to_tsv:
     input:
-        lca = expand("results/mlca/{sample}.lca.tsv", sample = SAMPLES),
-        rerep = expand("results/09_rereplicated/{sample}.rerep.fasta", sample = SAMPLES)
+        lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
+        rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
     output:
         tsv = "results/" + config['my_experiment'] + "blast" + config['MLCA_identity'] + ".tsv"
     script:

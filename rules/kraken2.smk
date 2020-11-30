@@ -10,10 +10,10 @@ configfile: "config.yaml"
 
 rule kraken2:
     input:
-        reads = "results/09_rereplicated/{SAMPLES}.rerep.fasta"
+        reads = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta"
     output:
-        reports = "results/kraken/{SAMPLES}.txt",
-        outputs = "results/kraken/{SAMPLES}.tsv"
+        reports = "results/kraken/{LIBRARIES}/{SAMPLES}.txt",
+        outputs = "results/kraken/{LIBRARIES}/{SAMPLES}.tsv"
     threads:
         10
     shell:

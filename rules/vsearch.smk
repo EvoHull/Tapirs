@@ -10,9 +10,9 @@ configfile: "config.yaml"
 
 rule vsearch_dereplicate:
     input:
-        fa = "results/05_forward_merged/{SAMPLES}.fasta"
+        fa = "results/05_forward_merged/{LIBRARIES}/{SAMPLES}.fasta"
     output:
-        derep = "results/06_dereplicated/{SAMPLES}.derep.fasta",
+        derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta",
     shell:
         "vsearch --derep_fulllength {input.fa} \
         --sizeout \
@@ -24,10 +24,10 @@ rule vsearch_dereplicate:
 
 rule vsearch_denoise:
     input:
-        "results/06_dereplicated/{SAMPLES}.derep.fasta",
+        "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta",
     output:
-        seqs = "results/07_denoised/{SAMPLES}.denoise.fasta",
-        denoise_results = "reports/vsearch/{SAMPLES}.denoise-report.txt"
+        seqs = "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta",
+        denoise_results = "reports/vsearch/{LIBRARIES}/{SAMPLES}.denoise-report.txt"
     shell:
         "vsearch \
         --cluster_unoise {input} \
@@ -44,10 +44,10 @@ rule vsearch_denoise:
 
 # rule vsearch_cluster:
 #     input:
-#         derep = "results/06_dereplicated/{SAMPLES}.derep.fasta"
+#         derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta"
 #     output:
-#         cluster = "results/07_clustered/{SAMPLES}.cluster.fasta",
-#         cluster_file = "results/08_clusters/{SAMPLES}.cluster.txt"
+#         cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta",
+#         cluster_file = "results/08_clusters/{LIBRARIES}/{SAMPLES}.cluster.txt"
 #     shell:
 #         "vsearch --cluster_fast {input.derep} \
 #         --sizein --sizeout \
@@ -62,10 +62,10 @@ rule vsearch_denoise:
 
 rule vsearch_dechimera:
     input:
-        cluster = "results/07_denoised/{SAMPLES}.denoise.fasta"
+        cluster = "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta"
     output:
-        nonchimeras = "results/08_dechimera/{SAMPLES}.nc.fasta",
-        chimeras = "results/08_dechimera/{SAMPLES}.chimera.fasta"
+        nonchimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta",
+        chimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.chimera.fasta"
     shell:
         "vsearch --uchime_ref {input.cluster} \
         --db {config[dechim_blast_db]} \
@@ -80,9 +80,9 @@ rule vsearch_dechimera:
 
 rule vsearch_rereplicate:
     input:
-        nonchimeras = "results/08_dechimera/{SAMPLES}.nc.fasta"
+        nonchimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta"
     output:
-        rerep = "results/09_rereplicated/{SAMPLES}.rerep.fasta",
+        rerep = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta",
     shell:
         "vsearch --rereplicate {input.nonchimeras} \
         --output {output.rerep}"

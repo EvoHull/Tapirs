@@ -10,9 +10,9 @@ configfile: "config.yaml"
 
 rule blastn:
     input:
-        query = "results/08_dechimera/{SAMPLES}.nc.fasta",
+        query = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta",
     output:
-        blast = "results/blast/{SAMPLES}.blast.tsv"
+        blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"
     params:
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
     shell:
@@ -32,8 +32,8 @@ rule blastn:
 rule taxonomy_to_blast:
     input:
         taxdump = config['taxdump'],
-        blast = "results/blast/{SAMPLES}.blast.tsv"
+        blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"
     output:
-        blast_tax = "results/blast_tax/{SAMPLES}.blast.tax.tsv"
+        blast_tax = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     script:
         "../scripts/taxonomy_to_blast.py"

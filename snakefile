@@ -11,16 +11,21 @@ report: "reports/snakemake-report.rst"
 # --------------------------------------------------
 
 libraries_df = pd.read_table('output.tsv', header = None)
-LIBRARIES = list(libraries_df[0])
-# LIBRARIES = list(dict.fromkeys(LIBRARIES))
-SAMPLES = list(libraries_df[1])
-# SAMPLES = list(dict.fromkeys(SAMPLES))
 
-# with open('samples.tsv') as infile:
-#     sample_list = []
-#     for line in infile:
-#         sample_list.append(line.strip().replace('\t', '/'))
-# SAMPLES = sample_list
+# Generate library wildcards
+LIBRARIES = list(libraries_df[0])
+LIBRARIES = list(dict.fromkeys(LIBRARIES))
+
+# Generate samples wildcards
+SAMPLES = list(libraries_df[1])
+SAMPLES = list(dict.fromkeys(SAMPLES))
+
+# Generate list of legitimate combinations
+with open('output.tsv') as infile:
+    real_combos = []
+    for line in infile:
+        real_combos.append(line.strip().replace('\t', '/'))
+
 
 # ---------------------------------------------------
 # Target rule
@@ -29,11 +34,11 @@ SAMPLES = list(libraries_df[1])
 rule all:
     input:
 # Final csv
-        # "results/"+config['my_experiment']+"blast"+config['MLCA_identity']+".tsv",
-        # expand("results/kraken/{sample}.txt", sample = SAMPLES),
+        "results/"+config['my_experiment']+"blast"+config['MLCA_identity']+".tsv",
+        expand("results/kraken/{real_combos}.txt", real_combos = real_combos),
 # Reports
         "reports/dag_rulegraph.png",
-        expand("reports/fastp/{LIBRARIES}/{SAMPLES}.fastp.html", LIBRARIES = LIBRARIES, SAMPLES = SAMPLES),
+        expand("reports/fastp/{real_combos}.fastp.html", real_combos = real_combos),
 # Archives
         "reports/archived_envs/tapirs.yaml",
 
@@ -42,10 +47,10 @@ rule all:
 # Rule files
 # -----------------------------------------------------
 
-# include: "rules/qc.smk"
-# include: "rules/blast.smk"
-# include: "rules/kraken2.smk"
-# include: "rules/lca.smk"
-# include: "rules/vsearch.smk"
+include: "rules/qc.smk"
+include: "rules/blast.smk"
+include: "rules/kraken2.smk"
+include: "rules/lca.smk"
+include: "rules/vsearch.smk"
 # # include: "rules/sintax.smk"
-# include: "rules/reports.smk"
+include: "rules/reports.smk"

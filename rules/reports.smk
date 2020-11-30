@@ -44,12 +44,12 @@ rule conda_env:
 
 # rule seqkit_stats_trimmedfiles:
 #     input:
-#         "results/02_trimmed/{SAMPLES}"
+#         "results/02_trimmed/{LIBRARIES}/{SAMPLES}"
 #     threads:
 #         4  # -j
 #     output:
-#         tsv = "reports/seqkit/{SAMPLES}.trimmed.seqkit-stats.tsv",
-#         md = "reports/seqkit/{SAMPLES}.trimmed.seqkit-stats.md",
+#         tsv = "reports/seqkit/{LIBRARIES}/{SAMPLES}.trimmed.seqkit-stats.tsv",
+#         md = "reports/seqkit/{LIBRARIES}/{SAMPLES}.trimmed.seqkit-stats.md",
 #     shell:
 #         """
 #         seqkit stats {input}*.fastq -b -e -T -j 4 -o {output.tsv} ;
@@ -64,9 +64,9 @@ rule vsearch_fastq_readstats:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/03_merged/{SAMPLES}.concat.fastq", SAMPLES=SAMPLES)
+        expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fastq", LIBRARIES = LIBRARIES, SAMPLES=SAMPLES)
     output:
-        fqreadstats = "reports/vsearch/{SAMPLES}.concat.fq_readstats"
+        fqreadstats = "reports/vsearch/{LIBRARIES}/{SAMPLES}.concat.fq_readstats"
     shell:
         """
         vsearch --fastq_stats {input} --log {output.fqreadstats}
@@ -80,9 +80,9 @@ rule vsearch_fastq_eestats:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/03_merged/{SAMPLES}.concat.fastq", SAMPLES=SAMPLES)
+        expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fastq", LIBRARIES = LIBRARIES, SAMPLES=SAMPLES)
     output:
-        fqreport = "reports/vsearch/{SAMPLES}.concat.fq_eestats",
+        fqreport = "reports/vsearch/{LIBRARIES}/{SAMPLES}.concat.fq_eestats",
     shell:
         """
         vsearch --fastq_eestats {input} --output {output.fqreport};
@@ -94,7 +94,7 @@ rule vsearch_fastq_eestats:
 
 # rule seqkit_stats_mergedfiles:
 #     input:
-#         expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
+#         expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
 #     threads:
 #         12
 #     output:

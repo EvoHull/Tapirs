@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule fastp_trim_reads:
     input:
-        read1 = "data/01_demultiplexed/{LIBRARIES}/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
+        read1 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R2.fastq.gz"
     output:
         R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
