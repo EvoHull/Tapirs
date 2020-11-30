@@ -75,3 +75,4 @@ rule kraken2:
 #         "reports/recentrifuge/{library}/{sample}.html"
 #     shell:
 #         "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
+# 
