@@ -30,8 +30,6 @@ rule all:
 # Archives
         "reports/archived_envs/tapirs.yaml",
 
-
-
 # -----------------------------------------------------
 # Rule files
 # -----------------------------------------------------
@@ -43,4 +41,4 @@ include: "rules/lca.smk"
 include: "rules/vsearch.smk"
 # include: "rules/sintax.smk"
 include: "rules/reports.smk"
-# include: "rules/biom.smk"
+include: "rules/biom.smk"
