@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule mlca:
+    conda:
+        "../envs/environment.yaml"
     input:
         blast = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     output:
@@ -22,10 +24,12 @@ rule mlca:
     script:
         "../scripts/mlca.py"
 
-
+# --------------------------------------------------
 # MLCA TO TSV
 
 rule mlca_to_tsv:
+    conda:
+        "../envs/environment.yaml"
     input:
         lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)

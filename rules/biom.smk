@@ -8,11 +8,11 @@ configfile: "config.yaml"
 # MLCA, convert mlca tsv output to biom format
 # ---------------------------------------------------------
 
-rule mlca-to-biom:
+rule mlca_to_biom:
     conda:
         "../envs/environment.yaml"
     input:
-        expand("results/mlca/{LIBRARIES}/{SAMPLES}.lca.tsv")
+        "results/mlca/{LIBRARIES}/{SAMPLES}.lca.tsv"
     output:
         "results/mlca/mlca_biom.hdf5"
     shell:
@@ -23,8 +23,10 @@ rule mlca-to-biom:
 # ---------------------------------------------------------
 
 rule sintax_tsv_to_BIOM:
+    conda:
+        "../envs/environment.yaml"
     input:
-        expand("reports/sintax/{LIBRARIES}/{SAMPLES}.sintax.tsv")
+        "reports/sintax/{LIBRARIES}/{SAMPLES}.sintax.tsv"
     output:
         "reports/sintax/{LIBRARIES}/{SAMPLES}.sintax.biom"
     shell:

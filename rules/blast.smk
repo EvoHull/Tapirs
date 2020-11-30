@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule blastn:
+    conda:
+        "../envs/environment.yaml"
     input:
         query = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta",
     output:
@@ -30,6 +32,8 @@ rule blastn:
 # TAXONOMY TO BLAST
 
 rule taxonomy_to_blast:
+    conda:
+        "../envs/environment.yaml"
     input:
         taxdump = config['taxdump'],
         blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"

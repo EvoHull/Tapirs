@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # DEREPLICATIE READS
 
 rule vsearch_dereplicate:
+    conda:
+        "../envs/environment.yaml"
     input:
         fa = "results/05_forward_merged/{LIBRARIES}/{SAMPLES}.fasta"
     output:
@@ -23,6 +25,8 @@ rule vsearch_dereplicate:
 # VSEARCH DENOISE
 
 rule vsearch_denoise:
+    conda:
+        "../envs/environment.yaml"
     input:
         "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta",
     output:
@@ -43,6 +47,8 @@ rule vsearch_denoise:
 # CLUSTER READS
 
 # rule vsearch_cluster:
+#    conda:
+#        "../envs/environment.yaml"
 #     input:
 #         derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta"
 #     output:
@@ -61,6 +67,8 @@ rule vsearch_denoise:
 # CHIMERA DETECTION
 
 rule vsearch_dechimera:
+    conda:
+        "../envs/environment.yaml"
     input:
         cluster = "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta"
     output:
@@ -79,6 +87,8 @@ rule vsearch_dechimera:
 # REREPLICATE READS
 
 rule vsearch_rereplicate:
+    conda:
+        "../envs/environment.yaml"
     input:
         nonchimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta"
     output:

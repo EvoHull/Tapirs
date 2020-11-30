@@ -12,6 +12,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 # rule snakemake_report:  # this only works when run after the workflow has completed, so unsure how to work it into the snakemake
+#    conda:
+#        "../envs/environment.yaml"
 #     output:
 #         "reports/snakemake-report.html"
 #     shell:
@@ -22,6 +24,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule plot_workflow_DAG:
+    conda:
+        "../envs/environment.yaml"
     output:
         "reports/dag_rulegraph.png"
     shell:
@@ -32,6 +36,8 @@ rule plot_workflow_DAG:
 # --------------------------------------------------
 
 rule conda_env:
+    conda:
+        "../envs/environment.yaml"
     output:
         "reports/archived_envs/tapirs.yaml"
     shell:
@@ -43,6 +49,8 @@ rule conda_env:
 # --------------------------------------------------
 
 # rule seqkit_stats_trimmedfiles:
+#    conda:
+#        "../envs/environment.yaml"
 #     input:
 #         "results/02_trimmed/{LIBRARIES}/{SAMPLES}"
 #     threads:
@@ -93,8 +101,10 @@ rule vsearch_fastq_eestats:
 #---------------------------------------------------
 
 # rule seqkit_stats_mergedfiles:
+#    conda:
+#        "../envs/environment.yaml"
 #     input:
-#         expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
+#        "results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fasta"
 #     threads:
 #         12
 #     output:

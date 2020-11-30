@@ -1,0 +1,7 @@
+query	lca_rank	lca_taxon	kingdom	phylum	class	order	family	genus	species	method
+M04282:77:000000000-C3GLD:1:1101:21645:1834;size=23064	species	Gasterosteus_aculeatus	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus	lca
+M04282:77:000000000-C3GLD:1:1101:18057:1801;size=18211	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius	single_hit
+M04282:77:000000000-C3GLD:1:1101:13564:4344;size=304	species	Phoxinus_phoxinus	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Phoxinus	Phoxinus_phoxinus	lca
+M04282:77:000000000-C3GLD:1:1101:22037:10215;size=193	species	Anguilla_anguilla	Eukaryota	Chordata	Actinopteri	Anguilliformes	Anguillidae	Anguilla	Anguilla_anguilla	lca
+M04282:77:000000000-C3GLD:1:1106:25625:20654;size=11	family	Gasterosteidae	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	unidentified	unidentified	lca
+M04282:77:000000000-C3GLD:1:1104:3374:7278;size=9	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius	lca
