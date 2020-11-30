@@ -15,6 +15,7 @@ results/0*
 results/blast/*
 results/blast_tax/*
 reports/fastp/*
+reports/recentrifuge/*
 results/kraken/*
 results/mlca/*
 reports/fastp_merged/*
