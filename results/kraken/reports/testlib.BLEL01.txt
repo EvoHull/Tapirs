@@ -1,0 +1,56 @@
+ 57.36	56225	56225	U	0	unclassified
+ 42.64	41798	0	R	1	root
+ 42.64	41798	0	R1	131567	  cellular organisms
+ 42.64	41798	0	D	2759	    Eukaryota
+ 42.64	41798	0	D1	33154	      Opisthokonta
+ 42.64	41798	0	K	33208	        Metazoa
+ 42.64	41798	0	K1	6072	          Eumetazoa
+ 42.64	41798	0	K2	33213	            Bilateria
+ 42.64	41798	0	K3	33511	              Deuterostomia
+ 42.64	41798	0	P	7711	                Chordata
+ 42.64	41798	0	P1	89593	                  Craniata
+ 42.64	41798	0	P2	7742	                    Vertebrata
+ 42.64	41798	0	P3	7776	                      Gnathostomata
+ 42.64	41798	0	P4	117570	                        Teleostomi
+ 42.64	41798	0	P5	117571	                          Euteleostomi
+ 42.64	41798	0	P6	7898	                            Actinopterygii
+ 42.64	41798	0	C	186623	                              Actinopteri
+ 42.64	41798	0	C1	41665	                                Neopterygii
+ 42.64	41798	0	C2	32443	                                  Teleostei
+ 42.44	41605	0	C3	1489341	                                    Osteoglossocephalai
+ 42.44	41605	0	C4	186625	                                      Clupeocephala
+ 42.13	41301	0	C5	1489388	                                        Euteleosteomorpha
+ 23.55	23081	0	C6	123365	                                          Neoteleostei
+ 23.55	23081	0	C7	123366	                                            Eurypterygia
+ 23.55	23081	0	C8	123367	                                              Ctenosquamata
+ 23.55	23081	0	C9	123368	                                                Acanthomorphata
+ 23.55	23081	0	C10	123369	                                                  Euacanthomorphacea
+ 23.55	23081	0	C11	1489872	                                                    Percomorphaceae
+ 23.55	23081	0	C12	1489922	                                                      Eupercaria
+ 23.55	23081	0	O	8111	                                                        Perciformes
+ 23.55	23081	0	O1	8100	                                                          Cottioidei
+ 23.55	23081	0	O2	1490020	                                                            Gasterosteales
+ 23.55	23081	11	F	69291	                                                              Gasterosteidae
+ 23.54	23070	0	G	69292	                                                                Gasterosteus
+ 23.54	23070	23070	S	69293	                                                                  Gasterosteus aculeatus
+ 18.59	18220	0	C6	41705	                                          Protacanthopterygii
+ 18.59	18220	0	O	8007	                                            Esociformes
+ 18.59	18220	0	F	8008	                                              Esocidae
+ 18.59	18220	0	G	8009	                                                Esox
+ 18.59	18220	18220	S	8010	                                                  Esox lucius
+  0.31	304	0	C5	186634	                                        Otomorpha
+  0.31	304	0	C6	32519	                                          Ostariophysi
+  0.31	304	0	C7	186626	                                            Otophysi
+  0.31	304	0	C8	186627	                                              Cypriniphysae
+  0.31	304	0	O	7952	                                                Cypriniformes
+  0.31	304	0	O1	30727	                                                  Cyprinoidei
+  0.31	304	0	F	7953	                                                    Cyprinidae
+  0.31	304	0	G	42662	                                                      Phoxinus
+  0.31	304	304	S	58324	                                                        Phoxinus phoxinus
+  0.20	193	0	C3	1489340	                                    Elopocephalai
+  0.20	193	0	C4	186624	                                      Elopocephala
+  0.20	193	0	C5	32521	                                        Elopomorpha
+  0.20	193	0	O	7933	                                          Anguilliformes
+  0.20	193	0	F	7934	                                            Anguillidae
+  0.20	193	0	G	7935	                                              Anguilla
+  0.20	193	193	S	7936	                                                Anguilla anguilla

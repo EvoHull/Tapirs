@@ -104,7 +104,7 @@ rule vsearch_fastq_eestats:
 #    conda:
 #        "../envs/environment.yaml"
 #     input:
-#         expand("results/03_merged/{library}/{sample}.concat.fasta", sample=SAMPLES, library=LIBRARIES)
+#         "results/03_merged/{SAMPLES}.concat.fasta"
 #     threads:
 #         12
 #     output:

@@ -1,0 +1,6 @@
+#OTU_ID	1EB	1FB	208	209	210	taxonomy
+Esox_lucius	0	0	128	128	128	k__Eukaryota; p__Chordata; c__Actinopteri; o__Esociformes; f__Esocidae; g__Esox; s__lucius
+Gasterosteus_aculeatus	0	0	41461	41461	41461	k__Eukaryota; p__Chordata; c__Actinopteri; o__Perciformes; f__Gasterosteidae; g__Gasterosteus; s__aculeatus
+Pungitius_pungitius	0	0	23205	23205	23205	k__Eukaryota; p__Chordata; c__Actinopteri; o__Perciformes; f__Gasterosteidae; g__Pungitius; s__pungitius
+Rutilus_rutilus	0	0	834	834	834	k__Eukaryota; p__Chordata; c__Actinopteri; o__Cypriniformes; f__Cyprinidae; g__Rutilus; s__rutilus
+unassigned	2250	617	15449	15449	15449	u__unassigned

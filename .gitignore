@@ -9,7 +9,7 @@ data/01_demultiplexed/*
 data/databases/blast*
 data/databases/new_taxdump
 data/databases/new*
-results/*
+results/0*
 reports/fastp/*
 reports/fastp_merged/*
 reports/vsearch/*
