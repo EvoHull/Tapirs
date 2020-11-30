@@ -12,16 +12,16 @@ rule fastp_trim_reads:
     conda:
         "../envs/environment.yaml"
     input:
-        read1 = "data/01_demultiplexed/{SAMPLES}.R1.fastq.gz",
-        read2 = "data/01_demultiplexed/{SAMPLES}.R2.fastq.gz"
+        read1 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
+        read2 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R2.fastq.gz"
     output:
-        R1trimmed = "results/02_trimmed/{SAMPLES}.R1.trimmed.fastq",
-        R2trimmed = "results/02_trimmed/{SAMPLES}.R2.trimmed.fastq",
-        R1unpaired = "results/02_trimmed/{SAMPLES}.R1.unpaired.fastq",
-        R2unpaired = "results/02_trimmed/{SAMPLES}.R2.unpaired.fastq",
-        failed = "results/02_trimmed/{SAMPLES}.failed.fastq",
-        json = "reports/fastp/{SAMPLES}.fastp.json",
-        html = "reports/fastp/{SAMPLES}.fastp.html"
+        R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
+        R2trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.trimmed.fastq",
+        R1unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.unpaired.fastq",
+        R2unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.unpaired.fastq",
+        failed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.failed.fastq",
+        json = "reports/fastp/{LIBRARIES}/{SAMPLES}.fastp.json",
+        html = "reports/fastp/{LIBRARIES}/{SAMPLES}.fastp.html"
     threads:
         10
     shell:
@@ -52,14 +52,14 @@ rule fastp_merge_reads:
     conda:
         "../envs/environment.yaml"
     input:
-        R1trimmed = "results/02_trimmed/{SAMPLES}.R1.trimmed.fastq",
-        R2trimmed = "results/02_trimmed/{SAMPLES}.R2.trimmed.fastq",
+        R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
+        R2trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.trimmed.fastq",
     output:
-        merged = "results/03_merged/{SAMPLES}.merged.fastq",
-        R1unmerged = "results/03_merged/{SAMPLES}.R1.unmerged.fastq",
-        R2unmerged = "results/03_merged/{SAMPLES}.R2.unmerged.fastq",
-        json = "reports/fastp_merged/{SAMPLES}.merged.fastp.json",
-        html = "reports/fastp_merged/{SAMPLES}.merged.fastp.html"
+        merged = "results/03_merged/{LIBRARIES}/{SAMPLES}.merged.fastq",
+        R1unmerged = "results/03_merged/{LIBRARIES}/{SAMPLES}.R1.unmerged.fastq",
+        R2unmerged = "results/03_merged/{LIBRARIES}/{SAMPLES}.R2.unmerged.fastq",
+        json = "reports/fastp_merged/{LIBRARIES}/{SAMPLES}.merged.fastp.json",
+        html = "reports/fastp_merged/{LIBRARIES}/{SAMPLES}.merged.fastp.html"
     shell:
         "fastp \
         --disable_quality_filtering \
@@ -82,11 +82,11 @@ rule merge_forward_reads:
     # conda:
     #     "../envs/environment.yaml"
     input:
-        merged = "results/03_merged/{SAMPLES}.merged.fastq",
-        R1unpaired = "results/02_trimmed/{SAMPLES}.R1.unpaired.fastq",
-        R1unmerged = "results/03_merged/{SAMPLES}.R1.unmerged.fastq"
+        merged = "results/03_merged/{LIBRARIES}/{SAMPLES}.merged.fastq",
+        R1unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.unpaired.fastq",
+        R1unmerged = "results/03_merged/{LIBRARIES}/{SAMPLES}.R1.unmerged.fastq"
     output:
-        fq = "results/04_forward_merged/{SAMPLES}.forward.merged.fastq"
+        fq = "results/04_forward_merged/{LIBRARIES}/{SAMPLES}.forward.merged.fastq"
     run:
         filenames = [input.merged, input.R1unpaired, input.R1unmerged]
         with open(str(output.fq), 'w') as outfile:
@@ -101,9 +101,9 @@ rule seqkit_fq2fa:
     conda:
         "../envs/environment.yaml"
     input:
-        fq = "results/04_forward_merged/{SAMPLES}.forward.merged.fastq"
+        fq = "results/04_forward_merged/{LIBRARIES}/{SAMPLES}.forward.merged.fastq"
     output:
-        fa = "results/05_forward_merged/{SAMPLES}.fasta"
+        fa = "results/05_forward_merged/{LIBRARIES}/{SAMPLES}.fasta"
     shell:
         "seqkit fq2fa \
         {input.fq} \

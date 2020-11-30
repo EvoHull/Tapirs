@@ -12,10 +12,10 @@ rule sintax:
     conda:
         "../envs/environment.yaml"
     input:
-        query = "results/09_rereplicated/{library}/{sample}.rerep.fasta",
+        query = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta",
         database = config["sintax_db"]
     output:
-        tsv = "results/sintax/{library}/{sample}.sintax.tsv",
+        tsv = "results/sintax/{LIBRARIES}/{SAMPLES}.sintax.tsv",
     shell:
         "vsearch --sintax \
         {input.query} \
