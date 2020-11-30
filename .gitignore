@@ -7,8 +7,8 @@
 */.Rhistory
 data/01_demultiplexed/*
 data/databases/blast*
-data/databases/new_taxdump
-data/databases/new*
+data/*
+data/databases/*
 data/old/*
 data/COI/*
 results/0*

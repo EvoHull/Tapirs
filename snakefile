@@ -33,6 +33,8 @@ with open('output.tsv') as infile:
 
 rule all:
     input:
+# Sintax
+        # expand("results/sintax/{real_combos}.sintax.tsv", real_combos = real_combos),
 # Final csv
         "results/"+config['my_experiment']+"blast"+config['MLCA_identity']+".tsv",
         expand("results/kraken/{real_combos}.txt", real_combos = real_combos),
@@ -41,6 +43,9 @@ rule all:
         expand("reports/fastp/{real_combos}.fastp.html", real_combos = real_combos),
 # Archives
         "reports/archived_envs/tapirs.yaml",
+# Biom
+        expand("results/mlca/{real_combos}.mlca_biom.hdf5", real_combos = real_combos),
+        # expand("reports/sintax/{real_combos}.sintax.biom", real_combos = real_combos)
 
 
 # -----------------------------------------------------
@@ -52,6 +57,6 @@ include: "rules/blast.smk"
 include: "rules/kraken2.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch.smk"
-# # include: "rules/sintax.smk"
+include: "rules/sintax.smk"
 include: "rules/reports.smk"
-# include: "rules/biom.smk"
+include: "rules/biom.smk"
