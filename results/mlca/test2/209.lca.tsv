@@ -1,5 +1,5 @@
 query	lca_rank	lca_otu	kingdom	phylum	class	order	family	genus	species	method
-M04282:87:000000000-CCLL6:1:1102:17773:2731;size=41461	species	Gasterosteus_aculeatus	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	aculeatus	lca
-M04282:87:000000000-CCLL6:1:1102:8994:2704;size=23205	species	Pungitius_pungitius	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Pungitius	pungitius	lca
-M04282:87:000000000-CCLL6:1:1102:2525:15060;size=128	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	lucius	lca
-M04282:87:000000000-CCLL6:1:1102:25966:6080;size=834	species	Rutilus_rutilus	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Rutilus	rutilus	lca
+M04282:87:000000000-CCLL6:1:1101:7266:2720;size=834	species	Rutilus_rutilus	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Rutilus	rutilus	lca
+M04282:87:000000000-CCLL6:1:1101:20736:1872;size=23205	species	Pungitius_pungitius	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Pungitius	pungitius	lca
+M04282:87:000000000-CCLL6:1:1101:13023:1788;size=41461	species	Gasterosteus_aculeatus	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	aculeatus	lca
+M04282:87:000000000-CCLL6:1:1101:27464:14230;size=128	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	lucius	lca
