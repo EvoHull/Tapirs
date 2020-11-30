@@ -13,7 +13,7 @@ rule kraken2:
         reads = "results/09_rereplicated/{SAMPLES}.rerep.fasta"
     output:
         reports = "results/kraken/{SAMPLES}.txt",
-        outputs = "results/kraken/{SAMPLES}.tsv"
+        outputs = "results/kraken/{SAMPLES}.krk"
     threads:
         10
     shell:
@@ -63,16 +63,14 @@ rule kraken2:
 # of kraken output
 #-----------------------------------------------------
 
-# rule kraken_recentrifuge_fig:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         taxdb = config["taxdump"],
-#         # makes 1 report per library containing all samples, needs .krk extension
-#         # kraken_out = expand("results/kraken/outputs/{library}", library=LIBRARIES),
-#         kraken_out_N = expand("results/kraken/outputs/{library}/{sample}.krk", sample=SAMPLES, library=LIBRARIES)
-#     output:
-#         "reports/recentrifuge/{library}/{sample}.html"
-#     shell:
-#         "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
-# 
+rule kraken_recentrifuge_fig:
+    conda:
+        "../envs/environment.yaml"
+    input:
+        taxdb = config["taxdump"],
+        # makes 1 report per library containing all samples, needs .krk extension
+        kraken_out_N = "results/kraken/{SAMPLES}.krk"
+    output:
+        "reports/recentrifuge/{library}/{sample}.html"
+    shell:
+        "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
