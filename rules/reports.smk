@@ -122,7 +122,7 @@ rule vsearch_fastq_eestats:
 
 # rule multiqc:
 #     conda:
-#         "envs/environment.yaml"
+#         "..envs/environment.yaml"
 #     input:
 #         "reports/fastp/{library}/"
 #     output:
