@@ -68,9 +68,8 @@ rule kraken_recentrifuge_fig:
         "../envs/environment.yaml"
     input:
         taxdb = config["taxdump"],
-        # makes 1 report per library containing all samples, needs .krk extension
         kraken_out_N = "results/kraken/{SAMPLES}.krk"
     output:
-        "reports/recentrifuge/{library}/{sample}.html"
+        "reports/recentrifuge/{SAMPLES}.html"
     shell:
         "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
