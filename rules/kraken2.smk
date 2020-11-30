@@ -12,10 +12,11 @@ rule kraken2:
     conda:
         "../envs/environment.yaml"
     input:
-        reads = "results/09_rereplicated/{SAMPLES}.rerep.fasta"
+        reads = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta"
     output:
-        reports = "results/kraken/{SAMPLES}.txt",
-        outputs = "results/kraken/{SAMPLES}.krk"
+        reports = "results/kraken/{LIBRARIES}/{SAMPLES}.txt",
+        outputs = "results/kraken/{LIBRARIES}/{SAMPLES}.krk"
+
     threads:
         10
     shell:

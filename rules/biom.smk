@@ -12,7 +12,7 @@ rule mlca_to_biom:
     conda:
         "../envs/environment.yaml"
     input:
-        "results/mlca/{SAMPLES}.lca.tsv"
+        "results/mlca/{LIBRARIES}/{SAMPLES}.lca.tsv"
     output:
         "results/mlca/mlca_biom.hdf5"
     shell:
@@ -26,9 +26,9 @@ rule sintax_tsv_to_BIOM:
     conda:
         "../envs/environment.yaml"
     input:
-        "reports/sintax/{SAMPLES}.sintax.tsv"
+        "reports/sintax/{LIBRARIES}/{SAMPLES}.sintax.tsv"
     output:
-        "reports/sintax/{SAMPLES}.sintax.biom"
+        "reports/sintax/{LIBRARIES}/{SAMPLES}.sintax.biom"
     shell:
         """
         biom convert {input} {output} --table-type="OTU table" --to-hdf5
