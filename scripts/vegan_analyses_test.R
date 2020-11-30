@@ -53,5 +53,22 @@ all_methods_table <- rbind.fill(data.frame(kraken2_table), data.frame(blast_tabl
 #Repeating the previous analyses with this new table
 all_methods_betadiv <- vegdist(all_methods_table, method="bray", na.rm = TRUE)
 all_methods_pca <- prcomp(all_methods_betadiv)
-autoplot(all_methods_pca, rownames.label = TRUE, colour=rep(c("red","blue"),each=nrow(kraken2_table)))
+plot(all_methods_pca$x[,1], all_methods_pca$x[,2], pch=20, main="PCA plot of Kraken2 and BLAST results", 
+     col=rep(c("red","blue"), each=nrow(kraken2_table)), ylab="PCA2", xlab="PCA1")
+legend("bottomright", legend=c("Kraken2", "BLAST"), title = "Analysis method", fill = c("red","blue"), cex=0.8)
+
+##Saving the PCA plot
+# Step 1: Call the pdf command to start the plot
+png(file = "~/github/Tapirs/results/pca_plot_test.png",   # The directory you want to save the file in
+    width = 5, # The width of the plot in inches
+    height = 5) # The height of the plot in inches
+
+# Step 2: Create the plot with R code
+plot(all_methods_pca$x[,1], all_methods_pca$x[,2], pch=20, main="PCA plot of Kraken2 and BLAST results", 
+     col=rep(c("red","blue"), each=nrow(kraken2_table)), ylab="PCA2", xlab="PCA1")
+legend("bottomright", legend=c("Kraken2", "BLAST"), title = "Analysis method", fill = c("red","blue"), cex=0.8)
+
+# Step 3: Run dev.off() to create the file!
+dev.off()
+
 
