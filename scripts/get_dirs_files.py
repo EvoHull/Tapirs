@@ -39,6 +39,6 @@ df = pd.read_csv(dupfile, sep="\t")
 # remove duplicate rows
 df.drop_duplicates(subset=None, inplace=True)
 # add column names
-df.columns = ['library', 'sample']
+# df.columns = ['library', 'sample']
 # Write the results to a new tsv, no (index) row names
-df.to_csv(samples_output, sep="\t", index=False)
+df.to_csv(samples_output, sep="\t", index=False, header=False)

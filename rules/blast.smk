@@ -9,45 +9,31 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule blastn:
-    conda:
-        "../envs/environment.yaml"
     input:
-        query = expand("results/06_dechimera/{library}/{sample}_nonchimera.fasta", sample=SAMPLES, library=LIBRARIES),
-        blastdb = config["blast_db"]
+        query = "results/08_dechimera/{SAMPLES}.nc.fasta",
+    output:
+        blast = "results/blast/{SAMPLES}.blast.tsv"
     params:
         outformat = "'6 qseqid stitle sacc staxids pident qcovs evalue bitscore'"
-    output:
-        "results/blast/{library}/{sample}.blast.tsv"
-    threads:
-        6
     shell:
         "blastn \
-        -db {input.blastdb} \
         -query {input.query} \
-        -num_threads {threads} \
+        -db {config[blast_db]} \
+        -num_threads {config[threads]} \
         -outfmt {params.outformat} \
         -perc_identity {config[BLAST_min_perc_ident]} \
         -evalue {config[BLAST_min_evalue]} \
         -max_target_seqs {config[BLAST_max_target_seqs]} \
-        -out {output} \
-        "
+        -out {output.blast}"
 
-# -----------------------------------------------------
-# tax_to_blast, adds taxonomy column to blast output
-# snakemakification still in progress
-# -----------------------------------------------------
+# ------------------------------------------------------------------------------
+# TAXONOMY TO BLAST
 
-rule add_taxonomy_to_blast:
-    conda:
-        "../envs/environment.yaml"
+rule taxonomy_to_blast:
     input:
-        blast_out = expand("results/blast/{library}/{sample}.blast.tsv", sample=SAMPLES, library=LIBRARIES),
-        ranked_lineage = "data/databases/new_taxdump/rankedlineage.dmp"
+        taxdump = config['taxdump'],
+        blast = "results/blast/{SAMPLES}.blast.tsv"
     output:
-        "results/blasttax/{library}/{sample}.tax.tsv",
-    params:
-    #     taxdump = "data/databases/new_taxdump/rankedlineage.dmp"
-    #     indir = "results/blast",
-    #     outdir = "results/blasttax"
+        blast_tax = "results/blast_tax/{SAMPLES}.blast.tax.tsv"
     script:
-        "scripts/tax_to_blast.py -i results/blast -o results/blasttax -lin {input.ranked_lineage}"
+        "../scripts/taxonomy_to_blast.py"
