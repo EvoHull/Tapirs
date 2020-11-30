@@ -47,7 +47,6 @@ rule all:
         expand("results/mlca/{real_combos}.mlca_biom.hdf5", real_combos = real_combos),
         # expand("reports/sintax/{real_combos}.sintax.biom", real_combos = real_combos)
 
-
 # -----------------------------------------------------
 # Rule files
 # -----------------------------------------------------
