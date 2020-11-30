@@ -23,6 +23,8 @@ rule mlca-to-biom:
 # ---------------------------------------------------------
 
 rule sintax_tsv_to_BIOM:
+    conda:
+        "../envs/environment.yaml"
     input:
         expand("reports/sintax/{library}/{sample}.sintax.tsv")
     output:

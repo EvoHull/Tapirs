@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule kraken2:
+    conda:
+        "../envs/environment.yaml"
     input:
         reads = "results/09_rereplicated/{SAMPLES}.rerep.fasta"
     output:

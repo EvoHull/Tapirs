@@ -9,6 +9,8 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule fastp_trim_reads:
+    conda:
+        "../envs/environment.yaml"
     input:
         read1 = "data/01_demultiplexed/{SAMPLES}.R1.fastq.gz",
         read2 = "data/01_demultiplexed/{SAMPLES}.R2.fastq.gz"
@@ -47,6 +49,8 @@ rule fastp_trim_reads:
 # FASTP MERGE PAIRED END READS
 
 rule fastp_merge_reads:
+    conda:
+        "../envs/environment.yaml"
     input:
         R1trimmed = "results/02_trimmed/{SAMPLES}.R1.trimmed.fastq",
         R2trimmed = "results/02_trimmed/{SAMPLES}.R2.trimmed.fastq",
@@ -75,6 +79,8 @@ rule fastp_merge_reads:
 # MERGE FORWARD READS
 
 rule merge_forward_reads:
+    conda:
+        "../envs/environment.yaml"
     input:
         merged = "results/03_merged/{SAMPLES}.merged.fastq",
         R1unpaired = "results/02_trimmed/{SAMPLES}.R1.unpaired.fastq",
@@ -92,6 +98,8 @@ rule merge_forward_reads:
 # FASTQ TO FASTA
 
 rule seqkit_fq2fa:
+    conda:
+        "../envs/environment.yaml"
     input:
         fq = "results/04_forward_merged/{SAMPLES}.forward.merged.fastq"
     output:
