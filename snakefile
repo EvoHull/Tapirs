@@ -10,15 +10,15 @@ report: "reports/snakemake-report.rst"
 # Load library and sample information
 # --------------------------------------------------
 
-libraries_df = pd.read_table('output.tsv', header = None)
+libraries_df = pd.read_table('output.tsv', header = None)  # Pull in libraries and samples from tsv
 
 # Generate library wildcards
-LIBRARIES = list(libraries_df[0])
-LIBRARIES = list(dict.fromkeys(LIBRARIES))
+LIBRARIES = list(libraries_df[0])  # create list from column of dataframe
+LIBRARIES = list(dict.fromkeys(LIBRARIES))  # dipping it into a dictionary to remove duplicates
 
 # Generate samples wildcards
-SAMPLES = list(libraries_df[1])
-SAMPLES = list(dict.fromkeys(SAMPLES))
+SAMPLES = list(libraries_df[1])  # create list from column of dataframe
+SAMPLES = list(dict.fromkeys(SAMPLES))  # dipping it into a dictionary to remove duplicates
 
 # Generate list of legitimate combinations
 with open('output.tsv') as infile:
@@ -33,14 +33,20 @@ with open('output.tsv') as infile:
 
 rule all:
     input:
+# Sintax
+        # expand("results/sintax/{real_combos}.sintax.tsv", real_combos = real_combos),
 # Final csv
         "results/"+config['my_experiment']+"blast"+config['MLCA_identity']+".tsv",
         expand("results/kraken/{real_combos}.txt", real_combos = real_combos),
 # Reports
         "reports/dag_rulegraph.png",
         expand("reports/fastp/{real_combos}.fastp.html", real_combos = real_combos),
+        expand("reports/recentrifuge/{real_combos}.krk.html", real_combos = real_combos),
 # Archives
         "reports/archived_envs/tapirs.yaml",
+# Biom
+        # expand("results/mlca/{real_combos}.mlca_biom.hdf5", real_combos = real_combos),
+        # expand("reports/sintax/{real_combos}.sintax.biom", real_combos = real_combos)
 
 # -----------------------------------------------------
 # Rule files
@@ -51,6 +57,6 @@ include: "rules/blast.smk"
 include: "rules/kraken2.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch.smk"
-# # include: "rules/sintax.smk"
+include: "rules/sintax.smk"
 include: "rules/reports.smk"
 include: "rules/biom.smk"

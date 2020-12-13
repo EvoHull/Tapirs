@@ -61,6 +61,16 @@ rule kraken2:
 #     shell:
 #         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
 
+
+rule get_centrifuge:
+    output:
+        "recentrifuge/retaxdump"
+    shell:
+        """
+        git clone https://github.com/khyox/recentrifuge.git
+        """
+
+
 #-----------------------------------------------------
 # Recentrifuge produces interactive html displays
 # of kraken output
@@ -70,9 +80,10 @@ rule kraken_recentrifuge_fig:
     conda:
         "../envs/environment.yaml"
     input:
-        taxdb = config["taxdump"],
-        kraken_out_N = "results/kraken/{LIBRARIES}/{SAMPLES}.krk"
+        taxdb = config["taxdump"].replace("rankedlineage.dmp", ""),
+        kraken_out_N = "results/kraken/{LIBRARIES}/{SAMPLES}.krk",
+        rcf = "recentrifuge/retaxdump"
     output:
         "reports/recentrifuge/{LIBRARIES}/{SAMPLES}.krk.html"
     shell:
-        "rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
+        "./recentrifuge/rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"

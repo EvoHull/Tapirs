@@ -14,7 +14,7 @@ rule mlca_to_biom:
     input:
         "results/mlca/{LIBRARIES}/{SAMPLES}.lca.tsv"
     output:
-        "results/mlca/mlca_biom.hdf5"
+        "results/mlca/{LIBRARIES}/{SAMPLES}.mlca_biom.hdf5"
     shell:
         "biom convert -i {input} -o {output} --to-hdf5"
 

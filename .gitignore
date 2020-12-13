@@ -7,14 +7,15 @@
 */.Rhistory
 data/01_demultiplexed/*
 data/databases/blast*
-data/databases/new_taxdump
-data/databases/new*
+data/*
+data/databases/*
 data/old/*
 data/COI/*
 results/0*
 results/blast/*
 results/blast_tax/*
 reports/fastp/*
+reports/recentrifuge/*
 results/kraken/*
 results/mlca/*
 reports/fastp_merged/*
