@@ -29,3 +29,11 @@ dependencies:
   - seqkit # format conversion and stats reporting
   - csvtk # csv file toolkit, used in seqkit stats
   - recentrifuge # produces graphical taxonomy report
+
+  # packages for R analyses
+  - r-vegan
+  - r-ape
+  - r-dplyr
+  - r-ggplot2
+  - r-ggfortify
+  - r-rcolorbrewer
