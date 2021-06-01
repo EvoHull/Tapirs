@@ -4,6 +4,7 @@
 .vscode
 .git/
 .Rhistory
+.editorconfig
 */.Rhistory
 data/01_demultiplexed/*
 data/databases/blast*

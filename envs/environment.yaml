@@ -12,6 +12,7 @@ dependencies:
   - graphviz
   - biopython
   - pandas
+  - snakefmt # formatting of snakemake files
 
   # processing sequence reads
   - fastp # sequence trimming and processing
