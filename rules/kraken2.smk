@@ -16,7 +16,6 @@ rule kraken2:
     output:
         reports = "results/kraken/{LIBRARIES}/{SAMPLES}.txt",
         outputs = "results/kraken/{LIBRARIES}/{SAMPLES}.krk"
-
     threads:
         10
     shell:
