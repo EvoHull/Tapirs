@@ -1,9 +1,4 @@
 
-# version 2
-# this uses merged.dmp to correct taxids from rankedlineage.dmp
-# to use this, direct snakemake to the 'new_taxdump' directory rather than rankedlineage.dmp
-# do this in the config file at TAXDUMP:
-
 def reference_taxonomy():
     taxonomyDict = {}
     with open(snakemake.input.taxdump + '/rankedlineage.dmp', 'r') as rankedlineage:

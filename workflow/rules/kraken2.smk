@@ -1,8 +1,8 @@
 # ==================================================
-# KRAKEN ANALYSIS
+# KRAKEN2 ANALYSIS
 # ==================================================
 
-configfile: "config.yaml"
+# configfile: "config.yaml"
 
 # --------------------------------------------------
 # Kraken, kmer based taxonomic id
@@ -10,17 +10,14 @@ configfile: "config.yaml"
 
 rule kraken2:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
         reads = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta"
     output:
-        reports = "results/kraken/{LIBRARIES}/{SAMPLES}.txt",
-        outputs = "results/kraken/{LIBRARIES}/{SAMPLES}.krk"
-    threads:
-        10
+        reports = "results/kraken2/reports/{LIBRARIES}/{SAMPLES}.txt",
+        outputs = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
     shell:
         "kraken2 --db {config[kraken_db]} {input.reads} \
-        --use-names --memory-mapping \
         --threads {threads} \
         --confidence 0 \
         --report {output.reports} \
@@ -59,30 +56,3 @@ rule kraken2:
 #         6
 #     shell:
 #         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
-
-
-rule get_centrifuge:
-    output:
-        "recentrifuge/retaxdump"
-    shell:
-        """
-        git clone https://github.com/khyox/recentrifuge.git
-        """
-
-
-#-----------------------------------------------------
-# Recentrifuge produces interactive html displays
-# of kraken output
-#-----------------------------------------------------
-
-rule kraken_recentrifuge_fig:
-    conda:
-        "../envs/environment.yaml"
-    input:
-        taxdb = config["taxdump"].replace("rankedlineage.dmp", ""),
-        kraken_out_N = "results/kraken/{LIBRARIES}/{SAMPLES}.krk",
-        rcf = "recentrifuge/retaxdump"
-    output:
-        "reports/recentrifuge/{LIBRARIES}/{SAMPLES}.krk.html"
-    shell:
-        "./recentrifuge/rcf -n {input.taxdb} -k {input.kraken_out_N} -o {output}"
