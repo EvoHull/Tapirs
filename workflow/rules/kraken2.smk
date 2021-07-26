@@ -17,9 +17,9 @@ rule kraken2:
         reports = "results/kraken2/reports/{LIBRARIES}/{SAMPLES}.txt",
         outputs = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
     shell:
-        "kraken2 --db {config[kraken_db]} {input.reads} \
-        --threads {threads} \
-        --confidence 0 \
+        "kraken2 --db {config[kraken2_db]} {input.reads} \
+        --threads {config[kraken2_threads]} \
+        --confidence {config[kraken2_confidence]} \
         --report {output.reports} \
         --output {output.outputs}"
 

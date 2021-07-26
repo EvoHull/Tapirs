@@ -6,8 +6,9 @@ my_experiment: "hull"  # insert experiment name, no_spaces
 
 samples: "config/hull1.tsv"
 
-conda: "../envs/Tapirs_blast.yaml"  # leave this unedited
+conda: "../envs/tapirs.yaml"  # leave this unedited
 
+analysis_method: "blast"
 # -----------------------------------------------
 # LOCATION OF INPUT DATA FILES
 # -----------------------------------------------
@@ -27,7 +28,7 @@ blast_db: "resources/databases/12s_fish_blast_db/12s_fish"
 # point this at the fasta within the blast database
 dechim_blast_db: "resources/databases/12s_fish_blast_db/12s_fish.fasta"
 # KRAKEN
-kraken_db: "resources/databases/12s_fish_kraken2_db"
+kraken2_db: "resources/databases/12s_fish_kraken2_db"
 # TAXDUMP
 taxdump: "resources/databases/new_taxdump"
 
@@ -50,8 +51,15 @@ FASTP_length_limit: 106 # maximum allowed length required to keep read after MER
 # -----------------------------------------------
 # VSEARCH VARIABLES
 # -----------------------------------------------
+
+cluster_method: "denoise"
+
 # dereplication
 VSEARCH_minuniqsize: 3
+# denoising
+VSEARCH_minsize: 1
+VSEARCH_unoise_alpha: 2.0
+VSEARCH_unoise_id: 0.99
 # clustering
 VSEARCH_cluster_id: 1
 VSEARCH_query_cov: 1
@@ -74,3 +82,9 @@ MLCA_identity: 100
 MCLA_coverage: 90
 MLCA_majority: 80
 MLCA_hits: 1
+
+# -----------------------------------------------
+# KRAKEN2 VARIABLES
+# -----------------------------------------------
+kraken2_confidence: 0
+kraken2_threads: 5

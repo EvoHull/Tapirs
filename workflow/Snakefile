@@ -4,7 +4,7 @@
 # ==============================================================================
 
 # conda:
-#     "envs/Tapirs_blast.yaml"
+#     "envs/tapirs_blast.yaml"
 
 import pandas as pd
 configfile: "config/config.yaml"
@@ -28,16 +28,25 @@ with open(config['samples']) as infile:
     real_combos = []
     for line in infile:
         real_combos.append(line.strip().replace('\t', '/'))
-# real_combos = set(real_combos)  # remove duplicates
 
 # ---------------------------------------------------
-# Target rule
+# Conditional rule all
 # ---------------------------------------------------
+
+myoutput = list()
+
+blast = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + ".tsv",
+kraken2 = "results/" + config['my_experiment'] + "_kraken2" + str(config['MLCA_identity']) + ".tsv"
+
+if config["analysis_method"] == "blast" or config["analysis_method"] == "both":
+    myoutput.append(blast)
+
+if config["analysis_method"] == "kraken2" or config["analysis_method"] == "both":
+    myoutput.append(kraken2)
 
 rule all:
     input:
-    # Final csv
-        "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + ".tsv",
+        myoutput
 
 # -----------------------------------------------------
 # Rule files
@@ -47,3 +56,9 @@ include: "rules/qc.smk"
 include: "rules/blast.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch.smk"
+
+if config["analysis_method"] == "blast" or config["analysis_method"] == "both":
+    include: "rules/blast.smk"
+
+if config["analysis_method"] == "kraken2" or config["analysis_method"] == "both":
+    include: "rules/kraken2.smk"

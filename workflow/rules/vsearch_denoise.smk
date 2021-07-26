@@ -3,9 +3,10 @@
 # dereplicate, denoise, dechimera, rereplicate
 # ==================================================
 
+# configfile: "config.yaml"
+
 # ------------------------------------------------------------------------------
 # DEREPLICATIE READS
-# ------------------------------------------------------------------------------
 
 rule vsearch_dereplicate:
     conda:
@@ -24,13 +25,12 @@ rule vsearch_dereplicate:
 
 # ------------------------------------------------------------------------------
 # CLUSTER READS
-# ------------------------------------------------------------------------------
 
 rule vsearch_cluster:
     conda:
         config['conda']
     input:
-        derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta"  if config['cluster_method'] == "cluster" else []
+        derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta"
     output:
         cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta",
         cluster_file = "results/08_clusters/cluster/{LIBRARIES}/{SAMPLES}.cluster.tsv"
@@ -43,15 +43,11 @@ rule vsearch_cluster:
         --centroids {output.cluster} \
         --uc {output.cluster_file}"
 
-# ------------------------------------------------------------------------------
-# DENOISE READS
-# ------------------------------------------------------------------------------
-
 rule vsearch_denoise:
     conda:
         config['conda']
     input:
-        "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta" if config['cluster_method'] == "denoise" else []
+        "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta",
     output:
         seqs = "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta",
         denoise_results = "reports/vsearch/{LIBRARIES}/{SAMPLES}.denoise-report.txt"
@@ -68,13 +64,12 @@ rule vsearch_denoise:
 
 # ------------------------------------------------------------------------------
 # CHIMERA DETECTION
-# ------------------------------------------------------------------------------
 
 rule vsearch_dechimera:
     conda:
         config['conda']
     input:
-        cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta" if config['cluster_method'] == "cluster" else "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta"
+        cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta"
     output:
         nonchimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta",
         chimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.chimera.fasta"
@@ -89,7 +84,6 @@ rule vsearch_dechimera:
 
 # ------------------------------------------------------------------------------
 # REREPLICATE READS
-# ------------------------------------------------------------------------------
 
 rule vsearch_rereplicate:
     conda:
