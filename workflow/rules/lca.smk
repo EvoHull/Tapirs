@@ -2,7 +2,7 @@
 # LCA: LOWEST COMMON ANCESTOR ANALYSES
 # ==================================================
 
-configfile: "config.yaml"
+# configfile: "config.yaml"
 
 # --------------------------------------------------
 # MLCA, majority lowest common ancestor
@@ -10,7 +10,7 @@ configfile: "config.yaml"
 
 rule mlca:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
         blast = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     output:
@@ -29,11 +29,11 @@ rule mlca:
 
 rule mlca_to_tsv:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
         lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
     output:
-        tsv = "results/" + config['my_experiment'] + "blast" + config['MLCA_identity'] + ".tsv"
+        tsv = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + ".tsv"
     script:
         "../scripts/mlca_to_tsv.py"

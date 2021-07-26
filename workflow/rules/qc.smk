@@ -2,30 +2,28 @@
 # QUALITY CONTROL SNAKEFILE
 # ==================================================
 
-configfile: "config.yaml"
-
 # --------------------------------------------------
 # fastp, trim on length and sequence quality
 # --------------------------------------------------
 
 rule fastp_trim_reads:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
-        read1 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
-        read2 = "data/01_demultiplexed/{LIBRARIES}/{SAMPLES}.R2.fastq.gz"
+        read1 = config['input_data'] + "/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
+        read2 = config['input_data'] + "/{LIBRARIES}/{SAMPLES}.R2.fastq.gz"
+    params:
+        overlap = int(config['FASTP_max_len1'] * ((config['FASTP_min_overlap']) / 100)),
     output:
         R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
         R2trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.trimmed.fastq",
         R1unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.unpaired.fastq",
         R2unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.unpaired.fastq",
-        failed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.failed.fastq",
-        json = "reports/fastp/{LIBRARIES}/{SAMPLES}.fastp.json",
-        html = "reports/fastp/{LIBRARIES}/{SAMPLES}.fastp.html"
-    threads:
-        10
+        failed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.trimmed.failed.fastq",
+        json = "results/02_trimmed/fastp_trimmed_reports/{LIBRARIES}/{SAMPLES}.fastp.json",
+        html = "results/02_trimmed/fastp_trimmed_reports/{LIBRARIES}/{SAMPLES}.fastp.html"
     shell:
-         "fastp \
+        "fastp \
         --in1 {input.read1} \
         --in2 {input.read2} \
         --out1 {output.R1trimmed} \
@@ -36,30 +34,36 @@ rule fastp_trim_reads:
         -j {output.json} \
         -h {output.html} \
         --qualified_quality_phred {config[FASTP_qual_phred]} \
-        --length_required {config[FASTP_len_required]} \
+        --unqualified_percent_limit {config[Fastp_unqualified_percent_limit]} \
+        --average_qual {config[FASTP_qual_phred]} \
+        --cut_front \
         --cut_tail \
+        --cut_window_size {config[FASTP_window_size]} \
+        --length_required {config[FASTP_len_required]} \
         --trim_front1 {config[FASTP_trim_front1]} \
         --trim_front2 {config[FASTP_trim_front2]} \
+        --overlap_len_require {params.overlap} \
+        --overlap_diff_percent_limit {config[FASTP_max_diff]} \
         --max_len1 {config[FASTP_max_len1]} \
-        --max_len2 {config[FASTP_max_len2]} \
-        --correction \
-        -w {config[threads]}"
+        --max_len2 {config[FASTP_max_len2]}"
 
 # ------------------------------------------------------------------------------
 # FASTP MERGE PAIRED END READS
 
 rule fastp_merge_reads:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
         R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
         R2trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.trimmed.fastq",
+    params:
+        overlap = int(config['FASTP_max_len1'] * ((config['FASTP_min_overlap']) / 100)),
     output:
         merged = "results/03_merged/{LIBRARIES}/{SAMPLES}.merged.fastq",
         R1unmerged = "results/03_merged/{LIBRARIES}/{SAMPLES}.R1.unmerged.fastq",
         R2unmerged = "results/03_merged/{LIBRARIES}/{SAMPLES}.R2.unmerged.fastq",
-        json = "reports/fastp_merged/{LIBRARIES}/{SAMPLES}.merged.fastp.json",
-        html = "reports/fastp_merged/{LIBRARIES}/{SAMPLES}.merged.fastp.html"
+        json = "results/03_merged/fastp_merged_reports/{LIBRARIES}/{SAMPLES}.merged.fastp.json",
+        html = "results/03_merged/fastp_merged_reports/{LIBRARIES}/{SAMPLES}.merged.fastp.html"
     shell:
         "fastp \
         --disable_quality_filtering \
@@ -70,17 +74,17 @@ rule fastp_merge_reads:
         --out2 {output.R2unmerged} \
         --merge \
         --merged_out {output.merged} \
-        --overlap_len_require {config[FASTP_overlap_len]} \
-        -w {config[threads]} \
+        --overlap_len_require {params.overlap} \
+        --overlap_diff_percent_limit {config[FASTP_max_diff]} \
+        --length_limit {config[FASTP_length_limit]} \
         -j {output.json} \
-        -h {output.html} "
+        -h {output.html} \
+        --correction"
 
 # ------------------------------------------------------------------------------
 # MERGE FORWARD READS
 
 rule merge_forward_reads:
-    # conda:
-    #     "../envs/environment.yaml"
     input:
         merged = "results/03_merged/{LIBRARIES}/{SAMPLES}.merged.fastq",
         R1unpaired = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.unpaired.fastq",
@@ -99,7 +103,7 @@ rule merge_forward_reads:
 
 rule seqkit_fq2fa:
     conda:
-        "../envs/environment.yaml"
+        config['conda']
     input:
         fq = "results/04_forward_merged/{LIBRARIES}/{SAMPLES}.forward.merged.fastq"
     output:
