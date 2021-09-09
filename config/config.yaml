@@ -9,12 +9,13 @@ samples: "config/hull1.tsv"
 conda: "../envs/tapirs.yaml"  # leave this unedited
 
 analysis_method: "blast"
+
 # -----------------------------------------------
 # LOCATION OF INPUT DATA FILES
 # -----------------------------------------------
 input_data: "resources/libraries"
-# default is data/libraries and should contain a library directory
-# containing your demultiplexed .fastq.gz sample files for analysis
+# should contain a library directory containing your 
+# demultiplexed .fastq.gz sample files for analysis
 
 #---------------------------------------------------
 # DATABASE LOCATIONS
@@ -29,7 +30,7 @@ blast_db: "resources/databases/12s_fish_blast_db/12s_fish"
 dechim_blast_db: "resources/databases/12s_fish_blast_db/12s_fish.fasta"
 # KRAKEN
 kraken2_db: "resources/databases/12s_fish_kraken2_db"
-# TAXDUMP
+# TAXONOMY
 taxdump: "resources/databases/new_taxdump"
 
 # -----------------------------------------------
