@@ -1,4 +1,4 @@
-# Tapirs Workflow
+# Tapirs
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/cc_tapirs.svg?branch=master)](https://travis-ci.org/snakemake-workflows/cc_tapirs)
@@ -7,13 +7,13 @@ Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding 
 
 Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis.
 
-Rules make use of [Conda](https://docs.conda.io/) environments containing all the required software packages. Using Conda ensures version control and prevents workflow failure through package incompatability.
-
 Tapirs was created by the EvoHull group, the University of Hull, UK
 
 Instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
 ## DAG overview of a workflow
+
+One example workflow is illustrated below, you may configure yours differently
 
 ![workflow graph](docs/images/dag.svg)
 
@@ -29,7 +29,7 @@ EvoHull group, University of Hull, UK
 
 ## Quickstart
 
-Tapirs is curently in beta-release, not all features are present and not all bugs have been caught.
+Tapirs is curently in 'beta-release', not all features are present and not all bugs have been caught.
 
 Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
@@ -44,10 +44,8 @@ Detailed instructions are given in the [Tapirs documentation](https://tapirs.rea
 
 ## Configure the Tapirs workflow
 
-You should adjust `config/config.yaml` to specify the location of relevant files. These will include any reference databases, taxonomy data, and sequence data to be analysed. 
+You should adjust `config/config.yaml` to specify the location of relevant files. These will include any reference databases, taxonomy data, and sequence data to be analysed.
 
-Although sensible defaults are set up, you can also specify here which analysis programs will be used and their parameter settings.
-
-Configure the workflow execution, and `samples.tsv` to specify your sample setup.
+Although sensible defaults have been set you can also specify in `config.yaml` which analysis programs will be used and their parameter settings.
 
 Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
