@@ -35,10 +35,10 @@ Detailed instructions are given in the [Tapirs documentation](https://tapirs.rea
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository, and relocate there
-    - `git clone https://github.com/EvoHull/Tapirs`
-    - `cd Tapirs`
+    * `git clone https://github.com/EvoHull/Tapirs`
+    * `cd Tapirs`
 3. install snakemake
-    - `conda install -c conda-forge snakemake`
+    * `conda install -c conda-forge snakemake`
 4. dry run `snakemake -npr` to identify any issues
 5. run `snakemake`
 
@@ -49,3 +49,7 @@ You should adjust `config/config.yaml` to specify the location of relevant files
 Although sensible defaults have been set you can also specify in `config.yaml` which analysis programs will be used and their parameter settings.
 
 Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
+
+----
+
+![tapirs_logo](docs/images/tapirs_seq.png)
