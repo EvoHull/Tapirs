@@ -1,6 +1,0 @@
-#OTU_ID	208	209	210	taxonomy
-Esox_lucius	0	128	0	k__Eukaryota; p__Chordata; c__Actinopteri; o__Esociformes; f__Esocidae; g__Esox; s__lucius
-Gasterosteus_aculeatus	30887	41461	20345	k__Eukaryota; p__Chordata; c__Actinopteri; o__Perciformes; f__Gasterosteidae; g__Gasterosteus; s__aculeatus
-Pungitius_pungitius	23663	23205	15711	k__Eukaryota; p__Chordata; c__Actinopteri; o__Perciformes; f__Gasterosteidae; g__Pungitius; s__pungitius
-Rutilus_rutilus	135	834	0	k__Eukaryota; p__Chordata; c__Actinopteri; o__Cypriniformes; f__Cyprinidae; g__Rutilus; s__rutilus
-unassigned	20212	15449	18604	u__unassigned

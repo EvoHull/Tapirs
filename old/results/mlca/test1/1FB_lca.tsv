@@ -1,2 +1,0 @@
-query	lca_rank	lca_otu	kingdom	phylum	class	order	family	genus	species	method
-M04282:87:000000000-CCLL6:1:1107:8585:13100;size=616	species	Homo_sapiens	Eukaryota	Chordata	Mammalia	Primates	Hominidae	Homo	sapiens	lca

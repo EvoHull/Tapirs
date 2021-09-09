@@ -1,4 +1,0 @@
-query	lca_rank	lca_otu	kingdom	phylum	class	order	family	genus	species	method
-M04282:87:000000000-CCLL6:1:1101:16979:1813;size=23663	species	Pungitius_pungitius	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Pungitius	pungitius	lca
-M04282:87:000000000-CCLL6:1:1101:9777:2401;size=135	species	Rutilus_rutilus	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Rutilus	rutilus	lca
-M04282:87:000000000-CCLL6:1:1101:16910:1889;size=30887	species	Gasterosteus_aculeatus	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	aculeatus	lca
