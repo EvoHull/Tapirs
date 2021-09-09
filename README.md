@@ -5,9 +5,9 @@
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
 
-Tapirs uses the Snakemake workflow manager and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis.
+Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis.
 
-Rules make use of Conda environments containing the appropriate packages needed to perform. Using Conda ensures version control and prevents workflow failure through package incompatability.
+Rules make use of [Conda](https://docs.conda.io/) environments containing all the required software packages. Using Conda ensures version control and prevents workflow failure through package incompatability.
 
 Tapirs was created by the EvoHull group, the University of Hull, UK
 
@@ -19,29 +19,35 @@ Instructions for installation, setup, and modification are contained within the 
 
 ## Authors
 
+EvoHull group, University of Hull, UK
+
 * Dave Lunt (@davelunt)
 * Graham Sellers (@Graham-Sellers)
 * Mike Winter (@mrmrwinter)
 * Merideth Freiheit (@merfre)
-* et al.
+* Marco Benucci
 
 ## Quickstart
 
-Tapirs is curently in alpha/beta-release, not all features are present and not all bugs have been caught
+Tapirs is curently in beta-release, not all features are present and not all bugs have been caught.
 
 Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
-2. git clone the Tapirs repository
-    - `git clone https://github.com/davelunt/Tapirs`
+2. git clone the Tapirs repository, and relocate there
+    - `git clone https://github.com/EvoHull/Tapirs`
+    - `cd Tapirs`
 3. install snakemake
-    - `conda install -c bioconda -c conda-forge snakemake`
-4. Place all library directories within the "resources/libraries" directory ensuring they follow the format:
-`libraries/01_demultiplexed/<library>/<sample>.<read>.fastq.gz`
-5. Create the library and sample lists from your data.
-5. Dry run `snakemake -npr` to identify any issues
-6. Run `snakemake`
+    - `conda install -c conda-forge snakemake`
+4. dry run `snakemake -npr` to identify any issues
+5. run `snakemake`
 
-## Configure workflow
+## Configure the Tapirs workflow
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
+You should adjust `config/config.yaml` to specify the location of relevant files. These will include any reference databases, taxonomy data, and sequence data to be analysed. 
+
+Although sensible defaults are set up, you can also specify here which analysis programs will be used and their parameter settings.
+
+Configure the workflow execution, and `samples.tsv` to specify your sample setup.
+
+Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
