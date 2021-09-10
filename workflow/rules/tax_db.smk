@@ -2,13 +2,13 @@
 # ESTABLISH TAXONOMY DATA DIR
 # ==================================================
 
-configfile: "config.yaml"
+from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
+configfile: "config/config.yaml"
 
 # --------------------------------------------------
 # Get taxonomy dump data from NCBI
 # --------------------------------------------------
 
-from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
 FTP = FTPRemoteProvider()
 
 rule get_new_taxdump:
@@ -19,8 +19,8 @@ rule get_new_taxdump:
     input:
         FTP.remote("ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip")
     output:
-        "data/databases/new_taxdump/rankedlineage.dmp"
+        "resources/databases/new_taxdump/rankedlineage.dmp"
     params:
-        "data/databases/new_taxdump"
+        "resources/databases/new_taxdump"
     shell:
         "unzip {input} -d {params}"
