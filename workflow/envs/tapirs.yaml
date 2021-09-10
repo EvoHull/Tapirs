@@ -25,7 +25,6 @@ dependencies:
   # reports and outputs
   - biom-format # converts tsv to BIOM format
   - kraken-biom # creates BIOM from kraken output
-  - multiqc # creates a report of qc reports
   - seqkit # format conversion and stats reporting
   - csvtk # csv file toolkit, used in seqkit stats
   - recentrifuge # produces graphical taxonomy report
