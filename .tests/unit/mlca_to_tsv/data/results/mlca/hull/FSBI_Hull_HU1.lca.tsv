@@ -1,0 +1,12 @@
+query	lca_rank	lca_otu	kingdom	phylum	class	order	family	genus	species	method
+M04282:84:000000000-CCCG3:1:1101:13215:12556;size=205	species	Pungitius_pungitius	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Pungitius	Pungitius_pungitius	lca
+M04282:84:000000000-CCCG3:1:1101:14092:11303;size=10945	family	Percidae	Eukaryota	Chordata	Actinopteri	Perciformes	Percidae	unidentified	unidentified	lca
+M04282:84:000000000-CCCG3:1:1101:16066:11448;size=1679	species	Platichthys_flesus	Eukaryota	Chordata	Actinopteri	Pleuronectiformes	Pleuronectidae	Platichthys	Platichthys_flesus	lca
+M04282:84:000000000-CCCG3:1:1101:16814:11285;size=55830	species	Rutilus_rutilus	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Rutilus	Rutilus_rutilus	lca
+M04282:84:000000000-CCCG3:1:1101:19446:13484;size=291	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius	lca
+M04282:84:000000000-CCCG3:1:1101:26688:12124;size=662	species	Esox_lucius	Eukaryota	Chordata	Actinopteri	Esociformes	Esocidae	Esox	Esox_lucius	single_hit
+M04282:84:000000000-CCCG3:1:1101:26896:12563;size=976	species	Cottus_gobio	Eukaryota	Chordata	Actinopteri	Perciformes	Cottidae	Cottus	Cottus_gobio	lca
+M04282:84:000000000-CCCG3:1:1101:27050:11346;size=1816	species	Abramis_brama	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Abramis	Abramis_brama	lca
+M04282:84:000000000-CCCG3:1:1101:3623:12387;size=236	species	Blicca_bjoerkna	Eukaryota	Chordata	Actinopteri	Cypriniformes	Cyprinidae	Blicca	Blicca_bjoerkna	lca
+M04282:84:000000000-CCCG3:1:1101:6677:12845;size=271	species	Gasterosteus_aculeatus	Eukaryota	Chordata	Actinopteri	Perciformes	Gasterosteidae	Gasterosteus	Gasterosteus_aculeatus	lca
+M04282:84:000000000-CCCG3:1:1101:6904:16416;size=174	species	Anguilla_anguilla	Eukaryota	Chordata	Actinopteri	Anguilliformes	Anguillidae	Anguilla	Anguilla_anguilla	lca
