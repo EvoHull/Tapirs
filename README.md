@@ -1,7 +1,7 @@
 # Tapirs
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥5.7.0-brightgreen.svg)](https://snakemake.bitbucket.io)
-[![Build Status](https://travis-ci.org/snakemake-workflows/cc_tapirs.svg?branch=master)](https://travis-ci.org/snakemake-workflows/cc_tapirs)
+[![Build Status](https://travis-ci.com/EvoHull/cc_tapirs.svg?branch=master)](https://travis-ci.com/EvoHull/cc_tapirs)
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
 
