@@ -6,10 +6,10 @@ Tapirs is a [Snakemake](snakemake.readthedocs.io) workflow system to reproducibl
 
 Tapirs is CC0 public domain software hosted at https://github.com/EvoHull/Tapirs
 
-The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences. There are three key sections to its workflow:
+There are three key sections to the Tapirs workflow:
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
-2. **Taxonomic Assignment** Taxonomic identity is assigned to each sequence by a variety of methods including blast with different LCA approaches, SINTAX kmer analysis, and Kraken2. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
+2. **Taxonomic Assignment** Taxonomic identity can be assigned to each sequence by a variety of methods. Currently impleneted are blast with different LCA approaches, and Kraken2 kmer analysis. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
 3. **Reports and Graphical Display** The workflow will write a detailed report of its analyses and actions, and output to standard format BIOM and .tsv files. The Vegan R package can be used to calculate diversity statistics and plots.
 
 # Quickstart
@@ -18,11 +18,9 @@ The Tapirs workflow starts with a directory of demultiplexed fastq.gz sequences.
 2. git clone the Tapirs repository
     - `git clone https://github.com/EvoHull/Tapirs`
     - `cd Tapirs`
-3. install snakemake in your base conda environment
-    - `conda activate base`
+3. install snakemake in your conda environment
     - `conda install -c bioconda -c conda-forge snakemake`
-4. Place all library directories within the "data/01_demultiplexed/" directory ensuring they follow the format:
-`data/01_demultiplexed/<library>/<sample>.<read>.fastq.gz`
+4. Populate `resources/databases` and `resources/libraries` with your data (.fastq.gz) and reference databases
 5. Run the scripts to create the library and sample lists from your data.
 `python scripts/get_dirs.py` and `python scripts/get_files_dirs.py`
 5. dry run `snakemake -s snakefile --use-conda --printshellcmds -n` to identify any issues
@@ -32,15 +30,13 @@ See the [installation](Setting-up-Tapirs/installation.md) and [setup](Setting-up
 
 # Licence and citation
 
-Project led by [Dave Lunt](https://davelunt.net), Michael Winter, Graham Sellers, Marco Benucci, and the EvoHull group at the University of Hull, UK.
+Project led by [Dave Lunt](https://davelunt.net), Michael Winter, Graham Sellers, Marco Benucci, Merideth Freiheit and the EvoHull group at the University of Hull, UK.
 
 The software is released as CC0, public domain, you may do as you wish.
 
 Please cite the software like this:
 ```
 Title:  Tapirs: extensible reproducible workflows for metabarcoding
-Authors:
-doi:    1234567
 URL:    https://github.com/EvoHull/Tapirs
 ```
 
