@@ -11,7 +11,7 @@ rule vsearch_dereplicate:
     conda:
         config['conda']
     input:
-        fa = "results/05_forward_merged/{LIBRARIES}/{SAMPLES}.fasta"
+        fa = "results/05_fasta/{LIBRARIES}/{SAMPLES}.fasta"
     output:
         derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta",
         cluster_file = "results/08_clusters/derep/{LIBRARIES}/{SAMPLES}.cluster.tsv"

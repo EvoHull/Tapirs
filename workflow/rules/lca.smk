@@ -34,6 +34,6 @@ rule mlca_to_tsv:
         lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
     output:
-        tsv = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + ".tsv"
+        tsv = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + "_" + config['cluster_method'] + ".tsv",
     script:
         "../scripts/mlca_to_tsv.py"
