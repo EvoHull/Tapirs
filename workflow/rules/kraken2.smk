@@ -34,8 +34,10 @@ rule taxonomy_to_kraken2:
     conda:
         config['conda']
     input:
-        taxdump = config['taxdump'],
+        config['taxdump'] + '/names.dmp',
         kraken2 = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
+    params:
+        taxdump = config['taxdump'],
     output:
         kraken2_tax = "results/kraken2_tax/{LIBRARIES}/{SAMPLES}.krk.tax.tsv"
     script:

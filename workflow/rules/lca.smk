@@ -1,12 +1,10 @@
-# ==================================================
-# LCA: LOWEST COMMON ANCESTOR ANALYSES
-# ==================================================
+# ==============================================================================
+# LOWEST COMMON ANCESTOR ANALYSIS
+# ==============================================================================
 
-# configfile: "config.yaml"
-
-# --------------------------------------------------
+# ------------------------------------------------------------------------------
 # MLCA, majority lowest common ancestor
-# --------------------------------------------------
+# ------------------------------------------------------------------------------
 
 rule mlca:
     conda:
@@ -24,8 +22,9 @@ rule mlca:
     script:
         "../scripts/mlca.py"
 
-# --------------------------------------------------
+# ------------------------------------------------------------------------------
 # MLCA TO TSV
+# ------------------------------------------------------------------------------
 
 rule mlca_to_tsv:
     conda:
@@ -33,7 +32,11 @@ rule mlca_to_tsv:
     input:
         lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
+    params:
+        lowest_rank = config['lowest_taxonomic_rank'],
+        highest_rank = config['highest_taxonomic_rank']
     output:
         tsv = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + "_" + config['cluster_method'] + ".tsv",
+
     script:
         "../scripts/mlca_to_tsv.py"

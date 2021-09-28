@@ -3,7 +3,7 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# blast, sequence similarity search
+# BLAST, sequence similarity search
 # ------------------------------------------------------------------------------
 
 rule blast:
@@ -35,8 +35,10 @@ rule taxonomy_to_blast:
     conda:
         config['conda']
     input:
-        taxdump = config['taxdump'],
+        config['taxdump'] + '/names.dmp',
         blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"
+    params:
+        taxdump = config['taxdump']
     output:
         blast_tax = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     script:

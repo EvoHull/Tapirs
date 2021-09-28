@@ -3,9 +3,9 @@
 
 from itertools import dropwhile
 
-nodes_dmp = snakemake.input.taxdump + '/nodes.dmp'
-names_dmp = snakemake.input.taxdump + '/names.dmp'
-merged_dmp = snakemake.input.taxdump + '/merged.dmp'
+nodes_dmp = snakemake.params.taxdump + '/nodes.dmp'
+names_dmp = snakemake.params.taxdump + '/names.dmp'
+merged_dmp = snakemake.params.taxdump + '/merged.dmp'
 
 kraken = snakemake.input.kraken2
 kraken_tax = snakemake.output.kraken2_tax

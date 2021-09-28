@@ -3,12 +3,13 @@
 # A reproducible metabarcoding workflow using snakemake
 # ==============================================================================
 
-import pandas as pd
 configfile: "config/config.yaml"
 
 # ------------------------------------------------------------------------------
 # LIBRARY AND SAMPLE INFORMATION
 # ------------------------------------------------------------------------------
+
+import pandas as pd
 
 libraries_df = pd.read_table(config['samples'], header = None)  # Pull in libraries and samples from tsv
 

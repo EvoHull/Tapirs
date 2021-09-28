@@ -8,7 +8,7 @@ samples: "config/hull.tsv"  # location and name of sample list
 
 conda: "../envs/env.yaml"  # leave this unedited
 
-analysis_method: "blast"  # chosen analysis method; "blast", "kraken2" or "both"
+analysis_method: "both"  # chosen analysis method; "blast", "kraken2" or "both"
 
 # taxonomic rank reporting
 # options: "domain", "phylum", "class", "order", "family", "genus", "species"

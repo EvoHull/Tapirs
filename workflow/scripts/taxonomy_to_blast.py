@@ -1,9 +1,9 @@
 # adapted from taxopy core.py functions (https://github.com/apcamargo/taxopy)
 # includes merged taxid dictionary for taxid corrections adapted from Simple-LCA (https://github.com/sdwfrost/Simple-LCA)
 
-nodes_dmp = snakemake.input.taxdump + '/nodes.dmp'
-names_dmp = snakemake.input.taxdump + '/names.dmp'
-merged_dmp = snakemake.input.taxdump + '/merged.dmp'
+nodes_dmp = snakemake.params.taxdump + '/nodes.dmp'
+names_dmp = snakemake.params.taxdump + '/names.dmp'
+merged_dmp = snakemake.params.taxdump + '/merged.dmp'
 
 blast = snakemake.input.blast
 blast_tax = snakemake.output.blast_tax
