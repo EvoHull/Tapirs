@@ -1,5 +1,5 @@
 # ==============================================================================
-# LOWEST COMMON ANCESTOR ANALYSIS
+# LOWEST COMMON ANCESTOR (LCA) ANALYSIS
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
@@ -37,6 +37,5 @@ rule mlca_to_tsv:
         highest_rank = config['highest_taxonomic_rank']
     output:
         tsv = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + "_" + config['cluster_method'] + ".tsv",
-
     script:
         "../scripts/mlca_to_tsv.py"
