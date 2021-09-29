@@ -59,16 +59,16 @@ Scripts called by snakemake rules are placed here.
 
 This directory usually has subdirectories named by program (eg blast). It is a convenient way of organising the output.
 
-# ANALYSIS
+## ANALYSIS
 
-## fastp
+### fastp
 
 fastp is used for 2 separate jobs:
 
 1. quality control, filter reads by score and length
 2. merge Forward and Reverse reads. It additionally does error correction if merged reads have a mismatch, taking the highest quality nucleotide
 
-## vsearch
+### vsearch
 
 vsearch does several jobs:
 
@@ -80,16 +80,16 @@ vsearch does several jobs:
 
 The sequences written by vsearch are the query sequences for taxonomic identification.
 
-## blast and MLCA
+### blast and MLCA
 
-### blast
+#### blast
 
 blastn is used to search a pre-prepared database for sequence matches. The hits for each query sequence are written including a taxonomic identifier.
 
-### MLCA
+#### MLCA
 
 MLCA (Majority Lowest Common Ancestor) will determine the LCA of the blast hits for each query sequence. It has several options for customising your blast analysis. Majority means that it differs from other LCA scripts in that it can determine LCA from the majority rather than all the hits. Imagine a situation in which 9/10 high quality blast hits for a sequence are to the brine shrimp _Artemia franciscana_ and one is to the Zebra fish _Danio rerio_ (commonly fed on Artemia in the lab). If the LCA looks for the taxonomy shared by **ALL** the top 10 hits (including the likely misclassified Danio record) the LCA is Bilateria and almost all information is lost. If however we decide to set the majority parameter -m to 0.8 then the LCA will determine the taxonomy shared by 80% of the top hits, which will be _Artemia franciscana_. If you set -m to 1.0 then it will require 100% agreement, as other LCAs do. We find this flexibility useful.
 
-## Kraken2
+### Kraken2
 
 Kraken2 is an alternative to blast and LCA. It uses a k-mer approach to determine taxonomy of query sequences by comparing to a databases built from reference sequences and taxonomic information. Databases are large, and require significant RAM and time to produce and their construction is not part of this workflow. Kraken2 searches themselves however are very fast and efficient.
