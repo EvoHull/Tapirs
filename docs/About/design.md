@@ -2,7 +2,7 @@
 
 We set directory structure in the repository to standardise the workflow design. You will need to populate the data directory with your demultiplexed sequence (fastq.gz) files and the databases you wish to search them against (eg blast, kraken2, sintax).
 
-![Directory Structure](../images/dir_structure.png)
+![Directory Structure](../images/directories.png)
 
 *Above: the directory structure of a standard Tapirs workflow*
 ## snakefile
