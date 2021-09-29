@@ -3,15 +3,13 @@
 # A reproducible metabarcoding workflow using snakemake
 # ==============================================================================
 
-# conda:
-#     "envs/tapirs_blast.yaml"
+configfile: "config/config.yaml"
+
+# ------------------------------------------------------------------------------
+# LIBRARY AND SAMPLE INFORMATION
+# ------------------------------------------------------------------------------
 
 import pandas as pd
-configfile: "config/config.yaml"
-# report: "reports/snakemake-report.rst"
-# --------------------------------------------------
-# Load library and sample information
-# --------------------------------------------------
 
 libraries_df = pd.read_table(config['samples'], header = None)  # Pull in libraries and samples from tsv
 
@@ -21,7 +19,7 @@ LIBRARIES = list(dict.fromkeys(LIBRARIES))  # dipping it into a dictionary to re
 
 # Generate samples wildcards
 SAMPLES = list(libraries_df[1])  # create list from column of dataframe
-SAMPLES = list(dict.fromkeys(SAMPLES))  # dipping it into a dictionary to remove duplicates
+SAMPLES = list(dict.fromkeys(SAMPLES))  # dipping into a dictionary to remove duplicates
 
 # Generate list of legitimate combinations
 with open(config['samples']) as infile:
@@ -29,14 +27,14 @@ with open(config['samples']) as infile:
     for line in infile:
         real_combos.append(line.strip().replace('\t', '/'))
 
-# ---------------------------------------------------
-# Conditional rule all
-# ---------------------------------------------------
+# ------------------------------------------------------------------------------
+# CONDITIONAL RULE ALL
+# ------------------------------------------------------------------------------
 
 myoutput = list()
 
-blast = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + ".tsv",
-kraken2 = "results/" + config['my_experiment'] + "_kraken2" + str(config['MLCA_identity']) + ".tsv"
+blast = "results/" + config['my_experiment'] + "_blast" + str(config['MLCA_identity']) + "_" + config['cluster_method'] + ".tsv",
+kraken2 = "results/" + config['my_experiment'] + "_kraken2_conf" + str(config['kraken2_confidence']).split('.')[1] + "_" + config['cluster_method'] + ".tsv"
 
 if config["analysis_method"] == "blast" or config["analysis_method"] == "both":
     myoutput.append(blast)
@@ -48,12 +46,12 @@ rule all:
     input:
         myoutput
 
-# -----------------------------------------------------
-# Rule files
-# -----------------------------------------------------
+# ------------------------------------------------------------------------------
+# INCLUCE CONDITIONAL RULE FILES
+# ------------------------------------------------------------------------------
 
+include: "rules/tax_db.smk"
 include: "rules/qc.smk"
-include: "rules/blast.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch.smk"
 

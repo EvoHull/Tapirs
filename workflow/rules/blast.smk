@@ -1,14 +1,12 @@
-# ==================================================
-# BLAST ANALYSIS
-# ==================================================
+# ==============================================================================
+# BLASTN ANALYSIS
+# ==============================================================================
 
-# configfile: "config.yaml"
+# ------------------------------------------------------------------------------
+# BLAST, sequence similarity search
+# ------------------------------------------------------------------------------
 
-# --------------------------------------------------
-# blastn, sequence similarity search
-# --------------------------------------------------
-
-rule blastn:
+rule blast:
     conda:
         config['conda']
     input:
@@ -26,17 +24,21 @@ rule blastn:
         -perc_identity {config[BLAST_min_perc_ident]} \
         -evalue {params.evalue} \
         -max_target_seqs {config[BLAST_max_target_seqs]} \
+        -num_threads {config[BLAST_threads]} \
         -out {output.blast}"
 
 # ------------------------------------------------------------------------------
 # TAXONOMY TO BLAST
+# ------------------------------------------------------------------------------
 
 rule taxonomy_to_blast:
     conda:
         config['conda']
     input:
-        taxdump = config['taxdump'],
+        config['taxdump'] + '/names.dmp',
         blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"
+    params:
+        taxdump = config['taxdump']
     output:
         blast_tax = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     script:

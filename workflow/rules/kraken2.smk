@@ -1,12 +1,10 @@
-# ==================================================
-# KRAKEN2 ANALYSIS
-# ==================================================
+# ==============================================================================
+# KRAKEN 2 ANALYSIS
+# ==============================================================================
 
-# configfile: "config.yaml"
-
-# --------------------------------------------------
-# Kraken, kmer based taxonomic id
-# --------------------------------------------------
+# ------------------------------------------------------------------------------
+# KRAKEN 2 TAXONOMIC ASSIGNMENT
+# ------------------------------------------------------------------------------
 
 rule kraken2:
     conda:
@@ -17,42 +15,48 @@ rule kraken2:
         reports = "results/kraken2/reports/{LIBRARIES}/{SAMPLES}.txt",
         outputs = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
     shell:
-        "kraken2 --db {config[kraken2_db]} {input.reads} \
-        --threads {config[kraken2_threads]} \
-        --confidence {config[kraken2_confidence]} \
-        --report {output.reports} \
-        --output {output.outputs}"
+        """if [[ $(wc -l <{input.reads}) -ge 2 ]]
+        then
+            kraken2 --db {config[kraken2_db]} {input.reads} \
+            --threads {config[kraken2_threads]} \
+            --confidence {config[kraken2_confidence]} \
+            --report {output.reports} \
+            --output {output.outputs}
+        else
+            touch {output.reports} {output.outputs}
+        fi"""
 
-#-----------------------------------------------------
-# Kraken output to BIOM format
-#-----------------------------------------------------
+# ------------------------------------------------------------------------------
+# TAXONOMY TO KRAKEN 2
+# ------------------------------------------------------------------------------
 
-# rule kraken_biom_and_tsv:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         expand("results/kraken/reports/{library}/{sample}.txt", sample=SAMPLES, library=LIBRARIES)
-#     output:
-#         biom = "results/kraken/{library}/{sample}.biom",
-#         text = "results/kraken/reports/{library}/{sample}.txt"
-#     shell:
-#         """
-#         kraken-biom --max F --fmt hdf5 -o {output.biom};
-#         kraken-biom --max F --fmt tsv -o {output.text}
-#         """
+rule taxonomy_to_kraken2:
+    conda:
+        config['conda']
+    input:
+        config['taxdump'] + '/names.dmp',
+        kraken2 = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
+    params:
+        taxdump = config['taxdump'],
+    output:
+        kraken2_tax = "results/kraken2_tax/{LIBRARIES}/{SAMPLES}.krk.tax.tsv"
+    script:
+        "../scripts/taxonomy_to_kraken2.py"
 
-# #---------------------------------------------------
-# # Biom convert, BIOM to tsv
-# #---------------------------------------------------
+# ------------------------------------------------------------------------------
+# KRAKEN 2 TO TSV
+# ------------------------------------------------------------------------------
 
-# rule kraken_biom_to_tsv:
-#     conda:
-#         "../envs/environment.yaml"
-#     input:
-#         expand("results/kraken/{my_experiment}.biom", my_experiment=config["my_experiment"])
-#     output:
-#         expand("results/kraken/{my_experiment}.tsv", my_experiment=config["my_experiment"])
-#     threads:
-#         6
-#     shell:
-#         "biom convert -i {input} -o {output} --to-tsv --header-key taxonomy"
+rule kraken2_to_tsv:
+    conda:
+        config['conda']
+    input:
+        lca = expand("results/kraken2_tax/{real_combos}.krk.tax.tsv", real_combos = real_combos),
+        rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
+    params:
+        lowest_rank = config['lowest_taxonomic_rank'],
+        highest_rank = config['highest_taxonomic_rank']
+    output:
+        tsv = "results/" + config['my_experiment'] + "_kraken2_conf" + str(config['kraken2_confidence']).split('.')[1] + "_" + config['cluster_method'] + ".tsv"
+    script:
+        "../scripts/mlca_to_tsv.py"

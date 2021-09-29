@@ -3,6 +3,7 @@
 # ==================================================
 
 from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
+
 configfile: "config/config.yaml"
 
 # --------------------------------------------------
@@ -13,14 +14,12 @@ FTP = FTPRemoteProvider()
 
 rule get_new_taxdump:
     conda:
-        "../envs/environment.yaml"
-    threads:
-        8
+        config['conda']
     input:
         FTP.remote("ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip")
     output:
-        "resources/databases/new_taxdump/rankedlineage.dmp"
+        config['taxdump'] + "/names.dmp"
     params:
-        "resources/databases/new_taxdump"
+        config['taxdump']
     shell:
         "unzip {input} -d {params}"

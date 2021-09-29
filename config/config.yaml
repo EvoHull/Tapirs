@@ -2,40 +2,47 @@
 #               TAPIRS: CONFIGFILE
 # ==================================================
 
-my_experiment: "hull"  # insert experiment name, no_spaces
+my_experiment: "hull"  # the experiment name, no_spaces
 
-samples: "config/hull1.tsv"
+samples: "config/hull.tsv"  # location and name of sample list
 
-conda: "../envs/tapirs.yaml"  # leave this unedited
+conda: "../envs/env.yaml"  # leave this unedited
 
-analysis_method: "blast"
+analysis_method: "both"  # chosen analysis method; "blast", "kraken2" or "both"
+
+# taxonomic rank reporting
+# options: "domain", "phylum", "class", "order", "family", "genus", "species"
+lowest_taxonomic_rank: 'species'  # assignments to ranks below this rank are moved up to this rank
+highest_taxonomic_rank: 'order'  # assignments to ranks above this rank are classed as unassigned
 
 # -----------------------------------------------
 # LOCATION OF INPUT DATA FILES
 # -----------------------------------------------
-input_data: "resources/libraries"
-# should contain a library directory containing your 
-# demultiplexed .fastq.gz sample files for analysis
 
-#---------------------------------------------------
+input_data: "resources/libraries"
+# should contain a library directory containing your
+# demultiplexed R1/R2.fastq.gz sample files for analysis
+
+#-------------------------------------------------------------------------------
 # DATABASE LOCATIONS
-#---------------------------------------------------
-# Place your reference databases in these locations
+#-------------------------------------------------------------------------------
+# Place your reference databases in resources/databases/
 # or edit to specify the location
 
 # BLAST
 blast_db: "resources/databases/12s_fish_blast_db/12s_fish"
-# VSEARCH vsearch_dechimerisation
-# point this at the fasta within the blast database
-dechim_blast_db: "resources/databases/12s_fish_blast_db/12s_fish.fasta"
-# KRAKEN
+# blast_db: "../genbank_nt_db_blast/nt/nt"
+
+# KRAKEN 2
 kraken2_db: "resources/databases/12s_fish_kraken2_db"
+
 # TAXONOMY
 taxdump: "resources/databases/new_taxdump"
 
-# -----------------------------------------------
+# ------------------------------------------------------------------------------
 # FASTP TRIMMING AND MERGING VARIABLES
-# -----------------------------------------------
+# ------------------------------------------------------------------------------
+
 FASTP_max_len1: 106  # this is the amplicon size
 FASTP_max_len2: 106  # this is the amplicon size
 FASTP_trim_front1: 20  # this is the forward primer length
@@ -45,47 +52,63 @@ Fastp_unqualified_percent_limit: 40  # maximum percentage bases allowed to be un
 FASTP_window_size: 5  # sliding window size for head and tail quality based cuts
 FASTP_len_required: 90  # reads shorter than this will be discarded
 
-FASTP_min_overlap: 30  # minimum percentage overlap required for MERGING
-FASTP_max_diff: 5  # maximum percentage difference required for MERGING
-FASTP_length_limit: 106 # maximum allowed length required to keep read after MERGING
+FASTP_poly_g_min: 10  # minimum 3' poly g bases to be trimmed
+FASTP_poly_x_min: 10  # minimum 3' poly x (any base) bases to be trimmed
 
-# -----------------------------------------------
+FASTP_min_overlap: 20  # minimum base overlap required for merging
+FASTP_diff_percent_limit: 5  # maximum percentage difference required for merging
+FASTP_diff_limit: 5  # maximum base differences required for merging
+FASTP_length_limit: 106 # maximum allowed length required to keep read after merging
+
+# ------------------------------------------------------------------------------
 # VSEARCH VARIABLES
-# -----------------------------------------------
+# ------------------------------------------------------------------------------
 
-cluster_method: "denoise"
+cluster_method: "denoise"  # vsearch clustering method; "cluster" or "denoise"
+chimera_detection: "denovo"
 
-# dereplication
+# dereplication (--derep_fulllength)
 VSEARCH_minuniqsize: 3
+
 # denoising
 VSEARCH_minsize: 1
 VSEARCH_unoise_alpha: 2.0
 VSEARCH_unoise_id: 0.99
-# clustering
+
+# clustering (--cluster_fast)
 VSEARCH_cluster_id: 1
 VSEARCH_query_cov: 1
-# dechimerisation
+
+# dechimerisation (uchime_ref)
 VSEARCH_mindiffs: 1
 VSEARCH_mindiv: 0.8
+dechim_blast_db: "resources/databases/12s_fish_blast_db/12s_fish.fasta" # fasta used for reference database
 
-# -----------------------------------------------
+# dechimerisation (uchime_denovo3): use with denoised input
+VSEARCH_abskew: 16.0  # ratio of parent sequences to their chimeras
+
+# ------------------------------------------------------------------------------
 # BLAST VARIABLES
-# -----------------------------------------------
-BLAST_max_target_seqs: 20 # Number of descriptions
-BLAST_min_perc_ident: 98
-BLAST_min_evalue: 1e-20
+# ------------------------------------------------------------------------------
 
-# ------------------------------------------------
+BLAST_max_target_seqs: 50
+BLAST_min_perc_ident: 75
+BLAST_min_evalue: 1e-20
+BLAST_threads: 2
+
+# ------------------------------------------------------------------------------
 # MLCA VARIABLES
-# ------------------------------------------------
+# ------------------------------------------------------------------------------
+
 MLCA_bitscore: 0
-MLCA_identity: 100
+MLCA_identity: 98
 MCLA_coverage: 90
 MLCA_majority: 80
 MLCA_hits: 1
 
-# -----------------------------------------------
+# ------------------------------------------------------------------------------
 # KRAKEN2 VARIABLES
-# -----------------------------------------------
-kraken2_confidence: 0
-kraken2_threads: 5
+# ------------------------------------------------------------------------------
+
+kraken2_confidence: 0.0
+kraken2_threads: 2
