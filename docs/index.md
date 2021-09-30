@@ -44,4 +44,4 @@ URL:    https://github.com/EvoHull/Tapirs
 
 ### A graph of a typical Tapirs workflow
 As part of its report-writing Tapirs will create a DAG illustration of its workflow.
-![DAG](images/dag.png)
+![DAG](images/Tapirs_rulegraph.png)
