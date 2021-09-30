@@ -15,7 +15,7 @@ Instructions for installation, setup, and modification are contained within the 
 
 One example workflow is illustrated below, you may configure yours differently
 
-![workflow graph](docs/images/dag.svg)
+![workflow graph](docs/images/Tapirs_rulegraph.png)
 
 ## Authors
 
