@@ -10,9 +10,9 @@ There are three key sections to the Tapirs workflow:
 
 1. **Quality Control** quality trimming, length trimming, denoising to remove errors, and dereplication to remove redundancy
 2. **Taxonomic Assignment** Taxonomic identity can be assigned to each sequence by a variety of methods. Currently impleneted are blast with different LCA approaches, and Kraken2 kmer analysis. Since we use a workflow manager (Snakemake) methods can easily be added to this list without affecting the rest of the workflow
-3. **Reports and Graphical Display** The workflow will write reports of its analyses and actions, and output to standard format BIOM and .tsv files.
+3. **Reports and Reproducibility** The workflow will write reports of its analyses and actions, and make reproducibility easy by recording the software environment, making analyses and configurqation explicit, writing output to standard format BIOM and .tsv files.
 
-# Quickstart
+# Quickstart (if you don't want to read the docs)
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. git clone the Tapirs repository
@@ -23,7 +23,7 @@ There are three key sections to the Tapirs workflow:
 4. Populate `resources/databases` and `resources/libraries` with your data (.fastq.gz) and reference databases
 5. Run the script to create the library and sample lists from your data, then check them.
 `python /workflow/scripts/get_files_dirs.py`
-5. dry run `snakemake -npr --cores 4` to identify any issues
+5. dry run `snakemake -npr` to identify any issues
 6. run `snakemake --cores 4` (you can run any number of cores)
 
 See the [installation](Setting-up-Tapirs/installation.md) and [setup](Setting-up-Tapirs/setup.md) pages for more detailed help
