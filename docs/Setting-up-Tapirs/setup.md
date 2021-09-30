@@ -1,8 +1,9 @@
+# SETUP
 
 !!! warning "install first then setup"
     These instructions are to set up Tapirs for your experiment after [installation](installation.md) has been carried out.
 
-# SETUP OVERVIEW
+## OVERVIEW
 
 It is vital to carry out all the set up instructions. This can be slow, and require some thought, but it only has to be done once.
 
@@ -31,9 +32,9 @@ In addition you may wish to fine-tune the analysis parameters of the programs. T
 
 The `resources/` directory must contain 2 subdirectories: a) `libraries/` b) `databases/`
 
-## 01_demultiplexed
+## demultiplexed sequence data
 
-The start point of this workflow is demultiplexed fastq.gz sequence files in the `resources/libraries` directory. Each directory is a sequencing library (eg `resources/libraries/river1`) and each library contains your sequences (eg `sample1.fastq.gz`)
+The start point of this workflow is demultiplexed `fastq.gz` sequence files in the `resources/libraries` directory. Each directory in `libraries` is a sequencing library (eg `resources/libraries/river1`) and each library contains your sequences in 1 or more fastq files (eg `sample1.fastq.gz`)
 
 It is essential for reproducibility that this starting data is kept together with the experiment. If size prohibits its inclusion then archive it publicly and include the doi into the experimental record.
 
