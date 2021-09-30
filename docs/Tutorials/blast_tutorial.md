@@ -1,12 +1,15 @@
 # Basic blast tutorial
 
 ## Reference data
+
 Download the sequences you wish to include in your reference database.
 
 ## Build a blast database
+
 There are many online guides to building a blast database, including detailed ones at the NCBI.
 
 ## blast parameters
+
 **Minimum percentage identity:** `min_perc_ident = "100"` identifies perfect matches but may be a little restrictive unless you know that you have all the potential hits in you database. Lower the value on a few test cases until you feel you are getting too much noise and not enough signal. Somewhere between that point and "100" is your optimum.
 
 **e-value:** `min_evalue = "1e-20"` may work for you, again you can explore hw stringent to be with this parameter. Using the NCBI web blast page for a few sequences can sometimes give you an idea of the sort of e-values you would expect for your data.
@@ -14,6 +17,7 @@ There are many online guides to building a blast database, including detailed on
 **number of hits:** `descriptions = "50"` ie return maximum of 50 hits is a good default, though you may also change if you wish.
 
 ## mlca
+
 Investigating the correct parameters for LCA analysis is an overlooked part of many experimental designs. LCA however is responsible for turning your 50 blast hits into an assigned taxonomy, so it can be exceptionally important. MLCA is short for Majority Lowest Common Ancestor, and our script allows you to modify several parameters of the LCA estimation, including whether to accept the majority taxonomy returned, or require ALL hits to have the same taxonomy.
 
 **bitscore threshold:** This will restrict the hits to a certain percentage of the top bitscore. Default=10 (within 10% of top hit) which may be a little too strict if you do not have close blast hits. Experiment with reducing it.

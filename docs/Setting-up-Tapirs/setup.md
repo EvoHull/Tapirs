@@ -10,7 +10,6 @@ It is vital to carry out all the set up instructions. This can be slow, and requ
 2. make sure your data is in the right location and format
 3. create the databases against which your query sequences will be compared.
 
-
 # CONFIG FILES
 
 The `config/config.yaml` file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in `config.yaml` have reasonable default values, but some may require your input. Open `config.yaml` in a text editor.
@@ -28,40 +27,34 @@ In addition you may wish to fine-tune the analysis parameters of the programs. T
 - set blast parameters
 - set MLCA parameters
 
-# DATA
+## DATA
 
-The `resources/` directory must contain 2 subdirectories: a) `libraries/` b) `databases/` and these should have been created for you.
+The `resources/` directory must contain 2 subdirectories: a) `libraries/` b) `databases/`
 
 ## 01_demultiplexed
 
-The start point of this workflow is demultiplexed fastq.gz sequence files in the `data/01_demultiplexed` directory.
+The start point of this workflow is demultiplexed fastq.gz sequence files in the `resources/libraries` directory. Each directory is a sequencing library (eg `resources/libraries/river1`) and each library contains your sequences (eg `sample1.fastq.gz`)
 
 It is essential for reproducibility that this starting data is kept together with the experiment. If size prohibits its inclusion then archive it publicly and include the doi into the experimental record.
 
 !!! tip "tip: exclude data directory from version control"
     Remember that if you are wisely keeping your analysis under git version control, then you can exclude very large data files from syncing to the web by including the data directory in your .gitignore file. It is essential however that you make other arrangements for both backing up and publishing the data.
 
-To facilitate iteration, the input files must follow the structure of `yourlibrary/yoursample.R*.fastq.gz`, the full path being `Tapirs/data/01_demultiplexed/yourlibrary/yoursample.R*.fastq.gz`. The * asterisk stands for the read number, ie R1 or R2.
+To facilitate iteration, the input files must follow the structure of `yourlibrary/yoursample.R*.fastq.gz`, the full path being `Tapirs/resources/libraries/yourlibrary/yoursample.R*.fastq.gz`. The * asterisk stands for the read number, ie R1 or R2.
 
 ### libraries and samples lists
 
-You must make sure that your config file points to your list of samples and libraries (eg samples: "config/hull1.tsv")
+You must make sure that your config file points to your list of samples and libraries (eg samples: `config/hull1.tsv`)
 
 Rather than implement a complex set of wildcards the recommended approach for snakemake is to create textual lists (.tsv files) of the sequencing metadata [see "samples, libraries, and units .tsv" Note below]. These lists are generated for you by a script, but this approach allows quality control and human intervention in determining what samples are analysed in each run. Importantly having an explicit textual record of what samples were analysed, and their metadata, is good for reproducibility.
 
 !!! Note "Note: samples, libraries, and units .tsv"
     The naming of the files differs between biological disciplines. In our work a library often represents a physical location ("Lake Windermere") and a sample represents a physical unit taken for DNA extraction ("water-sample-12"). In other disciplines the meaning of "sample" may differ slightly.
 
-Tapirs contains two python scripts (`scripts/get_dirs.py` and `scripts/get_dirs_files.py`) to create two text files `libraries.tsv` and `samples.tsv`. The first contains a list of all libraries (from directory names) and the second all the sample names (from the file names) within each library. Run the two commands below:
-
+Tapirs `workflow/scripts` contains a python script `get_dirs_files.py` to create a text file `samples.tsv`. This contains a list of all libraries and sample names. You can hand edit and should sanity check this list of input files, then specify it in the `config.yaml`. Run the python script at teh command line like this:
 ```
-python scripts/get_dirs.py
-python scripts/get_dirs_files.py
+python workflow/scripts/get_dirs_files.py
 ```
-
-You will now have generated two important files `libraries.tsv` and `samples.tsv`
-
-You should make sure that if you alter the file names or locations that the `config.yaml` still correctly points at these two files. These are specific to your current data and will need removing and regenerating of course if the input libraries or samples change.
 
 ## Databases
 
@@ -127,28 +120,26 @@ If all has gone well Snakemake will report the jobs it needs to perform without 
 
 # RUN TAPIRS
 
-Run Tapirs with either the `snakemake --use-conda` or `snakemake -s snakefile --use-conda --printshellcmds` command
+Run Tapirs with `snakemake --cores 4` or `snakemake --cores 4 --printshellcmds` commands
 
-Tapirs should now run, processing the data from 01_demultiplexed, assigning taxonomy using blast, kraken2 and sintax, and writing reports.
+Tapirs should now run, processing the data, assigning taxonomy using blast and/or kraken2, and writing reports.
 
 When it finishes you should also ask it to write a report with the command
 `snakemake --report reports/snakemake_report.html`
 
 # EXCLUDE ANALYSES
 
-If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can comment out the line that calls it in the snakefile. Towards the bottom of the snakefile in the top level directory you will see a line such as:
+If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in teh config file. For example replace the line `analysis_method: "both"` with `analysis_method: "blast"` to restrict the analysis to just blast. 
 
-`include: "rules/sintax.smk"`
+Remember that snakemake does not rerun jobs already completed. So if you run just blast, then run just kraken2, it will not attempt to repeat the qc stages common to both unless you change the input data.
 
-to remove sintax comment this line out by prefixing with a hash # then save and rerun snakemake.
-
-# REMOVING FILES FROM PREVIOUS RUNS
+## REMOVING FILES FROM PREVIOUS RUNS
 
 Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output --dry-run` The`--dry-run` flag checks what will be removed before you do it, when it looks fine rerun without this.
 
 <hr>
 
-**REFERENCES**
+## REFERENCES
 
 Altschul, S. F. et al. (1990) ‘Basic local alignment search tool’, Journal of molecular biology, 215(3), pp. 403–410. [doi: 10.1016/S0022-2836(05)80360-2](https://doi.org/10.1016/S0022-2836(05)80360-2)
 

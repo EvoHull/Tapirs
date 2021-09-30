@@ -2,7 +2,7 @@ This file outlines problems that users have faced and solved. Please contribute 
 
 ## conda build environment fails
 
-This is rare but it is possible that one of the softwares in the tapirs.yaml file will fail to install. This is an issue with conda not Tapirs, try installing the program in question at the command line with `conda -c conda-forge install PROGRAM`. It might help to try a different repository such as `-c bioconda` instead of conda-forge. It might be worth googling "conda PROGRAM" just to see how Anaconda Cloud page suggests installing.
+This is rare but it is possible that one of the softwares in the `env.yaml` file will fail to install. This is an issue with conda not Tapirs, try installing the program in question at the command line with `conda -c conda-forge install PROGRAM`. It might help to try a different repository such as `-c bioconda` instead of conda-forge. It might be worth googling "conda PROGRAM" just to see how Anaconda Cloud page suggests installing.
 
 ## PROGRAM not found
 
@@ -15,14 +15,3 @@ Some hosts require you to specify the number of cores on which to run your job. 
 ## I really want to speed up the first run building the environments
 
 We recommend using [mamba](https://github.com/mamba-org/mamba) not conda to build environments. Snakemake fully supports mamba. It is a LOT faster.
-
-### pre-build the environments yourself
-
-Currently Tapirs uses a single environment file but this might change soon. If the environment is specified in a **single file** (eg `workflows/envs/tapirs.yaml`) you can build the environment before first run with the command `mamba env create -f workflows/env/tapirs.yaml`
-
-If the environments are in multiple files (eg `workflows/envs/blast.yaml`, `workflows/envs/qc.yaml`) then these can all be installed at once from the command line `for f in workflows/envs/*.yaml; do mamba env create -f $f; done`
-
-```
-snakemake -conda-frontend mamba
-snakemake –use-conda -conda-create-envs-only True
-```
