@@ -29,7 +29,7 @@ EvoHull group, University of Hull, UK
 
 ## Quickstart
 
-Tapirs is curently in 'beta-release', not all features are present and not all bugs have been caught.
+Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
 
 Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
