@@ -5,7 +5,7 @@
 
 ## DRY RUN TAPIRS
 
-Make sure you are in the top-level directory containing the snakefile then type `snakemake -npr --cores 1`  or `snakemake -s snakefile --printshellcmds -n -k --cores 1` to dry-run the workflow.
+Make sure you are in the top-level directory containing the snakefile then type `snakemake -npr`  or `snakemake -s snakefile --printshellcmds -n -k` to dry-run the workflow.
 
 If all has gone well Snakemake will report the jobs it needs to perform without any complaint. If not (as is common in most experiments) you will need to diagnose and fix any minor issues. Reading the [problem-solving](../Setting-up-Tapirs/problem-solving.md) documentation might help. Some errors are only detected in the real run, not the dry run, and they often concern the format of data files, as these have not been checked by a dry run.
 
@@ -16,17 +16,19 @@ Run Tapirs with either the `snakemake --printshellcmds --cores 4` command. Cores
 Tapirs should now run, processing the data, assigning taxonomy using blast and kraken2, and writing reports.
 
 When it finishes you should also ask it to write a report with the command
+
 `snakemake --report reports/snakemake_report.html`
 
 ## EXCLUDE ANALYSES
 
-If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in teh config file.
+If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in the config file.
 
 ## REMOVING FILES FROM PREVIOUS RUNS
 
-Snakemake can clean away the files it has previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake --delete-all-output` and add `--dry-run` the first time to check what will be removed before you do it.
 
-<hr>
+Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output --dry-run` The`--dry-run` flag checks what will be removed before you do it, when it looks fine rerun without `--dry-run`.
+
+We highly recommend performing a `--dry-run` as `--delete-all-output` is as dangerous to your results as it sounds.
 
 ## **REFERENCES**
 

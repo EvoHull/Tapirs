@@ -1,3 +1,5 @@
+# INSTALLATION
+
 !!! note
     These documents assume a unix system like OSX or Linux, on MS Windows it may be best to work in a Linux Virtual Machine
 

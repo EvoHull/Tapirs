@@ -31,13 +31,15 @@ Teaching and trouble-shooting Snakemake and bioinformatics are beyond the scope 
   becomes
   `ls -l | awk '{{if ($3 == ""rahmu"") print $0;}}'`
 
-6, Here is an example rule.
+6, if you get errors that your new program is not recognised, make sure that the software you wish to include is added to the tapirs `env.yaml` file and you have updated this environment to install it and its dependencies with `conda env update -f workflow/envs/env.yaml`. Make sure the tapirs environment is active `conda activate tapirs` and test the program at the command line outside of snakemake.
+
+Here is an example rule:
 
 ```
 rule test:
   input:
     file1 = "firstfile.fasta",
-    file2 = "secondfile.fasta"
+    file2 = "secondfile.fasta",
   output:
     "allseqs.fasta"
   shell:

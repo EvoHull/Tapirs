@@ -4,17 +4,17 @@ Some commands to help when you're struggling to remember the syntax:
 ## Conda create & activate
 
 ```
-conda env create --name snake-env --file environment.yaml
+conda env create --name snake-env --file workflow/envs/env.yaml
 ```
 if .yaml has name option specified
 ```
-conda env create -f environment.yaml
+conda env create -f workflow/envs/env.yaml
 ```
 ```
 conda activate snake-env
-conda env update -f environment.yaml
+conda env update -f workflow/envs/env.yaml
 conda info --envs
-conda env export > environment_out.yml
+conda env export > reports/environment_out.yml
 conda install -c bioconda softwarename
 ```
 

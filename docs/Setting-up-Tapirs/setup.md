@@ -120,9 +120,9 @@ Alternatively there is a snakemake rule specifically to set this up. You can run
 
 ## DRY RUN TAPIRS
 
-Make sure you are in the directory containing the snakefile then type `snakemake --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n -k` to dry-run the workflow.
+Make sure you are in the directory containing the snakefile then type `snakemake -npr` to dry-run the workflow.
 
-If all has gone well Snakemake will report the jobs it needs to perform without any complaint. If not (as is common in most experiments) you will need to diagnose and fix any minor issues. Some errors are only detected in the real run, not the dry run, and they often concern the format of data files, as these have not been checked by a dry run.
+If all has gone well Snakemake will report the jobs it needs to perform (in yellow) without any complaint. If not (as is common in most experiments) you will need to diagnose and fix any minor issues. Some errors are only detected in the real run, not the dry run, and they often concern the format of data files, as these have not been checked by a dry run.
 
 ## RUN TAPIRS
 
@@ -141,7 +141,9 @@ Remember that snakemake does not rerun jobs already completed. So if you run jus
 
 ## REMOVING FILES FROM PREVIOUS RUNS
 
-Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output --dry-run` The`--dry-run` flag checks what will be removed before you do it, when it looks fine rerun without this.
+Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output --dry-run` The`--dry-run` flag checks what will be removed before you do it, when it looks fine rerun without `--dry-run`.
+
+We highly recommend performing a `--dry-run` as `--delete-all-output` is as dangerous to your results as it sounds.
 
 ## REFERENCES
 
