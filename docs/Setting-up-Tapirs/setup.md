@@ -11,7 +11,7 @@ It is vital to carry out all the set up instructions. This can be slow, and requ
 2. make sure your data is in the right location and format
 3. create the databases against which your query sequences will be compared.
 
-# CONFIG FILES
+## CONFIG FILES
 
 The `config/config.yaml` file contains settings for the workflow's operation. In an ideal experiment you would never have to alter any of the snakemake workflow code, only set up a configuration text file. Most of the settings in `config.yaml` have reasonable default values, but some may require your input. Open `config.yaml` in a text editor.
 
@@ -53,11 +53,12 @@ Rather than implement a complex set of wildcards the recommended approach for sn
     The naming of the files differs between biological disciplines. In our work a library often represents a physical location ("Lake Windermere") and a sample represents a physical unit taken for DNA extraction ("water-sample-12"). In other disciplines the meaning of "sample" may differ slightly.
 
 Tapirs `workflow/scripts` contains a python script `get_dirs_files.py` to create a text file `samples.tsv`. This contains a list of all libraries and sample names. You can hand edit and should sanity check this list of input files, then specify it in the `config.yaml`. Run the python script at teh command line like this:
+
 ```
 python workflow/scripts/get_dirs_files.py
 ```
 
-## Databases
+## DATABASES
 
 ### Kraken2
 
@@ -89,8 +90,8 @@ You will need to build a blastn database from a collection of fasta files. Infor
 
 You will require:
 
-* Fasta input file containing all reference sequences
-* Accession to taxid map. See [NCBI blast instructions](https://www.ncbi.nlm.nih.gov/books/NBK279688/) for more details.
+- Fasta input file containing all reference sequences
+- Accession to taxid map. See [NCBI blast instructions](https://www.ncbi.nlm.nih.gov/books/NBK279688/) for more details.
 
 !!! note "create a blast database"
     If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database, then you could create a blast database with the command:
@@ -107,19 +108,23 @@ It is essential for reproducibility that you publicly archive your database at t
 ### taxonomy database
 
 Several programs may require the NCBI taxonomy database in order to carry out taxonomic assignment. This is typically contained in a `new_taxdump` directory that is fetched directly from the NCBI using the commands:
+
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
+
 `unzip new_taxdump`
 
+If on OSX `wget` is not installed, you can install with `cconda install -c conda-forge wget
+`
 Alternatively there is a snakemake rule specifically to set this up. You can run this with the command:
-`snakemake -s rules/tax_db.smk`
+`snakemake -s workflow/rules/tax_db.smk`
 
-# DRY RUN TAPIRS
+## DRY RUN TAPIRS
 
 Make sure you are in the directory containing the snakefile then type `snakemake --use-conda -npr`  or `snakemake -s snakefile --use-conda --printshellcmds -n -k` to dry-run the workflow.
 
 If all has gone well Snakemake will report the jobs it needs to perform without any complaint. If not (as is common in most experiments) you will need to diagnose and fix any minor issues. Some errors are only detected in the real run, not the dry run, and they often concern the format of data files, as these have not been checked by a dry run.
 
-# RUN TAPIRS
+## RUN TAPIRS
 
 Run Tapirs with `snakemake --cores 4` or `snakemake --cores 4 --printshellcmds` commands
 
@@ -128,17 +133,15 @@ Tapirs should now run, processing the data, assigning taxonomy using blast and/o
 When it finishes you should also ask it to write a report with the command
 `snakemake --report reports/snakemake_report.html`
 
-# EXCLUDE ANALYSES
+## EXCLUDE ANALYSES
 
-If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in teh config file. For example replace the line `analysis_method: "both"` with `analysis_method: "blast"` to restrict the analysis to just blast. 
+If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in teh config file. For example replace the line `analysis_method: "both"` with `analysis_method: "blast"` to restrict the analysis to just blast.
 
 Remember that snakemake does not rerun jobs already completed. So if you run just blast, then run just kraken2, it will not attempt to repeat the qc stages common to both unless you change the input data.
 
 ## REMOVING FILES FROM PREVIOUS RUNS
 
 Snakemake can clean up files it as previously created. This is useful if you have reports and intermediate results from previous runs that you wish to remove before a new run. The Snakemake docs have a [FAQ on cleaning files](https://snakemake.readthedocs.io/en/stable/project_info/faq.html#how-do-i-remove-all-files-created-by-snakemake-i-e-like-make-clean), in short though try `snakemake some_target --delete-all-output --dry-run` The`--dry-run` flag checks what will be removed before you do it, when it looks fine rerun without this.
-
-<hr>
 
 ## REFERENCES
 
@@ -153,4 +156,3 @@ Ondov, B. D., Bergman, N. H. and Phillippy, A. M. (2011) ‘Interactive metageno
 Rognes, T. et al. (2016) ‘VSEARCH: a versatile open source tool for metagenomics’, PeerJ, 4, p. e2584. [doi: 10.7717/peerj.2584]
 
 Wood, D. E., Lu, J. and Langmead, B. (2019) ‘Improved metagenomic analysis with Kraken 2’, Genome biology, 20(1), p. 257. [doi: 10.1186/s13059-019-1891-0](https://doi.org/10.1186/s13059-019-1891-0)
-
