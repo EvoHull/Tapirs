@@ -52,11 +52,7 @@ Rather than implement a complex set of wildcards the recommended approach for sn
 !!! Note "Note: samples, libraries, and units .tsv"
     The naming of the files differs between biological disciplines. In our work a library often represents a physical location ("Lake Windermere") and a sample represents a physical unit taken for DNA extraction ("water-sample-12"). In other disciplines the meaning of "sample" may differ slightly.
 
-Tapirs `workflow/scripts` contains a python script `get_dirs_files.py` to create a text file `samples.tsv`. This contains a list of all libraries and sample names. You can hand edit and should sanity check this list of input files, then specify it in the `config.yaml`. Run the python script at teh command line like this:
-
-```
-python workflow/scripts/get_dirs_files.py
-```
+Tapirs `workflow/scripts` contains a python script `get_dirs_files.py` to create a text file `samples.tsv`. This contains a list of all libraries and sample names. You can hand edit and should sanity check this list of input files, then specify it in the `config.yaml`. Run the python script at the command line with `python workflow/scripts/get_dirs_files.py` to generate the tsv file
 
 ## DATABASES
 
@@ -113,10 +109,10 @@ Several programs may require the NCBI taxonomy database in order to carry out ta
 
 `unzip new_taxdump`
 
-If on OSX `wget` is not installed, you can install with `cconda install -c conda-forge wget
-`
 Alternatively there is a snakemake rule specifically to set this up. You can run this with the command:
 `snakemake -s workflow/rules/tax_db.smk`
+
+If on OSX `wget` is not installed, you can install with `conda install -c conda-forge wget`
 
 ## DRY RUN TAPIRS
 
@@ -135,7 +131,7 @@ When it finishes you should also ask it to write a report with the command
 
 ## EXCLUDE ANALYSES
 
-If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in teh config file. For example replace the line `analysis_method: "both"` with `analysis_method: "blast"` to restrict the analysis to just blast.
+If you wish to run Tapirs without invoking one of analysis programs (eg Kraken2 or blast) then you can specify this in the config file. For example replace the line `analysis_method: "both"` with `analysis_method: "blast"` to restrict the analysis to just blast.
 
 Remember that snakemake does not rerun jobs already completed. So if you run just blast, then run just kraken2, it will not attempt to repeat the qc stages common to both unless you change the input data.
 
