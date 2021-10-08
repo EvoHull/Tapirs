@@ -27,8 +27,9 @@ Detailed instructions for installation, setup, and modification are contained wi
     * `rm new_taxdump.zip`
 6. populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files)
 7. place your sample sheet tsv in `config/` (see `config/Hull_test.tsv` for layout format)
-8. dry run `snakemake -npr` to identify any issues
-9. run `snakemake --cores 4` (you can run all available cores with `snakemake --cores`)
+8. adjust `config/config.yaml` to configure the Tapirs workflow (see below)
+9. dry run `snakemake -npr` to identify any issues
+10. run `snakemake --cores 4` (you can run all available cores with `snakemake --cores`)
 
 ## Configure the Tapirs workflow
 
