@@ -99,7 +99,7 @@ BLAST_threads: 2
 # MLCA VARIABLES
 # ------------------------------------------------------------------------------
 
-MLCA_bitscore: 0
+MLCA_bitscore: 2
 MLCA_identity: 98
 MCLA_coverage: 90
 MLCA_majority: 80
