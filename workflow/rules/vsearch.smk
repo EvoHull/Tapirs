@@ -8,8 +8,6 @@
 # ------------------------------------------------------------------------------
 
 rule vsearch_dereplicate:
-    conda:
-        config['conda']
     input:
         fa = "results/05_fasta/{LIBRARIES}/{SAMPLES}.fasta"
     output:
@@ -29,8 +27,6 @@ rule vsearch_dereplicate:
 # ------------------------------------------------------------------------------
 
 rule vsearch_cluster:
-    conda:
-        config['conda']
     input:
         derep = "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta"  if config['cluster_method'] == "cluster" else []
     output:
@@ -52,8 +48,6 @@ rule vsearch_cluster:
 # ------------------------------------------------------------------------------
 
 rule vsearch_denoise:
-    conda:
-        config['conda']
     input:
         "results/06_dereplicated/{LIBRARIES}/{SAMPLES}.derep.fasta" if config['cluster_method'] == "denoise" else []
     output:
@@ -77,8 +71,6 @@ rule vsearch_denoise:
 if config['chimera_detection'] == "ref":
 
     rule vsearch_uchime_ref:
-        conda:
-            config['conda']
         input:
             cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta" if config['cluster_method'] == "cluster" else "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta"
         output:
@@ -98,8 +90,6 @@ if config['chimera_detection'] == "ref":
 elif config['chimera_detection'] == "denovo":
 
     rule vsearch_uchime3_denovo:
-        conda:
-            config['conda']
         input:
             cluster = "results/07_clustered/{LIBRARIES}/{SAMPLES}.cluster.fasta" if config['cluster_method'] == "cluster" else "results/07_denoised/{LIBRARIES}/{SAMPLES}.denoise.fasta"
         output:
@@ -119,8 +109,6 @@ elif config['chimera_detection'] == "denovo":
 # ------------------------------------------------------------------------------
 
 rule vsearch_rereplicate:
-    conda:
-        config['conda']
     input:
         nonchimeras = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta"
     output:

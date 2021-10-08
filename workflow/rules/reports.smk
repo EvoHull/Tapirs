@@ -24,8 +24,6 @@ configfile: "config.yaml"
 # --------------------------------------------------
 
 rule plot_workflow_DAG:
-    conda:
-        "../envs/environment.yaml"
     output:
         "reports/dag_rulegraph.png"
     shell:
@@ -36,8 +34,6 @@ rule plot_workflow_DAG:
 # --------------------------------------------------
 
 rule conda_env:
-    conda:
-        "../envs/environment.yaml"
     output:
         "reports/archived_envs/tapirs.yaml"
     shell:
@@ -69,8 +65,6 @@ rule conda_env:
 # -----------------------------------------------------
 
 rule vsearch_fastq_readstats:
-    conda:
-        "../envs/environment.yaml"
     input:
         expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fastq", LIBRARIES = LIBRARIES, SAMPLES=SAMPLES)
     output:
@@ -85,8 +79,6 @@ rule vsearch_fastq_readstats:
 # -----------------------------------------------------
 
 rule vsearch_fastq_eestats:
-    conda:
-        "../envs/environment.yaml"
     input:
         expand("results/03_merged/{LIBRARIES}/{SAMPLES}.concat.fastq", LIBRARIES = LIBRARIES, SAMPLES=SAMPLES)
     output:

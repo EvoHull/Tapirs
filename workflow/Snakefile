@@ -50,7 +50,6 @@ rule all:
 # INCLUCE CONDITIONAL RULE FILES
 # ------------------------------------------------------------------------------
 
-include: "rules/tax_db.smk"
 include: "rules/qc.smk"
 include: "rules/lca.smk"
 include: "rules/vsearch.smk"

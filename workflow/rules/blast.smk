@@ -7,8 +7,6 @@
 # ------------------------------------------------------------------------------
 
 rule blast:
-    conda:
-        config['conda']
     input:
         query = "results/08_dechimera/{LIBRARIES}/{SAMPLES}.nc.fasta",
     output:
@@ -32,8 +30,6 @@ rule blast:
 # ------------------------------------------------------------------------------
 
 rule taxonomy_to_blast:
-    conda:
-        config['conda']
     input:
         config['taxdump'] + '/names.dmp',
         blast = "results/blast/{LIBRARIES}/{SAMPLES}.blast.tsv"
