@@ -31,7 +31,7 @@ Detailed instructions for installation, setup, and modification are contained wi
 9. dry run `snakemake -npr` to identify any issues
 10. run `snakemake --cores 4` (you can run all available cores with `snakemake --cores`)
 
-## Configure the Tapirs workflow
+## Configuring the Tapirs workflow
 
 You should adjust `config/config.yaml` to specify the location of relevant files (reference databases and sequence data to be analysed) and parameters for the analysis (experiment name, sample sheet name, amplicon/primer lengths, analysis methods etc.). Defaults are present and are set for the test data set: Hull_test.
 
