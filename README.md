@@ -11,6 +11,30 @@ Tapirs was created by the EvoHull group, the University of Hull, UK
 
 Instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
+## Quickstart
+
+Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
+
+Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
+
+1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
+2. install [git](https://github.com/git-guides/install-git)
+3. git clone the Tapirs repository, and relocate there
+    * `git clone https://github.com/EvoHull/Tapirs`
+    * `cd Tapirs`
+4. install snakemake
+    * `conda env create -f workflow/envs/env.yaml`
+    * `conda activate tapirs`
+5. populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files) 
+6. dry run `snakemake -npr` to identify any issues
+7. run `snakemake --cores 4` (you can run all available cores `snakemake --cores`)
+
+## Configure the Tapirs workflow
+
+You should adjust `config/config.yaml` to specify the location of relevant files (reference databases and sequence data to be analysed) and parameters for the analysis (experiment name, sample sheet name, amplicon/primer lengths, analysis methods etc.). Defaults are present and are set for the test data set: Hull_test.
+
+Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
+
 ## DAG overview of a workflow
 
 One example workflow is illustrated below, you may configure yours differently
@@ -26,29 +50,6 @@ EvoHull group, University of Hull, UK
 * Mike Winter (@mrmrwinter)
 * Merideth Freiheit (@merfre)
 * Marco Benucci
-
-## Quickstart
-
-Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
-
-Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
-
-1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
-2. git clone the Tapirs repository, and relocate there
-    * `git clone https://github.com/EvoHull/Tapirs`
-    * `cd Tapirs`
-3. install snakemake
-    * `conda install -c conda-forge snakemake`
-4. dry run `snakemake -npr` to identify any issues
-5. run `snakemake`
-
-## Configure the Tapirs workflow
-
-You should adjust `config/config.yaml` to specify the location of relevant files. These will include any reference databases, taxonomy data, and sequence data to be analysed.
-
-Although sensible defaults have been set you can also specify in `config.yaml` which analysis programs will be used and their parameter settings.
-
-Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
 
 ----
 
