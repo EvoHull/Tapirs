@@ -37,7 +37,7 @@ You should adjust `config/config.yaml` to specify the location of relevant files
 
 Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more extensive support.
 
-## DAG overview of a workflow
+## Workflow overview
 
 One example workflow is illustrated below, you may configure yours differently
 
