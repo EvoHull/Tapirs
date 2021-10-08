@@ -5,17 +5,13 @@
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
 
-Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis.
+Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis. Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
 
 Tapirs was created by the EvoHull group, the University of Hull, UK
 
-Instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
+Detailed instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
 ## Quickstart
-
-Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
-
-Detailed instructions are given in the [Tapirs documentation](https://tapirs.readthedocs.io).
 
 1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
 2. install [git](https://github.com/git-guides/install-git)
@@ -25,9 +21,14 @@ Detailed instructions are given in the [Tapirs documentation](https://tapirs.rea
 4. install snakemake
     * `conda env create -f workflow/envs/env.yaml`
     * `conda activate tapirs`
-5. populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files) 
-6. dry run `snakemake -npr` to identify any issues
-7. run `snakemake --cores 4` (you can run all available cores `snakemake --cores`)
+5. download taxonomy
+    * `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
+    * `unzip new_taxdump.zip -d resources/databases/new_taxdump`
+    * `rm new_taxdump.zip`
+6. populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files)
+7. place your sample sheet tsv in `config/` (see `config/Hull_test.tsv` for layout format)
+8. dry run `snakemake -npr` to identify any issues
+9. run `snakemake --cores 4` (you can run all available cores `snakemake --cores`)
 
 ## Configure the Tapirs workflow
 
