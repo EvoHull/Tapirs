@@ -2,9 +2,9 @@
 #               TAPIRS: CONFIGFILE
 # ==================================================
 
-my_experiment: "hull"  # the experiment name, no_spaces
+my_experiment: "Hull_test"  # the experiment name, no_spaces
 
-samples: "config/hull.tsv"  # location and name of sample list
+samples: "config/Hull_test.tsv"  # location and name of sample list
 
 conda: "../envs/env.yaml"  # leave this unedited
 
@@ -31,7 +31,6 @@ input_data: "resources/libraries"
 
 # BLAST
 blast_db: "resources/databases/12s_fish_blast_db/12s_fish"
-# blast_db: "../genbank_nt_db_blast/nt/nt"
 
 # KRAKEN 2
 kraken2_db: "resources/databases/12s_fish_kraken2_db"
@@ -100,7 +99,7 @@ BLAST_threads: 2
 # MLCA VARIABLES
 # ------------------------------------------------------------------------------
 
-MLCA_bitscore: 0
+MLCA_bitscore: 2
 MLCA_identity: 98
 MCLA_coverage: 90
 MLCA_majority: 80

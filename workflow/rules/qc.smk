@@ -7,8 +7,6 @@
 # ------------------------------------------------------------------------------
 
 rule fastp_trim_reads:
-    conda:
-        config['conda']
     input:
         read1 = config['input_data'] + "/{LIBRARIES}/{SAMPLES}.R1.fastq.gz",
         read2 = config['input_data'] + "/{LIBRARIES}/{SAMPLES}.R2.fastq.gz"
@@ -54,8 +52,6 @@ rule fastp_trim_reads:
 # ------------------------------------------------------------------------------
 
 rule fastp_merge_reads:
-    conda:
-        config['conda']
     input:
         R1trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R1.trimmed.fastq",
         R2trimmed = "results/02_trimmed/{LIBRARIES}/{SAMPLES}.R2.trimmed.fastq",
@@ -107,8 +103,6 @@ rule merge_forward_reads:
 # ------------------------------------------------------------------------------
 
 rule seqkit_fq2fa:
-    conda:
-        config['conda']
     input:
         fq = "results/04_forward_merged/{LIBRARIES}/{SAMPLES}.forward.merged.fastq"
     output:

@@ -34,18 +34,18 @@ The `resources/` directory must contain 2 subdirectories: a) `libraries/` b) `da
 
 ## demultiplexed sequence data
 
-The start point of this workflow is demultiplexed `fastq.gz` sequence files in the `resources/libraries` directory. Each directory in `libraries` is a sequencing library (eg `resources/libraries/river1`) and each library contains your sequences in 1 or more fastq files (eg `sample1.fastq.gz`)
+The start point of this workflow is demultiplexed `fastq.gz` sequence files in the `resources/libraries` directory. Each directory in `libraries` is a sequencing library (eg `resources/libraries/river1`) and each library contains your sequences in paired fastq files (eg `sample1.R1.fastq.gz` and `sample1.R2.fastq.gz`)
 
 It is essential for reproducibility that this starting data is kept together with the experiment. If size prohibits its inclusion then archive it publicly and include the doi into the experimental record.
 
 !!! tip "tip: exclude data directory from version control"
     Remember that if you are wisely keeping your analysis under git version control, then you can exclude very large data files from syncing to the web by including the data directory in your .gitignore file. It is essential however that you make other arrangements for both backing up and publishing the data.
 
-To facilitate iteration, the input files must follow the structure of `yourlibrary/yoursample.R*.fastq.gz`, the full path being `Tapirs/resources/libraries/yourlibrary/yoursample.R*.fastq.gz`. The * asterisk stands for the read number, ie R1 or R2.
+To facilitate iteration, the input files must follow the structure of `yourlibrary/yoursample.R*.fastq.gz`, the full path being `Tapirs/resources/libraries/yourlibrary/yoursample.R*.fastq.gz`. The * asterisk stands for the paired-end read number, ie R1 or R2.
 
 ### libraries and samples lists
 
-You must make sure that your config file points to your list of samples and libraries (eg samples: `config/hull1.tsv`)
+You must make sure that your config file points to your list of samples and libraries (eg samples: `config/Hull_test.tsv`)
 
 Rather than implement a complex set of wildcards the recommended approach for snakemake is to create textual lists (.tsv files) of the sequencing metadata [see "samples, libraries, and units .tsv" Note below]. These lists are generated for you by a script, but this approach allows quality control and human intervention in determining what samples are analysed in each run. Importantly having an explicit textual record of what samples were analysed, and their metadata, is good for reproducibility.
 
@@ -67,16 +67,16 @@ Database creation has 3 steps:
 1. Download taxonomy:
 `kraken2-build --download-taxonomy --db fish_kraken --threads 6`
 2. Add sequences to library:
-`kraken2-build --add-to-library databases/12s_verts.fasta --no-masking --db fish_kraken --threads 6`
+`kraken2-build --add-to-library databases/12s_fish.fasta --no-masking --db fish_kraken --threads 6`
 the `--no-masking` flag improved accuracy for short reads
 3. Build database:
 `kraken2-build --build --minimizer-spaces 1 --kmer-len 31 --db fish_kraken --threads 6`
 
 it is important to have some minimizer-spaces in lmers, having 1 makes for more accurate taxonomic assignment. Having kmer same length as lmer for shorter reads makes for more accurate taxonomic assignment
 
-`fish_kraken` and `12s_verts.fasta` are our experiment-specific names for our data, you will choose different names for whatever data you are working with.
+`fish_kraken` and `12s_fish.fasta` are our experiment-specific names for our data, you will choose different names for whatever data you are working with.
 
-See the [Kraken Tutorial](../Tutorials/kraken_tutorial.md) and the [Kraken2 manual](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) for information on building Kraken databases.
+See the [Kraken Tutorial](../Tutorials/kraken_tutorial.md) and the [Kraken2 manual](https://ccb.jhu.edu/software/kraken2/index.shtml?t=manual) for information on building Kraken 2 databases.
 
 It is essential for reproducibility that you publicly archive your database at the end of the experiment. [Zenodo.org](https://zenodo.org) is a suitable location. If your database is too large to database easily, consider making it from scripts in a reproducible manner instead and then archiving those scripts. Don't forget to include the international sequence database **version** from which your scripts harvested the sequences.
 
@@ -90,11 +90,11 @@ You will require:
 - Accession to taxid map. See [NCBI blast instructions](https://www.ncbi.nlm.nih.gov/books/NBK279688/) for more details.
 
 !!! note "create a blast database"
-    If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database, then you could create a blast database with the command:
+    If you have a single fasta format file (allseqs.fas) containing all the sequences to be included in the database and an accession to taxid map (tax_map.txt), then you could create a blast database with the command:
 
     ```
-    makeblastdb -in blast_db/allseqs.fasta -input_type fasta -dbtype nucl \
-    -parse_seqids -taxid_map blast_db/tax_map.txt -out blast_db/allseqs
+    makeblastdb -in allseqs.fasta -input_type fasta -dbtype nucl \
+    -parse_seqids -taxid_map tax_map.txt -out blast_db/allseqs
     ```
 
 See the [Blast Tutorial](../Tutorials/blast_tutorial.md) for more detailed help
@@ -111,12 +111,11 @@ Several programs may require the NCBI taxonomy database in order to carry out ta
 
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
 
-`unzip new_taxdump`
+`unzip new_taxdump.zip -d resources/databases/new_taxdump`
 
-Alternatively there is a snakemake rule specifically to set this up. You can run this with the command:
-`snakemake -s workflow/rules/tax_db.smk`
+`rm new_taxdump.zip`
 
-If on OSX `wget` is not installed, you can install with `conda install -c conda-forge wget` or any ftp client will fetch this new_taxdump data for you.
+`wget` is included in the Tapirs conda environment
 
 ## DRY RUN TAPIRS
 

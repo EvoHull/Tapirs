@@ -7,8 +7,6 @@
 # ------------------------------------------------------------------------------
 
 rule mlca:
-    conda:
-        config['conda']
     input:
         blast = "results/blast_tax/{LIBRARIES}/{SAMPLES}.blast.tax.tsv"
     output:
@@ -27,8 +25,6 @@ rule mlca:
 # ------------------------------------------------------------------------------
 
 rule mlca_to_tsv:
-    conda:
-        config['conda']
     input:
         lca = expand("results/mlca/{real_combos}.lca.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)

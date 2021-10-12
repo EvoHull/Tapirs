@@ -7,37 +7,32 @@
 # ------------------------------------------------------------------------------
 
 rule kraken2:
-    conda:
-        config['conda']
     input:
         reads = "results/09_rereplicated/{LIBRARIES}/{SAMPLES}.rerep.fasta"
     output:
         reports = "results/kraken2/reports/{LIBRARIES}/{SAMPLES}.txt",
         outputs = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
-    shell:
-        """if [[ $(wc -l <{input.reads}) -ge 2 ]]
-        then
-            kraken2 --db {config[kraken2_db]} {input.reads} \
+    run:
+        if len([1 for line in open(input.reads)]) > 0:
+            shell("kraken2 --db {config[kraken2_db]} {input.reads} \
             --threads {config[kraken2_threads]} \
             --confidence {config[kraken2_confidence]} \
             --report {output.reports} \
-            --output {output.outputs}
-        else
-            touch {output.reports} {output.outputs}
-        fi"""
+            --output {output.outputs}")
+        else:
+            open(output.reports, 'w').close()
+            open(output.outputs, 'w').close()
 
 # ------------------------------------------------------------------------------
 # TAXONOMY TO KRAKEN 2
 # ------------------------------------------------------------------------------
 
 rule taxonomy_to_kraken2:
-    conda:
-        config['conda']
     input:
         config['taxdump'] + '/names.dmp',
         kraken2 = "results/kraken2/outputs/{LIBRARIES}/{SAMPLES}.krk"
     params:
-        taxdump = config['taxdump'],
+        taxdump = config['taxdump']
     output:
         kraken2_tax = "results/kraken2_tax/{LIBRARIES}/{SAMPLES}.krk.tax.tsv"
     script:
@@ -48,8 +43,6 @@ rule taxonomy_to_kraken2:
 # ------------------------------------------------------------------------------
 
 rule kraken2_to_tsv:
-    conda:
-        config['conda']
     input:
         lca = expand("results/kraken2_tax/{real_combos}.krk.tax.tsv", real_combos = real_combos),
         rerep = expand("results/09_rereplicated/{real_combos}.rerep.fasta", real_combos = real_combos)
