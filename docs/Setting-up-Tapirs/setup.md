@@ -103,7 +103,11 @@ It is essential for reproducibility that you publicly archive your database at t
 
 ### taxonomy database
 
-Several programs may require the NCBI taxonomy database in order to carry out taxonomic assignment. This is typically contained in a `new_taxdump` directory that is fetched directly from the NCBI using the commands:
+Several programs may require the NCBI taxonomy database in order to carry out taxonomic assignment. This is typically contained in a `new_taxdump` directory that is fetched directly from the NCBI.
+
+`mkdir resources/databases/new_taxdump`
+
+`cd resources/databases/new_taxdump`
 
 `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
 
@@ -112,7 +116,7 @@ Several programs may require the NCBI taxonomy database in order to carry out ta
 Alternatively there is a snakemake rule specifically to set this up. You can run this with the command:
 `snakemake -s workflow/rules/tax_db.smk`
 
-If on OSX `wget` is not installed, you can install with `conda install -c conda-forge wget`
+If on OSX `wget` is not installed, you can install with `conda install -c conda-forge wget` or any ftp client will fetch this new_taxdump data for you.
 
 ## DRY RUN TAPIRS
 
