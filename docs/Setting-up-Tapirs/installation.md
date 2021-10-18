@@ -37,7 +37,7 @@ Install all required software now:
 
 `conda env create --file workflows/envs/env.yaml`
 
-If in future you modify the environment file you can always update it with:
+This will take a few minutes to install all the required software and their dpendencies. If in future you modify the environment file you can update it with:
 
 `conda env update -f workflows/envs/env.yaml`
 
@@ -55,10 +55,46 @@ If you get errors when running Tapirs suggesting that some "software-name" is un
 
 The Snakemake workflow manager software was listed in the `env.yaml` file and has already been installed if you have carried out the instructions above. You could test this with a `snakemake -help` command. If you get an error such as `command not found: snakemake` its likely that the tapirs environment is not active, try: `conda activate tapirs`
 
-## Databases and data
+## Testing the Installation
 
-You should now have installed all the software required for your analysis. You will also require some data and reference databases.
+You should now have installed all the software required for your analysis. You will also require some data and reference databases. Below we give instructions of running Tapirs with test data and databases in oerder to verify the installation. Subsequently you will remove the outputs of the test and repeat with your own data and databases.
 
-In order to search a reference database with your query sequences you will need to provide both, and tell Tapirs where they are located. Databases are large files, and everyone needs a different one, so they are not included with Tapirs.
+### Install the taxonomy data
+The three commands below will download and expand the taxonomy data
+
+`wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
+`unzip new_taxdump.zip -d resources/databases/new_taxdump`
+`rm new_taxdump.zip`
+
+### Dry run Tapirs
+
+We have provided test data
+- a list of samples `/config/hull_test.tsv`
+- blast and kraken2 databases in `resources/databases/`
+- sequence data in `resources/libraries`
+
+Dry run Tapirs with:
+
+`snakemake -npr`
+
+If you don't get any obvious errors but rather a (yellow) list of jobs to be carried out then you should be ready to go.
+
+`snakemake --cores 4`
+
+You can omit the number to run it on all availabale cores. This will begin the analysis of the test data. It will only take a couple of minutes to complete. Again examine the output for obvious errors (usually in red text) but everything is likely fine if it completes with something like:
+```
+Finished job 0.
+29 of 29 steps (100%) done
+```
+
+### remove test output and prepare to run your own data
+The output from any snakemake run can be cleaned up with `--delete-alloutput` but we recommend a dry run first to see what it will delete
+
+`snakemake --delete-all-output -n`
+
+It should list files in the `results` directory, and you can delete them all with 
+
+`snakemake --delete-all-output`
+
 
 Instructions of what files are required are provided on the Tapirs [setup](setup.md) page.
