@@ -24,4 +24,4 @@ We take reproducible science very seriously, and so should you. Not only is it t
 
 ## Contributions
 
-Very many people have contributed to Tapirs. Many scientists have worked in EvoHull, discussed metabarcoding software and approaches with us, made suggestions about good practice, explored data analysis, critiqued this work, given feedback and made suggestions on metabarcoding courses, and taught us how to proceed. Although the code here was physically written by Dave Lunt, Michael Winter, Graham Sellers, Merideth Freiheit and Marco Benucci, a much larger pool of people have contributed significantly.
+Very many people have contributed to Tapirs. Many scientists have worked in EvoHull, discussed metabarcoding software and approaches with us, made suggestions about good practice, explored data analysis, critiqued this work, given feedback and made suggestions on metabarcoding courses, and taught us how to proceed. Although the code here was physically written by Dave Lunt, Michael Winter, Graham Sellers, Merideth Freiheit and Marco Benucci, a much larger pool of people have contributed their experience.
