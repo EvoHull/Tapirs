@@ -18,7 +18,7 @@ Detailed instructions for installation, setup, and modification are contained wi
 3. git clone the Tapirs repository, and relocate there
     * `git clone https://github.com/EvoHull/Tapirs`
     * `cd Tapirs`
-4. install snakemake
+4. Create an env with snakemake and other software for the workflow
     * `conda env create -f workflow/envs/env.yaml`
     * `conda activate tapirs`
 5. download taxonomy
