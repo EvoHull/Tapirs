@@ -105,7 +105,7 @@ for otu in final_out.index:
 
 final_out = (pd.concat([final_out, tfob], axis = 1, sort = False)).fillna(0).sort_index()  # add taxonomy column to final dataframe
 
-# order final dataframe by taxonomy alphabetically and by ranks length: species -> domain
+# order final dataframe rows by taxonomy alphabetically and by ranks length: species -> domain
 str_len = [len(y) for y in [x.split(';') for x in final_out['taxonomy']]]  # lengths of taxonomy strings
 final_out['str_len'] = str_len  # adding column of taxonomy string length
 final_out = final_out.sort_values(['str_len','taxonomy'], ascending = [False, True])  # sort by taxonomy alphabetically and by ranks length
@@ -113,5 +113,6 @@ final_out.drop('str_len', inplace = True, axis = 1)  # drop taxonomy string leng
 
 final_out.index.name = '#OTU_ID'
 final_out = final_out.drop('unassigned', axis = 0).append(final_out.loc[['unassigned'], :])  # unassigned reads as last row
-final_out = final_out.reindex(sorted(final_out.columns), axis=1)  # sort columns alphabetically
+final_out = final_out.reindex(sorted(final_out.columns), axis=1)  # order columns alphabetically
+final_out.insert(len(final_out.columns)-1, 'taxonomy', final_out.pop('taxonomy'))  # make taxonomy as final column
 final_out.to_csv(outfile, sep = '\t', index = True, header = True)  # write the output tsv file
