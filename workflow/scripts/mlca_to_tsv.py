@@ -87,6 +87,8 @@ for sample in samples:
 
     final_out = (pd.concat([final_out, dfob], axis = 1, sort = False)).fillna(0).astype(int).sort_index()
 
+final_out = final_out.reindex(sorted(final_out.columns), axis=1)  # order columns alphabetically
+
 tfob = pd.DataFrame(columns = ['taxonomy'], index = final_out.index)  # create, sort and write taxonomy strings
 for otu in final_out.index:
     if otu != 'unassigned':
@@ -113,6 +115,4 @@ final_out.drop('str_len', inplace = True, axis = 1)  # drop taxonomy string leng
 
 final_out.index.name = '#OTU_ID'
 final_out = final_out.drop('unassigned', axis = 0).append(final_out.loc[['unassigned'], :])  # unassigned reads as last row
-final_out = final_out.reindex(sorted(final_out.columns), axis=1)  # order columns alphabetically
-final_out.insert(len(final_out.columns)-1, 'taxonomy', final_out.pop('taxonomy'))  # make taxonomy as final column
 final_out.to_csv(outfile, sep = '\t', index = True, header = True)  # write the output tsv file
