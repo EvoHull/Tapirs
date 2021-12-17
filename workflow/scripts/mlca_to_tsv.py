@@ -113,4 +113,5 @@ final_out.drop('str_len', inplace = True, axis = 1)  # drop taxonomy string leng
 
 final_out.index.name = '#OTU_ID'
 final_out = final_out.drop('unassigned', axis = 0).append(final_out.loc[['unassigned'], :])  # unassigned reads as last row
+final_out = final_out.reindex(sorted(final_out.columns), axis=1)  # sort columns alphabetically
 final_out.to_csv(outfile, sep = '\t', index = True, header = True)  # write the output tsv file
