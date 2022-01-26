@@ -57,7 +57,7 @@ FASTP_poly_x_min: 10  # minimum 3' poly x (any base) bases to be trimmed
 FASTP_min_overlap: 20  # minimum base overlap required for merging
 FASTP_diff_percent_limit: 5  # maximum percentage difference required for merging
 FASTP_diff_limit: 5  # maximum base differences required for merging
-FASTP_length_limit: 106 # maximum allowed length required to keep read after merging
+FASTP_length_limit: 110 # maximum allowed length required to keep read after merging
 
 # ------------------------------------------------------------------------------
 # VSEARCH VARIABLES
