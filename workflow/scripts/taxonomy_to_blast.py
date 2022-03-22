@@ -70,6 +70,7 @@ def taxonomy_string(taxid):
     taxdict = rank_name_dictionary(taxid)
     # dropping genus_sp. and species without genus
     if 'species' in taxdict:
+        taxdict['species'] = taxdict['species'].split('/')[0]
         taxdict['species'] = '_'.join(taxdict['species'].split(' ')[0:2])
         if '_sp.' in taxdict['species']:
             del(taxdict['species'])
