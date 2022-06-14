@@ -102,8 +102,11 @@ if len([1 for line in open(blast)]) > 0:
                     try:
                         output.write(hit.strip() + '\t' + '/'.join(taxonomy_string(int(taxid))) + '\n')
                     except KeyError:
-                        taxid = merged_dict[taxid]
-                        output.write(hit.strip() + '\t' + '/'.join(taxonomy_string(int(taxid))) + '\n')
+                        try:
+                            taxid = merged_dict[taxid]
+                            output.write(hit.strip() + '\t' + '/'.join(taxonomy_string(int(taxid))) + '\n')
+                        except KeyError:
+                            output.write(hit.strip() + '\tunknown/unknown/unknown/unknown/unknown/unknown/unknown\n')
 
 # if input file is empty write empty file to output
 else:
