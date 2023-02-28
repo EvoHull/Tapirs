@@ -13,23 +13,23 @@ Detailed instructions for installation, setup, and modification are contained wi
 
 ## Quickstart
 
-1. install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
-2. install [git](https://github.com/git-guides/install-git)
-3. git clone the Tapirs repository, and relocate there
+1. Install [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) (miniconda)
+2. Install [git](https://github.com/git-guides/install-git)
+3. Clone the Tapirs repository, and relocate there
     * `git clone https://github.com/EvoHull/Tapirs`
     * `cd Tapirs`
-4. Create an env with snakemake and other software for the workflow
+4. Create an environment with snakemake and other software for the workflow
     * `conda env create -f workflow/envs/env.yaml`
     * `conda activate tapirs`
-5. download taxonomy
+5. Download taxonomy
     * `wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.zip`
     * `unzip new_taxdump.zip -d resources/databases/new_taxdump`
     * `rm new_taxdump.zip`
-6. populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files)
-7. place your sample sheet tsv in `config/` (see `config/Hull_test.tsv` for layout format)
-8. adjust `config/config.yaml` to configure the Tapirs workflow (see below)
-9. dry run `snakemake -npr` to identify any issues
-10. run `snakemake --cores 4` (you can run all available cores with `snakemake --cores`)
+6. Populate `resources/databases` with your reference databases and `resources/libraries` with your data (a directory containing your demultiplexed R1/R2.fastq.gz sample files)
+7. Place your sample sheet tsv in `config/` (see `config/Hull_test.tsv` for layout format)
+8. Adjust `config/config.yaml` to configure the Tapirs workflow (see below)
+9. Dry run `snakemake -npr` to identify any issues
+10. Run `snakemake --cores 4` (you can run all available cores with `snakemake --cores`)
 
 ## Configuring the Tapirs workflow
 
@@ -39,7 +39,7 @@ Consult the [Tapirs documentation](https://tapirs.readthedocs.io) to get more ex
 
 ## Workflow overview
 
-One example workflow is illustrated below, you may configure yours differently
+One example workflow is illustrated below, you may configure yours differently.
 
 ![workflow graph](docs/images/Tapirs_rulegraph.png)
 
@@ -49,7 +49,7 @@ EvoHull group, University of Hull, UK
 
 * Dave Lunt (@davelunt)
 * Graham Sellers (@Graham-Sellers)
-* Mike Winter (@mrmrwinter)
+* Michael R Winter (@mrmrwinter)
 * Merideth Freiheit (@merfre)
 * Marco Benucci
 
