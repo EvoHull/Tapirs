@@ -5,9 +5,9 @@
 
 Tapirs is a reproducible modular workflow for the analysis of DNA metabarcoding data.
 
-Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis. Tapirs is curently v1.0, it is simple, robust, and reliable in our hands, but not all features are yet present.
+Tapirs uses the [Snakemake workflow manager](https://snakemake.github.io/) and is compartmentalised into several modules, each performing a step of the workflow. Tapirs is designed to be experimental, allowing you to test the effect of different approaches to data analysis. Tapirs is curently v1.0. It is simple, robust, and reliable in our hands, but not all features are yet present.
 
-Tapirs was created by the EvoHull group, the University of Hull, UK
+Tapirs was created by the EvoHull group, at the University of Hull, UK
 
 Detailed instructions for installation, setup, and modification are contained within the [Tapirs documentation](https://tapirs.readthedocs.io)
 
