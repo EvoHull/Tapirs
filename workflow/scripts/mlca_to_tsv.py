@@ -113,6 +113,9 @@ final_out['str_len'] = str_len  # adding column of taxonomy string length
 final_out = final_out.sort_values(['str_len','taxonomy'], ascending = [False, True])  # sort by taxonomy alphabetically and by ranks length
 final_out.drop('str_len', inplace = True, axis = 1)  # drop taxonomy string length column
 
+# remove 'unassigned' and add it as the last row
 final_out.index.name = '#OTU_ID'
-final_out = final_out.drop('unassigned', axis = 0).append(final_out.loc[['unassigned'], :])  # unassigned reads as last row
+df_unassigned = final_out.loc[['unassigned'], :]
+final_out = final_out.drop('unassigned', axis = 0)
+final_out = pd.concat([final_out, df_unassigned])  # unassigned reads as last row
 final_out.to_csv(outfile, sep = '\t', index = True, header = True)  # write the output tsv file
